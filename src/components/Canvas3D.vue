@@ -1,10 +1,10 @@
 <template>
   <div class="fixed inset-0 w-full h-full pointer-events-none">
     <TresCanvas
-      clear-color="#000000"
-      window-size
+        clear-color="#000000"
+        window-size
     >
-      <TresPerspectiveCamera :position="[0, 0, 5]" :fov="35" :near="0.1" :far="1000" />
+      <TresPerspectiveCamera :position="[0, 0, 8]" :fov="90" :near="0.1" :far="1000" />
       <SceneContent />
     </TresCanvas>
   </div>

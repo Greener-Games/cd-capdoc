@@ -6,7 +6,7 @@
     </div>
 
     <!-- Frosted Glass Overlay -->
-    <div class="fixed inset-0 z-[1] pointer-events-none backdrop-blur-[100px] bg-black/40">
+    <div class="fixed inset-0 z-1 pointer-events-none backdrop-blur-[100px] bg-black/40 opacity-50">
       <div class="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style="background-image: url('https://grainy-gradients.vercel.app/noise.svg')"></div>
       <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.6)_100%)] pointer-events-none"></div>
     </div>
