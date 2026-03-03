@@ -25,10 +25,7 @@
     <div class="fixed top-8 left-8 right-8 flex justify-between items-center z-50 pointer-events-none">
       <button
         @click="handleGoHome"
-        class="text-caption opacity-50 pointer-events-auto hover:opacity-100 transition-opacity flex items-center space-x-2 cursor-pointer"
-        v-motion
-        :initial="{ opacity: 0, y: -20 }"
-        :enter="{ opacity: 1, y: 0 }"
+        class="text-caption opacity-50 pointer-events-auto hover:opacity-100 transition-opacity flex items-center space-x-2 cursor-pointer animate-in fade-in slide-in-from-top-4 duration-500"
       >
         <span>AtkinsRéalis</span>
       </button>
@@ -37,12 +34,7 @@
         <button
           v-if="view !== ViewState.DEVELOPER"
           @click="handleOpenSearch"
-          class="relative flex items-center space-x-3 bg-white/5 border border-white/10 rounded-full px-6 py-2.5 backdrop-blur-md hover:bg-white/10 transition-all cursor-pointer group"
-          v-motion
-          :initial="{ opacity: 0, scale: 0.9 }"
-          :enter="{ opacity: 1, scale: 1 }"
-          :hover="{ scale: 1.05 }"
-          :tapped="{ scale: 0.95 }"
+          class="relative flex items-center space-x-3 bg-white/5 border border-white/10 rounded-full px-6 py-2.5 backdrop-blur-md hover:bg-white/10 transition-all cursor-pointer group animate-in fade-in zoom-in-90 duration-500 active:scale-95 hover:scale-105"
         >
           <Search class="w-3.5 h-3.5 text-white/40 group-hover:text-white transition-colors" />
           <span class="text-[9px] font-black tracking-[0.2em] uppercase text-white/40 group-hover:text-white">Search Library</span>

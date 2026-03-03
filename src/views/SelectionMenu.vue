@@ -17,10 +17,7 @@
           >
             <div
               v-if="filterType === type"
-              class="absolute inset-0 bg-white rounded-full z-0"
-              v-motion
-              :initial="{ opacity: 0, scale: 0.8 }"
-              :enter="{ opacity: 1, scale: 1 }"
+              class="absolute inset-0 bg-white rounded-full z-0 animate-in fade-in zoom-in-75 duration-300 fill-mode-both"
             ></div>
             <span class="relative z-10">
               {{ type === CategoryType.CAPABILITY ? 'Capability' : type === CategoryType.MARKET ? 'Market' : 'Region' }}
@@ -31,11 +28,8 @@
 
       <div class="h-[100px]">
         <h2
-          v-motion
           :key="filterType"
-          :initial="{ opacity: 0, y: 10 }"
-          :enter="{ opacity: 1, y: 0, transition: { duration: 400 } }"
-          class="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none"
+          class="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none animate-in fade-in slide-in-from-bottom-2 duration-400 fill-mode-both"
         >
           {{ filterType === CategoryType.CAPABILITY ? 'Capabilities' :
              filterType === CategoryType.MARKET ? 'Market sectors' : 'Global regions' }}
@@ -58,13 +52,11 @@
       <div
         v-for="(item, index) in currentData"
         :key="`${filterType}-${item.id}`"
-        v-motion
-        :initial="{ opacity: 0, scale: 0.9, x: 50 }"
-        :enter="{ opacity: 1, scale: 1, x: 0, transition: { delay: index * 50, duration: 600 } }"
+        :style="{ animationDelay: `${index * 50}ms` }"
         @click="!isCurrentlyDragging && handleSelect(item.id)"
         @mouseenter="store.setHoveredColor(item.color || item.accentColor)"
         @mouseleave="store.setHoveredColor(null)"
-        class="group relative flex-shrink-0 w-[80vw] sm:w-[35vw] md:w-[22vw] h-full overflow-hidden rounded-[2.5rem] border border-white/5 transition-all duration-700 bg-zinc-950/40"
+        class="group relative flex-shrink-0 w-[80vw] sm:w-[35vw] md:w-[22vw] h-full overflow-hidden rounded-[2.5rem] border border-white/5 transition-all duration-700 bg-zinc-950/40 animate-in fade-in zoom-in-90 slide-in-from-right-12 duration-[600ms] fill-mode-both"
       >
         <div class="absolute inset-0 z-0">
           <img

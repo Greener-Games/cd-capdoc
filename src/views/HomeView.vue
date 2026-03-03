@@ -4,30 +4,15 @@
         class="absolute inset-0 flex flex-col items-center justify-center cursor-pointer group/bg"
     >
       <div class="text-center z-10 pointer-events-none">
-        <h1
-          v-motion
-          :initial="{ opacity: 0, scale: 0.5 }"
-          :enter="{ opacity: 1, scale: 1, transition: { duration: 800, type: 'spring', stiffness: 100 } }"
-          class="text-h1 mb-6 text-white text-shadow-glow"
-      >
+        <h1 class="text-h1 mb-6 text-white text-shadow-glow animate-in fade-in zoom-in-50 duration-[800ms] fill-mode-both">
         Complex to clarity
       </h1>
 
-      <p
-          v-motion
-          :initial="{ opacity: 0, y: 40 }"
-          :enter="{ opacity: 1, y: 0, transition: { duration: 800, delay: 600 } }"
-          class="text-subtitle mb-16 max-w-xl mx-auto px-4 text-shadow"
-      >
+      <p class="text-subtitle mb-16 max-w-xl mx-auto px-4 text-shadow animate-in fade-in slide-in-from-bottom-10 duration-[800ms] delay-[600ms] fill-mode-both">
         Creative Design
       </p>
 
-        <div
-            v-motion
-            :initial="{ opacity: 0, y: 20 }"
-            :enter="{ opacity: 1, y: 0, transition: { delay: 800, duration: 1000 } }"
-            class="flex flex-col items-center space-y-4"
-        >
+        <div class="flex flex-col items-center space-y-4 animate-in fade-in slide-in-from-bottom-5 duration-[1000ms] delay-[800ms] fill-mode-both">
         <span class="text-white/40 text-sm font-light tracking-[0.3em] uppercase animate-pulse">
           Click anywhere to begin
         </span>

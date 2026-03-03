@@ -1,12 +1,10 @@
 <template>
   <div
-    class="group cursor-pointer relative"
+    class="group cursor-pointer relative animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both"
+    :style="{ animationDelay: `${index * 50}ms` }"
     @mouseenter="store.setHoveredColor(project.accentColor)"
     @mouseleave="store.setHoveredColor(null)"
     @click="handleClick"
-    v-motion
-    :initial="{ opacity: 0, y: 20 }"
-    :enter="{ opacity: 1, y: 0, transition: { duration: 500, delay: index * 50 } }"
   >
     <div class="absolute -top-3 -right-3 z-20 pointer-events-auto">
       <button

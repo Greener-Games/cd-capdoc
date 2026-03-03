@@ -12,11 +12,7 @@
       </div>
 
       <div class="max-w-4xl mx-auto px-8 pt-[20vh] pb-32">
-        <div
-          v-motion
-          :initial="{ opacity: 0, y: 40 }"
-          :enter="{ opacity: 1, y: 0, transition: { duration: 800 } }"
-        >
+        <div class="animate-in fade-in slide-in-from-bottom-10 duration-[800ms] fill-mode-both">
           <div class="flex items-center space-x-6 mb-8">
             <span
               class="text-caption"
@@ -81,12 +77,7 @@
         </div>
 
         <!-- Navigation Actions -->
-        <div
-          v-motion
-          :initial="{ opacity: 0, y: 20 }"
-          :enter="{ opacity: 1, y: 0, transition: { duration: 800, delay: 200 } }"
-          class="flex items-center justify-between border-t border-white/10 pt-12"
-        >
+        <div class="flex items-center justify-between border-t border-white/10 pt-12 animate-in fade-in slide-in-from-bottom-5 duration-[800ms] delay-200 fill-mode-both">
           <button
             @click="handleBack"
             class="group flex items-center space-x-4 text-white/40 hover:text-white transition-colors cursor-pointer"

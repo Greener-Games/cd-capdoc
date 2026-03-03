@@ -15,12 +15,7 @@
         <div class="text-[10px] font-bold tracking-[0.4em] uppercase text-white/40 mb-2">
           Exploring
         </div>
-        <h2
-          v-motion
-          :initial="{ opacity: 0, y: 10 }"
-          :enter="{ opacity: 1, y: 0, transition: { duration: 400 } }"
-          class="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none text-white"
-        >
+        <h2 class="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none text-white animate-in fade-in slide-in-from-bottom-2 duration-400 fill-mode-both">
           {{ store.currentCategoryData?.title || 'Timeline' }}
         </h2>
       </div>
@@ -41,13 +36,11 @@
       <div
         v-for="(project, index) in currentProjects"
         :key="project.id"
-        v-motion
-        :initial="{ opacity: 0, scale: 0.9, x: 50 }"
-        :enter="{ opacity: 1, scale: 1, x: 0, transition: { delay: index * 50, duration: 600 } }"
+        :style="{ animationDelay: `${index * 50}ms` }"
         @click="!isCurrentlyDragging && handleProjectSelect(project)"
         @mouseenter="store.setHoveredColor(project.accentColor)"
         @mouseleave="store.setHoveredColor(null)"
-        class="group relative flex-shrink-0 w-[80vw] sm:w-[35vw] md:w-[22vw] h-full overflow-hidden rounded-[2.5rem] border border-white/5 transition-all duration-700 bg-zinc-950/40"
+        class="group relative flex-shrink-0 w-[80vw] sm:w-[35vw] md:w-[22vw] h-full overflow-hidden rounded-[2.5rem] border border-white/5 transition-all duration-700 bg-zinc-950/40 animate-in fade-in zoom-in-90 slide-in-from-right-12 duration-[600ms] fill-mode-both"
       >
         <div class="absolute inset-0 z-0">
           <img

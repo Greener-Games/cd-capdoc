@@ -26,13 +26,11 @@
           ></div>
 
           <div
-            class="group w-80 cursor-pointer"
+            class="group w-80 cursor-pointer animate-in fade-in slide-in-from-right-24 duration-[800ms] fill-mode-both"
+            :style="{ animationDelay: `${index * 100}ms` }"
             @mouseenter="store.setHoveredColor(project.accentColor)"
             @mouseleave="store.setHoveredColor(null)"
             @click="handleProjectSelect(project)"
-            v-motion
-            :initial="{ opacity: 0, x: 100 }"
-            :enter="{ opacity: 1, x: 0, transition: { duration: 800, delay: index * 100 } }"
           >
             <!-- Timeline Node -->
             <div class="absolute -top-12 left-1/2 -translate-x-1/2 flex flex-col items-center">
@@ -71,21 +69,13 @@
     <div class="fixed bottom-8 left-8 right-8 flex justify-between items-end pointer-events-none z-50">
       <button
         @click="handleBack"
-        class="text-caption text-white/40 hover:text-white pointer-events-auto flex items-center space-x-2 transition-colors cursor-pointer"
-        v-motion
-        :initial="{ opacity: 0, x: -20 }"
-        :enter="{ opacity: 1, x: 0 }"
+        class="text-caption text-white/40 hover:text-white pointer-events-auto flex items-center space-x-2 transition-colors cursor-pointer animate-in fade-in slide-in-from-left-4 duration-500 fill-mode-both"
       >
         <ArrowLeft class="w-3.5 h-3.5" />
         <span>Back to Developer</span>
       </button>
 
-      <div
-        class="text-right pointer-events-auto group"
-        v-motion
-        :initial="{ opacity: 0, x: 20 }"
-        :enter="{ opacity: 1, x: 0 }"
-      >
+      <div class="text-right pointer-events-auto group animate-in fade-in slide-in-from-right-4 duration-500 fill-mode-both">
         <div class="text-[10px] font-bold tracking-[0.4em] uppercase text-white/40 mb-2">
           Exploring
         </div>
