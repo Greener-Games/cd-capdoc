@@ -19,6 +19,15 @@ export enum ViewState {
   SEARCH = 'SEARCH'
 }
 
+export interface CategoryItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  image: string;
+  color: string;
+  projects: Project[];
+}
+
 export enum CategoryType {
   CAPABILITY = 'CAPABILITY',
   MARKET = 'MARKET',

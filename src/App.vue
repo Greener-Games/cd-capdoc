@@ -19,6 +19,8 @@
       </router-view>
     </main>
 
+    <DevToggle />
+
     <!-- Global Navigation -->
     <div class="fixed top-8 left-8 right-8 flex justify-between items-center z-50 pointer-events-none">
       <button
@@ -62,6 +64,7 @@ import { useAppStore } from './store';
 import { ViewState } from './types';
 import { Search, Heart } from 'lucide-vue-next';
 import Canvas3D from './components/Canvas3D.vue';
+import DevToggle from './components/DevToggle.vue';
 
 const router = useRouter();
 const store = useAppStore();
