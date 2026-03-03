@@ -72,7 +72,7 @@ const router = createRouter({
 });
 
 // Update store selectedProject or filter based on route parameters
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
   const store = useAppStore();
 
   if (to.name === 'Timeline') {
@@ -87,7 +87,7 @@ router.beforeEach((to, from, next) => {
     store.setSelectedProject(project);
   }
 
-  next();
+  return true;
 });
 
 export default router;
