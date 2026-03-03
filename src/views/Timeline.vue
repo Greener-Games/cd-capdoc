@@ -1,97 +1,95 @@
 <template>
-  <div class="absolute inset-0 z-10">
-    <div
-      ref="scrollContainer"
-      class="absolute inset-0 overflow-x-auto overflow-y-hidden scrollbar-none cursor-grab active:cursor-grabbing"
-      @scroll="handleScroll"
-      @wheel="handleWheel"
-      @mousedown="startDragging"
-      @mouseup="stopDragging"
-      @mouseleave="stopDragging"
-      @mousemove="onDrag"
-    >
-      <div
-        class="h-full flex items-center px-[20vw] space-x-32"
-        :style="{ width: `${currentProjects.length * 400 + 1000}px` }"
-      >
-        <div
-          v-for="(project, index) in currentProjects"
-          :key="project.id"
-          class="relative flex-shrink-0"
+  <div class="relative flex flex-col w-full h-full overflow-hidden pt-32 z-10">
+    <div class="px-12 md:px-24 mb-16 flex flex-col items-start z-10">
+      <div class="flex items-center mb-8">
+        <button
+          @click="handleBack"
+          class="flex items-center space-x-2 bg-white/5 backdrop-blur-md rounded-full px-6 py-2 border border-white/10 pointer-events-auto text-[9px] font-black tracking-[0.2em] uppercase text-white/40 hover:text-white transition-all duration-500 cursor-pointer"
         >
-          <!-- Connection Line -->
-          <div
-            v-if="index < currentProjects.length - 1"
-            class="absolute top-1/2 left-[100%] w-32 h-[1px] bg-gradient-to-r from-white/20 to-transparent -translate-y-1/2"
-          ></div>
-
-          <div
-            class="group w-80 cursor-pointer"
-            @mouseenter="store.setHoveredColor(project.accentColor)"
-            @mouseleave="store.setHoveredColor(null)"
-            @click="handleProjectSelect(project)"
-            v-motion
-            :initial="{ opacity: 0, x: 100 }"
-            :enter="{ opacity: 1, x: 0, transition: { duration: 800, delay: index * 100 } }"
-          >
-            <!-- Timeline Node -->
-            <div class="absolute -top-12 left-1/2 -translate-x-1/2 flex flex-col items-center">
-              <div class="w-[1px] h-8 bg-white/20 mb-2 group-hover:bg-white/40 transition-colors"></div>
-              <div
-                class="w-3 h-3 rounded-full border-2 border-white/20 group-hover:scale-150 group-hover:border-white transition-all duration-300"
-                :style="{ backgroundColor: project.accentColor }"
-              ></div>
-            </div>
-
-            <!-- Content Card -->
-            <div class="mt-4 glass-panel p-6 opacity-60 group-hover:opacity-100 group-hover:bg-white/10 transition-all duration-500 transform group-hover:-translate-y-4">
-              <span class="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 block" :style="{ color: project.accentColor }">
-                Phase {{ String(index + 1).padStart(2, '0') }}
-              </span>
-              <h3 class="text-2xl font-light text-white mb-3 tracking-wide">{{ project.title }}</h3>
-              <p class="text-sm text-white/50 leading-relaxed font-light">
-                {{ project.description }}
-              </p>
-
-              <!-- Image Reveal -->
-              <div class="h-0 group-hover:h-48 overflow-hidden transition-all duration-500 mt-6 rounded-lg opacity-0 group-hover:opacity-100">
-                <img
-                  :src="project.imageUrl"
-                  :alt="project.title"
-                  class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+          <ArrowLeft class="w-3.5 h-3.5" />
+          <span>Back to Categories</span>
+        </button>
       </div>
-    </div>
 
-    <!-- Navigation Overlay -->
-    <div class="fixed bottom-8 left-8 right-8 flex justify-between items-end pointer-events-none z-50">
-      <button
-        @click="handleBack"
-        class="text-caption text-white/40 hover:text-white pointer-events-auto flex items-center space-x-2 transition-colors cursor-pointer"
-        v-motion
-        :initial="{ opacity: 0, x: -20 }"
-        :enter="{ opacity: 1, x: 0 }"
-      >
-        <ArrowLeft class="w-3.5 h-3.5" />
-        <span>Back to Categories</span>
-      </button>
-
-      <div
-        class="text-right pointer-events-auto group"
-        v-motion
-        :initial="{ opacity: 0, x: 20 }"
-        :enter="{ opacity: 1, x: 0 }"
-      >
+      <div class="min-h-[100px]">
         <div class="text-[10px] font-bold tracking-[0.4em] uppercase text-white/40 mb-2">
           Exploring
         </div>
-        <div class="text-3xl font-light tracking-wide text-white group-hover:text-shadow-glow transition-all">
-          {{ store.currentCategoryData.title }}
+        <h2
+          v-motion
+          :initial="{ opacity: 0, y: 10 }"
+          :enter="{ opacity: 1, y: 0, transition: { duration: 400 } }"
+          class="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none text-white"
+        >
+          {{ store.currentCategoryData?.title || 'Timeline' }}
+        </h2>
+      </div>
+    </div>
+
+    <!-- Draggable/Scrollable Container -->
+    <div
+      ref="scrollContainer"
+      @scroll="handleScroll"
+      @mousedown="startDragging"
+      @mouseleave="stopDragging"
+      @mouseup="stopDragging"
+      @mousemove="onDrag"
+      @wheel="handleWheel"
+      class="flex items-center space-x-6 px-12 md:px-24 overflow-x-auto scrollbar-none h-[55vh] select-none"
+      :class="isCurrentlyDragging ? 'cursor-grabbing' : 'cursor-grab'"
+    >
+      <div
+        v-for="(project, index) in currentProjects"
+        :key="project.id"
+        v-motion
+        :initial="{ opacity: 0, scale: 0.9, x: 50 }"
+        :enter="{ opacity: 1, scale: 1, x: 0, transition: { delay: index * 50, duration: 600 } }"
+        @click="!isCurrentlyDragging && handleProjectSelect(project)"
+        @mouseenter="store.setHoveredColor(project.accentColor)"
+        @mouseleave="store.setHoveredColor(null)"
+        class="group relative flex-shrink-0 w-[80vw] sm:w-[35vw] md:w-[22vw] h-full overflow-hidden rounded-[2.5rem] border border-white/5 transition-all duration-700 bg-zinc-950/40"
+      >
+        <div class="absolute inset-0 z-0">
+          <img
+            :src="project.imageUrl"
+            :alt="project.title"
+            class="w-full h-full object-cover opacity-30 grayscale group-hover:grayscale-0 group-hover:scale-110 group-hover:opacity-70 transition-all duration-1000 ease-out pointer-events-none"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent pointer-events-none" />
         </div>
+
+        <div class="relative z-10 h-full p-10 flex flex-col justify-end text-left pointer-events-none">
+          <div class="flex items-center space-x-4 mb-6">
+            <span class="text-[10px] font-black tracking-widest text-white/30 group-hover:text-white transition-colors">
+              Phase {{ String(index + 1).padStart(2, '0') }}
+            </span>
+            <div class="w-6 h-[1px] bg-white/10 group-hover:w-10 group-hover:bg-white transition-all duration-700" />
+          </div>
+          <h2 class="text-2xl md:text-3xl font-black tracking-tighter uppercase mb-3 leading-tight group-hover:translate-x-1 transition-transform duration-700 text-white">
+            {{ project.title }}
+          </h2>
+          <p class="text-[9px] font-bold tracking-widest uppercase opacity-30 group-hover:opacity-100 transition-opacity duration-700 text-white">
+            {{ project.description }}
+          </p>
+        </div>
+
+        <div
+          class="absolute bottom-0 left-0 w-full h-1 translate-y-full group-hover:translate-y-0 transition-transform duration-500"
+          :style="{ backgroundColor: project.accentColor }"
+        />
+      </div>
+
+      <div class="min-w-[15vw] flex-shrink-0 h-1" />
+    </div>
+
+    <div class="absolute bottom-12 left-12 md:left-24 right-12 md:right-24 flex items-center justify-between pointer-events-none opacity-20 hidden md:flex z-10">
+      <div class="text-[9px] font-black tracking-[0.4em] uppercase">
+        Explore sequential strategic assets
+      </div>
+      <div class="flex space-x-6">
+        <div class="w-1 h-1 rounded-full bg-white animate-pulse" />
+        <div class="w-1 h-1 rounded-full bg-white opacity-50" />
+        <div class="w-1 h-1 rounded-full bg-white opacity-20" />
       </div>
     </div>
   </div>
@@ -111,13 +109,14 @@ const scrollContainer = ref<HTMLElement | null>(null);
 const currentProjects = computed(() => store.currentProjects);
 
 const isDragging = ref(false);
+const isCurrentlyDragging = ref(false);
 const startX = ref(0);
 const scrollLeft = ref(0);
 
 const handleScroll = (e: Event) => {
   const target = e.target as HTMLElement;
   const maxScroll = target.scrollWidth - target.clientWidth;
-  const progress = target.scrollLeft / maxScroll;
+  const progress = maxScroll > 0 ? target.scrollLeft / maxScroll : 0;
   store.setScrollProgress(progress);
 };
 
@@ -129,13 +128,19 @@ const handleWheel = (e: WheelEvent) => {
 };
 
 const startDragging = (e: MouseEvent) => {
+  if (!scrollContainer.value) return;
   isDragging.value = true;
-  startX.value = e.pageX - (scrollContainer.value?.offsetLeft || 0);
-  scrollLeft.value = scrollContainer.value?.scrollLeft || 0;
+  isCurrentlyDragging.value = false;
+  startX.value = e.pageX - scrollContainer.value.offsetLeft;
+  scrollLeft.value = scrollContainer.value.scrollLeft;
 };
 
 const stopDragging = () => {
+  if (!isDragging.value) return;
   isDragging.value = false;
+  setTimeout(() => {
+    isCurrentlyDragging.value = false;
+  }, 50); // slight delay to prevent click event right after drag
 };
 
 const onDrag = (e: MouseEvent) => {
@@ -143,6 +148,11 @@ const onDrag = (e: MouseEvent) => {
   e.preventDefault();
   const x = e.pageX - scrollContainer.value.offsetLeft;
   const walk = (x - startX.value) * 2;
+
+  if (Math.abs(walk) > 5) {
+    isCurrentlyDragging.value = true;
+  }
+
   scrollContainer.value.scrollLeft = scrollLeft.value - walk;
 };
 
@@ -156,3 +166,6 @@ const handleBack = () => {
   router.push('/select');
 };
 </script>
+
+<style scoped>
+</style>
