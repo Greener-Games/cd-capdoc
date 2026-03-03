@@ -25,6 +25,7 @@ export interface CategoryItem {
   subtitle: string;
   image: string;
   color: string;
+  accentColor: string;
   projects: Project[];
 }
 

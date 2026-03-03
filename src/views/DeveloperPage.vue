@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute inset-0 z-20 overflow-y-auto no-scrollbar pointer-events-auto bg-black/90 backdrop-blur-3xl">
+  <div class="absolute inset-0 z-20 overflow-y-auto scrollbar-none pointer-events-auto bg-black/90 backdrop-blur-3xl">
     <div class="max-w-7xl mx-auto px-8 py-24">
       <div class="flex items-center justify-between mb-16">
         <div>

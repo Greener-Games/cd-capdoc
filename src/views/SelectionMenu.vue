@@ -39,6 +39,8 @@
         >
           {{ filterType === CategoryType.CAPABILITY ? 'Capabilities' :
              filterType === CategoryType.MARKET ? 'Market sectors' : 'Global regions' }}
+
+          {{isCurrentlyDragging }}
         </h2>
       </div>
     </div>
@@ -50,7 +52,7 @@
       @mouseleave="handleMouseLeave"
       @mouseup="handleMouseUp"
       @mousemove="handleMouseMove"
-      class="flex items-center space-x-6 px-12 md:px-24 overflow-x-auto no-scrollbar h-[55vh] select-none"
+      class="flex items-center space-x-6 px-12 md:px-24 overflow-x-auto scrollbar-none h-[55vh] select-none"
       :class="isCurrentlyDragging ? 'cursor-grabbing' : 'cursor-grab'"
     >
       <div
@@ -143,44 +145,47 @@ const isDragging = ref(false);
 const isCurrentlyDragging = ref(false);
 const startX = ref(0);
 const scrollLeft = ref(0);
+const dragThreshold = 5; // Minimum pixels to move before it's a drag
 
 const handleMouseDown = (e: MouseEvent) => {
   if (!containerRef.value) return;
   isDragging.value = true;
-  isCurrentlyDragging.value = true;
+  // Don't set isCurrentlyDragging here yet
   startX.value = e.pageX - containerRef.value.offsetLeft;
   scrollLeft.value = containerRef.value.scrollLeft;
 };
 
 const handleMouseLeave = () => {
-  if (!isDragging.value) return;
   isDragging.value = false;
   isCurrentlyDragging.value = false;
 };
 
 const handleMouseUp = () => {
-  if (!isDragging.value) return;
   isDragging.value = false;
+  // Use a timeout to ensure the click handler (which runs after mouseup)
+  // can still see the correct state of isCurrentlyDragging
   setTimeout(() => {
     isCurrentlyDragging.value = false;
-  }, 50); // slight delay to prevent click event right after drag
+  }, 50);
 };
 
 const handleMouseMove = (e: MouseEvent) => {
   if (!isDragging.value || !containerRef.value) return;
-  e.preventDefault();
+
   const x = e.pageX - containerRef.value.offsetLeft;
-  const walk = (x - startX.value) * 2;
-  containerRef.value.scrollLeft = scrollLeft.value - walk;
+  const walk = (x - startX.value);
+
+  // Only trigger drag state if we've moved past the threshold
+  if (Math.abs(walk) > dragThreshold) {
+    isCurrentlyDragging.value = true;
+  }
+
+  if (isCurrentlyDragging.value) {
+    e.preventDefault();
+    containerRef.value.scrollLeft = scrollLeft.value - (walk * 2);
+  }
 };
 </script>
 
 <style scoped>
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
 </style>

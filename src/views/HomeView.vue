@@ -1,51 +1,39 @@
 <template>
-  <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
     <div
-      v-motion
-      :initial="{ opacity: 0, scale: 0.9, y: 20 }"
-      :enter="{ opacity: 1, scale: 1, y: 0, transition: { duration: 1000, delay: 200 } }"
-      class="text-center z-10"
+        @click="handleEnter"
+        class="absolute inset-0 flex flex-col items-center justify-center cursor-pointer group/bg"
     >
-      <div
-        v-motion
-        :initial="{ opacity: 0 }"
-        :enter="{ opacity: 1, transition: { duration: 1000, delay: 500 } }"
-        class="text-[10px] font-bold tracking-[0.4em] uppercase mb-8 text-white/50"
+      <div class="text-center z-10 pointer-events-none">
+        <h1
+          v-motion
+          :initial="{ opacity: 0, scale: 0.5 }"
+          :enter="{ opacity: 1, scale: 1, transition: { duration: 800, type: 'spring', stiffness: 100 } }"
+          class="text-h1 mb-6 text-white text-shadow-glow"
       >
-        Welcome To
-      </div>
-
-      <h1 class="text-h1 mb-6 text-white text-shadow-glow">
-        Ethereal
+        Complex to clarity
       </h1>
 
-      <p class="text-subtitle mb-16 max-w-xl mx-auto px-4 text-shadow">
-        An immersive exploration of our capabilities, markets, and regional impact.
+      <p
+          v-motion
+          :initial="{ opacity: 0, y: 40 }"
+          :enter="{ opacity: 1, y: 0, transition: { duration: 800, delay: 600 } }"
+          class="text-subtitle mb-16 max-w-xl mx-auto px-4 text-shadow"
+      >
+        Creative Design
       </p>
 
-      <button
-        @click="handleEnter"
-        v-motion
-        :initial="{ opacity: 0, y: 20 }"
-        :enter="{ opacity: 1, y: 0, transition: { delay: 800 } }"
-        class="pointer-events-auto btn-primary inline-flex items-center space-x-3 group"
-      >
-        <span>Begin Journey</span>
-        <ArrowRight class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-      </button>
-    </div>
-
-    <!-- Developer Access -->
-    <button
-      @click="handleDevAccess"
-      v-motion
-      :initial="{ opacity: 0 }"
-      :enter="{ opacity: 1, transition: { delay: 1500 } }"
-      class="absolute bottom-8 right-8 pointer-events-auto flex items-center space-x-2 text-white/20 hover:text-white/60 transition-colors cursor-pointer group"
-    >
-      <span class="text-[9px] font-black tracking-[0.2em] uppercase">Dev Access</span>
-      <Terminal class="w-3.5 h-3.5" />
-    </button>
+        <div
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { delay: 800, duration: 1000 } }"
+            class="flex flex-col items-center space-y-4"
+        >
+        <span class="text-white/40 text-sm font-light tracking-[0.3em] uppercase animate-pulse">
+          Click anywhere to begin
+        </span>
+          <ArrowRight class="w-5 h-5 text-white/20 group-hover/bg:translate-x-2 transition-transform duration-500" />
+        </div>
+      </div>
   </div>
 </template>
 
@@ -57,9 +45,5 @@ const router = useRouter();
 
 const handleEnter = () => {
   router.push('/select');
-};
-
-const handleDevAccess = () => {
-  router.push('/developer');
 };
 </script>

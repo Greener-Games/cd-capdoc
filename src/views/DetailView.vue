@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute inset-0 z-10 overflow-y-auto no-scrollbar pointer-events-auto">
+  <div class="absolute inset-0 z-10 overflow-y-auto scrollbar-none pointer-events-auto">
     <div class="min-h-[150vh] relative">
       <!-- Fixed Progress indicator -->
       <div class="fixed right-8 top-1/2 -translate-y-1/2 flex flex-col items-center space-y-4 z-50 mix-blend-difference">

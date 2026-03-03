@@ -2,7 +2,7 @@
   <div class="absolute inset-0 z-10">
     <div
       ref="scrollContainer"
-      class="absolute inset-0 overflow-x-auto overflow-y-hidden no-scrollbar cursor-grab active:cursor-grabbing"
+      class="absolute inset-0 overflow-x-auto overflow-y-hidden scrollbar-none cursor-grab active:cursor-grabbing"
       @scroll="handleScroll"
       @wheel="handleWheel"
       @mousedown="startDragging"

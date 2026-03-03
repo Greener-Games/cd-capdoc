@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "tailwind-scrollbar";
 
 @theme {
   --color-primary: #1e293b;
@@ -7,13 +8,6 @@
 }
 
 @layer utilities {
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
 
   .text-shadow {
     text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
@@ -56,6 +50,7 @@
 }
 
 /* Base styles */
+/* Base styles moved from index.html */
 body {
   margin: 0;
   padding: 0;
@@ -73,7 +68,7 @@ body {
   height: 100vh;
 }
 
-/* Custom slider thumb styling */
+/* Custom slider thumb styling moved from index.html */
 input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -84,6 +79,7 @@ input[type='range']::-webkit-slider-thumb {
   cursor: pointer;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
+
 input[type='range']::-moz-range-thumb {
   width: 12px;
   height: 12px;
