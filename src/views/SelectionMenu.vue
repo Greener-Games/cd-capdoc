@@ -80,8 +80,6 @@
           :style="{ backgroundColor: item.color || item.accentColor }"
         />
       </div>
-
-      <div class="min-w-[15vw] flex-shrink-0 h-1" />
     </DragScroll>
 
     <div class="absolute bottom-12 left-12 md:left-24 right-12 md:right-24 flex items-center justify-between pointer-events-none opacity-20 hidden md:flex">

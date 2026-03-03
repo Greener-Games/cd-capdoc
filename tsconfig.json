@@ -11,7 +11,8 @@
     ],
     "skipLibCheck": true,
     "types": [
-      "node"
+      "node",
+      "@tresjs/core"
     ],
     "moduleResolution": "bundler",
     "isolatedModules": true,
