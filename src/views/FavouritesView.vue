@@ -1,14 +1,10 @@
 <template>
   <div class="absolute inset-0 z-10">
-    <div
-      ref="scrollContainer"
-      class="absolute inset-0 overflow-x-auto overflow-y-hidden scrollbar-none cursor-grab active:cursor-grabbing"
+    <DragScroll
+      class="absolute inset-0 overflow-y-hidden"
       @scroll="handleScroll"
-      @wheel="handleWheel"
-      @mousedown="startDragging"
-      @mouseup="stopDragging"
-      @mouseleave="stopDragging"
-      @mousemove="onDrag"
+      :enable-wheel-scroll="true"
+      v-slot="{ isDragging }"
     >
       <div
         class="h-full flex items-center px-[20vw] space-x-32"
@@ -30,7 +26,7 @@
             :style="{ animationDelay: `${index * 100}ms` }"
             @mouseenter="store.setHoveredColor(project.accentColor)"
             @mouseleave="store.setHoveredColor(null)"
-            @click="handleProjectSelect(project)"
+            @click="!isDragging && handleProjectSelect(project)"
           >
             <!-- Timeline Node -->
             <div class="absolute -top-12 left-1/2 -translate-x-1/2 flex flex-col items-center">
@@ -63,7 +59,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </DragScroll>
 
     <!-- Navigation Overlay -->
     <div class="fixed bottom-8 left-8 right-8 flex justify-between items-end pointer-events-none z-50">
@@ -97,11 +93,11 @@ import { useRouter } from 'vue-router';
 import { useAppStore } from '../store';
 import { ArrowLeft } from 'lucide-vue-next';
 import { Project, ViewState } from '../types';
+import DragScroll from '../components/DragScroll.vue';
 
 const store = useAppStore();
 const router = useRouter();
 
-const scrollContainer = ref<HTMLElement | null>(null);
 const currentProjects = computed(() => store.currentProjects);
 
 const curatedTitle = computed({
@@ -109,40 +105,11 @@ const curatedTitle = computed({
   set: (val) => store.curatedTitle = val
 });
 
-const isDragging = ref(false);
-const startX = ref(0);
-const scrollLeft = ref(0);
-
 const handleScroll = (e: Event) => {
   const target = e.target as HTMLElement;
   const maxScroll = target.scrollWidth - target.clientWidth;
   const progress = target.scrollLeft / maxScroll;
   store.setScrollProgress(progress);
-};
-
-const handleWheel = (e: WheelEvent) => {
-  if (scrollContainer.value) {
-    e.preventDefault();
-    scrollContainer.value.scrollLeft += e.deltaY;
-  }
-};
-
-const startDragging = (e: MouseEvent) => {
-  isDragging.value = true;
-  startX.value = e.pageX - (scrollContainer.value?.offsetLeft || 0);
-  scrollLeft.value = scrollContainer.value?.scrollLeft || 0;
-};
-
-const stopDragging = () => {
-  isDragging.value = false;
-};
-
-const onDrag = (e: MouseEvent) => {
-  if (!isDragging.value || !scrollContainer.value) return;
-  e.preventDefault();
-  const x = e.pageX - scrollContainer.value.offsetLeft;
-  const walk = (x - startX.value) * 2;
-  scrollContainer.value.scrollLeft = scrollLeft.value - walk;
 };
 
 const handleProjectSelect = (project: Project) => {

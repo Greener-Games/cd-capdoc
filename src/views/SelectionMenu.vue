@@ -33,27 +33,20 @@
         >
           {{ filterType === CategoryType.CAPABILITY ? 'Capabilities' :
              filterType === CategoryType.MARKET ? 'Market sectors' : 'Global regions' }}
-
-          {{isCurrentlyDragging }}
         </h2>
       </div>
     </div>
 
     <!-- Draggable/Scrollable Container -->
-    <div
-      ref="containerRef"
-      @mousedown="handleMouseDown"
-      @mouseleave="handleMouseLeave"
-      @mouseup="handleMouseUp"
-      @mousemove="handleMouseMove"
-      class="flex items-center space-x-6 px-12 md:px-24 overflow-x-auto scrollbar-none h-[55vh] select-none"
-      :class="isCurrentlyDragging ? 'cursor-grabbing' : 'cursor-grab'"
+    <DragScroll
+      class="flex items-center space-x-6 px-12 md:px-24 h-[55vh]"
+      v-slot="{ isDragging }"
     >
       <div
         v-for="(item, index) in currentData"
         :key="`${filterType}-${item.id}`"
         :style="{ animationDelay: `${index * 50}ms` }"
-        @click="!isCurrentlyDragging && handleSelect(item.id)"
+        @click="!isDragging && handleSelect(item.id)"
         @mouseenter="store.setHoveredColor(item.color || item.accentColor)"
         @mouseleave="store.setHoveredColor(null)"
         class="group relative flex-shrink-0 w-[80vw] sm:w-[35vw] md:w-[22vw] h-full overflow-hidden rounded-[2.5rem] border border-white/5 transition-all duration-700 bg-zinc-950/40 animate-in fade-in zoom-in-90 slide-in-from-right-12 duration-[600ms] fill-mode-both"
@@ -89,7 +82,7 @@
       </div>
 
       <div class="min-w-[15vw] flex-shrink-0 h-1" />
-    </div>
+    </DragScroll>
 
     <div class="absolute bottom-12 left-12 md:left-24 right-12 md:right-24 flex items-center justify-between pointer-events-none opacity-20 hidden md:flex">
       <div class="text-[9px] font-black tracking-[0.4em] uppercase">
@@ -110,12 +103,12 @@ import { useRouter } from 'vue-router';
 import { useAppStore } from '../store';
 import { CategoryType } from '../types';
 import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA } from '../constants';
+import DragScroll from '../components/DragScroll.vue';
 
 const store = useAppStore();
 const router = useRouter();
 
 const filterType = ref<CategoryType>(store.filterType || CategoryType.CAPABILITY);
-const containerRef = ref<HTMLDivElement | null>(null);
 
 const currentData = computed(() => {
   return filterType.value === CategoryType.CAPABILITY ? CAPABILITY_DATA :
@@ -130,52 +123,6 @@ const setFilter = (type: CategoryType) => {
 const handleSelect = (id: string) => {
   store.setFilter(filterType.value, id);
   router.push(`/timeline/${filterType.value}/${id}`);
-};
-
-// Drag to scroll logic
-const isDragging = ref(false);
-const isCurrentlyDragging = ref(false);
-const startX = ref(0);
-const scrollLeft = ref(0);
-const dragThreshold = 5; // Minimum pixels to move before it's a drag
-
-const handleMouseDown = (e: MouseEvent) => {
-  if (!containerRef.value) return;
-  isDragging.value = true;
-  // Don't set isCurrentlyDragging here yet
-  startX.value = e.pageX - containerRef.value.offsetLeft;
-  scrollLeft.value = containerRef.value.scrollLeft;
-};
-
-const handleMouseLeave = () => {
-  isDragging.value = false;
-  isCurrentlyDragging.value = false;
-};
-
-const handleMouseUp = () => {
-  isDragging.value = false;
-  // Use a timeout to ensure the click handler (which runs after mouseup)
-  // can still see the correct state of isCurrentlyDragging
-  setTimeout(() => {
-    isCurrentlyDragging.value = false;
-  }, 50);
-};
-
-const handleMouseMove = (e: MouseEvent) => {
-  if (!isDragging.value || !containerRef.value) return;
-
-  const x = e.pageX - containerRef.value.offsetLeft;
-  const walk = (x - startX.value);
-
-  // Only trigger drag state if we've moved past the threshold
-  if (Math.abs(walk) > dragThreshold) {
-    isCurrentlyDragging.value = true;
-  }
-
-  if (isCurrentlyDragging.value) {
-    e.preventDefault();
-    containerRef.value.scrollLeft = scrollLeft.value - (walk * 2);
-  }
 };
 </script>
 

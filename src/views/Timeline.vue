@@ -22,22 +22,17 @@
     </div>
 
     <!-- Draggable/Scrollable Container -->
-    <div
-      ref="scrollContainer"
+    <DragScroll
+      class="flex items-center space-x-6 px-12 md:px-24 h-[55vh]"
       @scroll="handleScroll"
-      @mousedown="startDragging"
-      @mouseleave="stopDragging"
-      @mouseup="stopDragging"
-      @mousemove="onDrag"
-      @wheel="handleWheel"
-      class="flex items-center space-x-6 px-12 md:px-24 overflow-x-auto scrollbar-none h-[55vh] select-none"
-      :class="isCurrentlyDragging ? 'cursor-grabbing' : 'cursor-grab'"
+      :enable-wheel-scroll="true"
+      v-slot="{ isDragging }"
     >
       <div
         v-for="(project, index) in currentProjects"
         :key="project.id"
         :style="{ animationDelay: `${index * 50}ms` }"
-        @click="!isCurrentlyDragging && handleProjectSelect(project)"
+        @click="!isDragging && handleProjectSelect(project)"
         @mouseenter="store.setHoveredColor(project.accentColor)"
         @mouseleave="store.setHoveredColor(null)"
         class="group relative flex-shrink-0 w-[80vw] sm:w-[35vw] md:w-[22vw] h-full overflow-hidden rounded-[2.5rem] border border-white/5 transition-all duration-700 bg-zinc-950/40 animate-in fade-in zoom-in-90 slide-in-from-right-12 duration-[600ms] fill-mode-both"
@@ -73,7 +68,7 @@
       </div>
 
       <div class="min-w-[15vw] flex-shrink-0 h-1" />
-    </div>
+    </DragScroll>
 
     <div class="absolute bottom-12 left-12 md:left-24 right-12 md:right-24 flex items-center justify-between pointer-events-none opacity-20 hidden md:flex z-10">
       <div class="text-[9px] font-black tracking-[0.4em] uppercase">
@@ -94,59 +89,18 @@ import { useRouter } from 'vue-router';
 import { useAppStore } from '../store';
 import { ArrowLeft } from 'lucide-vue-next';
 import { Project } from '../types';
+import DragScroll from '../components/DragScroll.vue';
 
 const store = useAppStore();
 const router = useRouter();
 
-const scrollContainer = ref<HTMLElement | null>(null);
 const currentProjects = computed(() => store.currentProjects);
-
-const isDragging = ref(false);
-const isCurrentlyDragging = ref(false);
-const startX = ref(0);
-const scrollLeft = ref(0);
 
 const handleScroll = (e: Event) => {
   const target = e.target as HTMLElement;
   const maxScroll = target.scrollWidth - target.clientWidth;
   const progress = maxScroll > 0 ? target.scrollLeft / maxScroll : 0;
   store.setScrollProgress(progress);
-};
-
-const handleWheel = (e: WheelEvent) => {
-  if (scrollContainer.value) {
-    e.preventDefault();
-    scrollContainer.value.scrollLeft += e.deltaY;
-  }
-};
-
-const startDragging = (e: MouseEvent) => {
-  if (!scrollContainer.value) return;
-  isDragging.value = true;
-  isCurrentlyDragging.value = false;
-  startX.value = e.pageX - scrollContainer.value.offsetLeft;
-  scrollLeft.value = scrollContainer.value.scrollLeft;
-};
-
-const stopDragging = () => {
-  if (!isDragging.value) return;
-  isDragging.value = false;
-  setTimeout(() => {
-    isCurrentlyDragging.value = false;
-  }, 50); // slight delay to prevent click event right after drag
-};
-
-const onDrag = (e: MouseEvent) => {
-  if (!isDragging.value || !scrollContainer.value) return;
-  e.preventDefault();
-  const x = e.pageX - scrollContainer.value.offsetLeft;
-  const walk = (x - startX.value) * 2;
-
-  if (Math.abs(walk) > 5) {
-    isCurrentlyDragging.value = true;
-  }
-
-  scrollContainer.value.scrollLeft = scrollLeft.value - walk;
 };
 
 const handleProjectSelect = (project: Project) => {
