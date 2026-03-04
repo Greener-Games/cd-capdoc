@@ -53,7 +53,14 @@ let resizeObserver: ResizeObserver | null = null;
 const updateTransform = (newX: number) => {
   if (!containerRef.value || !trackRef.value) return;
 
-  const maxScroll = -(trackRef.value.scrollWidth - containerRef.value.clientWidth);
+  // Calculate the maximum distance we can scroll left
+  let maxScroll = -(trackRef.value.scrollWidth - containerRef.value.clientWidth);
+
+  // FIX: If the content is smaller than the container, maxScroll becomes positive.
+  // We need to cap it at 0 so we don't accidentally push the content out of bounds!
+  if (maxScroll > 0) {
+    maxScroll = 0;
+  }
 
   // Clamp the translation so it doesn't scroll past the ends
   const clampedX = Math.max(maxScroll, Math.min(0, newX));
