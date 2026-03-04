@@ -2,7 +2,7 @@
   <div class="absolute inset-0 w-full h-full text-white overflow-hidden">
     <!-- Main Content -->
     <div class="absolute top-[140px] left-[64px] z-10 pointer-events-none">
-      <h1 class="text-[120px] leading-[0.9] font-normal tracking-tighter text-black animate-in fade-in slide-in-from-left-10 duration-[1000ms] fill-mode-both">
+      <h1 class="text-[120px] leading-[0.9] font-normal tracking-tighter text-white animate-in fade-in slide-in-from-left-10 duration-[1000ms] fill-mode-both">
         Complex<br />to Clarity
       </h1>
     </div>
