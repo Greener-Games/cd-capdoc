@@ -46,6 +46,13 @@
         </div>
       </div>
     </div>
+
+    <!-- Global Footer -->
+    <PageFooter
+      v-if="showFooter"
+      :count="footerProps.count"
+      :label="footerProps.label"
+    />
   </div>
 </template>
 
@@ -57,12 +64,38 @@ import { ViewState } from './types';
 import { Search, Heart } from 'lucide-vue-next';
 import Canvas3D from './components/Canvas3D.vue';
 import DevToggle from './components/DevToggle.vue';
+import PageFooter from './components/PageFooter.vue';
+import { CategoryType } from './types';
+import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA } from './constants';
 
 const router = useRouter();
 const store = useAppStore();
 
 const view = computed(() => store.view);
 const favouriteIds = computed(() => store.favouriteIds);
+
+const showFooter = computed(() => {
+  return [ViewState.LANDING, ViewState.SELECTOR, ViewState.TIMELINE].includes(view.value);
+});
+
+const footerProps = computed(() => {
+  if (view.value === ViewState.LANDING) {
+    return { count: store.flattenedAllProjects.length, label: 'PROJECTS' };
+  }
+  if (view.value === ViewState.SELECTOR) {
+    if (store.filterType === CategoryType.CAPABILITY) {
+      return { count: store.fetchedCapabilities.length || CAPABILITY_DATA.length, label: 'CAPABILITIES' };
+    } else if (store.filterType === CategoryType.MARKET) {
+      return { count: store.fetchedMarkets.length || MARKET_DATA.length, label: 'MARKETS' };
+    } else {
+      return { count: store.fetchedRegions.length || REGION_DATA.length, label: 'REGIONS' };
+    }
+  }
+  if (view.value === ViewState.TIMELINE) {
+    return { count: store.currentProjects.length, label: 'PROJECTS' };
+  }
+  return { count: 0, label: '' };
+});
 
 const handleGoHome = () => {
   store.goHome();

@@ -69,7 +69,6 @@
     </DragScroll>
 
     <!-- Bottom Footer -->
-    <PageFooter :count="currentProjects.length" label="PROJECTS" />
   </div>
 </template>
 
@@ -80,7 +79,6 @@ import { useAppStore } from '../store';
 import { ArrowLeft } from 'lucide-vue-next';
 import { Project } from '../types';
 import DragScroll from '../components/DragScroll.vue';
-import PageFooter from '../components/PageFooter.vue';
 
 const store = useAppStore();
 const router = useRouter();

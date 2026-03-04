@@ -17,21 +17,13 @@
       </button>
     </div>
 
-    <!-- Bottom Footer -->
-    <PageFooter :count="projectCount" label="PROJECTS" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAppStore } from '../store';
-import PageFooter from '../components/PageFooter.vue';
 
 const router = useRouter();
-const store = useAppStore();
-
-const projectCount = computed(() => store.flattenedAllProjects.length);
 
 const handleEnter = () => {
   router.push('/select');
