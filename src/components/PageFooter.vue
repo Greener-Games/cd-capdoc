@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute layout-footer  pb-4 flex justify-between items-end z-10 pointer-events-none text-[10px] font-bold tracking-[0.2em] uppercase text-white/60">
+  <div class="absolute layout-footer px-safe-side h-[var(--footer-height)] items-center flex justify-between items-end z-10 pointer-events-none text-[10px] font-bold tracking-[0.2em] uppercase text-white/60">
     <!-- Dynamic part: always animates (with delay on initial load if desired, but here we just keep the animation logic as it's unmounted/remounted) -->
     <div
         class="animate-in fade-in slide-in-from-bottom-5 duration-[1000ms] fill-mode-both"

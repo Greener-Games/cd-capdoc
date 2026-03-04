@@ -18,37 +18,44 @@
   --border-width-bottom: 20px;
   --border-width-top: 90px;
   --border-inner-radius: 1.5rem;
+  --footer-height: 40px;
+  --safe-padding: 20px;
+  --safe-padding-large: 40px;
 }
 
 @layer utilities
 {
   /* Clean positioning classes for Nav and Footer */
   .layout-nav {
-    top: calc(var(--border-width-top) / 2);
-    left: calc(var(--border-width-side) + 40px);
-    right: calc(var(--border-width-side) + 40px);
+    top: 0;
+    height: var(--border-width-top);
+    width: 100%
   }
 
   .layout-footer {
     bottom: var(--border-width-bottom);
-    left: calc(var(--border-width-side) + 40px);
-    right: calc(var(--border-width-side) + 40px);
+    width: 100%
   }
 
   /* Padding utility to clear the top border + 20px */
   .pt-safe-top {
-    padding-top: calc(var(--border-width-top) + 10px);
+    padding-top: calc(var(--border-width-top) + var(--safe-padding));
+  }
+
+  /* Padding utility to clear the bottom border + 20px */
+  .pb-safe-bottom {
+    padding-bottom: calc(var(--border-width-bottom) + var(--safe-padding));
   }
 
   /* Padding utility to clear the bottom border + footer + buffer */
-  .pb-safe-bottom {
-    padding-bottom: calc(var(--border-width-bottom) + 20px);
+  .pb-safe-bottom-footer {
+    padding-bottom: calc(var(--border-width-bottom) + var(--footer-height) + var(--safe-padding));
   }
 
   /* Padding utility to clear the side borders */
   .px-safe-side {
-    padding-left: calc(var(--border-width-side) + 40px);
-    padding-right: calc(var(--border-width-side) + 40px);
+    padding-left: calc(var(--border-width-side) + var(--safe-padding-large));
+    padding-right: calc(var(--border-width-side) + var(--safe-padding-large));
   }
 
   /* The transparent hole that uses a massive shadow to create the white border */

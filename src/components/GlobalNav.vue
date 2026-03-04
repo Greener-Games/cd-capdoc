@@ -1,8 +1,8 @@
 <template>
-  <div class="fixed layout-nav -translate-y-1/2 flex justify-between items-center z-[70] pointer-events-none">
+  <div class="fixed layout-nav px-safe-side flex justify-between items-center z-[70] pointer-events-none">
     <div class="flex items-center space-x-12 pointer-events-auto">
       <div class="flex flex-col items-start gap-1 transition-colors duration-500" :class="view === ViewState.LANDING ? 'text-black' : 'text-white'">
-        <span class="font-gamechanger text-2xl text-caption font-bold tracking-widest">Creative Design</span>
+      <span class="font-gamechanger text-2xl text-caption font-bold tracking-widest">Creative Design</span>
       </div>
     </div>
 
