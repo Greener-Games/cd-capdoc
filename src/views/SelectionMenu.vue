@@ -1,45 +1,56 @@
 <template>
-  <div class="relative flex flex-col w-full h-full overflow-hidden pt-32 z-10">
+  <div class="relative flex flex-col w-full h-full overflow-hidden pt-32 z-10 md:pt-48">
     <div class="px-12 md:px-24 mb-16 flex flex-col items-start z-10">
-      <div class="flex items-center mb-8">
-        <!-- Segmented Controller -->
-        <div class="flex items-center space-x-2 bg-white/5 backdrop-blur-md rounded-full p-1 border border-white/10 pointer-events-auto">
-          <button
-            v-for="type in [CategoryType.CAPABILITY, CategoryType.MARKET, CategoryType.REGION]"
-            :key="type"
-            @click="setFilter(type)"
-            class="relative px-6 py-2 rounded-full text-[9px] font-black tracking-[0.2em] uppercase transition-all duration-500 cursor-pointer"
-            :class="[
-              filterType === type
-                ? 'text-black'
-                : 'text-white/40 hover:text-white'
-            ]"
-          >
-            <div
-              v-if="filterType === type"
-              class="absolute inset-0 bg-white rounded-full z-0 animate-in fade-in zoom-in-75 duration-300 fill-mode-both"
-            ></div>
-            <span class="relative z-10">
-              {{ type === CategoryType.CAPABILITY ? 'Capability' : type === CategoryType.MARKET ? 'Market' : 'Region' }}
-            </span>
-          </button>
-        </div>
-      </div>
-
-      <div class="h-[100px]">
+      <div class="h-[80px] mb-8">
         <h2
           :key="filterType"
-          class="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none animate-in fade-in slide-in-from-bottom-2 duration-400 fill-mode-both"
+          class="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-none animate-in fade-in slide-in-from-bottom-2 duration-400 fill-mode-both"
         >
-          {{ filterType === CategoryType.CAPABILITY ? 'Capabilities' :
+          {{ filterType === CategoryType.CAPABILITY ? 'Our Capabilities' :
              filterType === CategoryType.MARKET ? 'Market sectors' : 'Global regions' }}
         </h2>
+      </div>
+
+      <div class="flex items-center">
+        <!-- Styled Pills -->
+        <div class="flex items-center space-x-2 pointer-events-auto">
+          <button
+            @click="setFilter(CategoryType.CAPABILITY)"
+            class="relative px-6 py-2 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all duration-500 cursor-pointer border border-white/20"
+            :class="[
+              filterType === CategoryType.CAPABILITY
+                ? 'bg-white text-black border-transparent'
+                : 'bg-transparent text-white hover:bg-white/10'
+            ]"
+          >
+            <span>Capabilities</span>
+          </button>
+
+          <!-- Dummy Buttons for UI match -->
+          <button
+            class="relative px-6 py-2 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all duration-500 cursor-pointer border border-white/20 bg-transparent text-white/50 hover:bg-white/10 hover:text-white"
+          >
+            <span>Market</span>
+          </button>
+
+          <button
+            class="relative px-6 py-2 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all duration-500 cursor-pointer border border-white/20 bg-transparent text-white/50 hover:bg-white/10 hover:text-white"
+          >
+            <span>Region</span>
+          </button>
+
+          <button
+            class="relative px-6 py-2 rounded-full text-[10px] font-black tracking-[0.2em] uppercase transition-all duration-500 cursor-pointer border border-white/20 bg-transparent text-white/50 hover:bg-white/10 hover:text-white"
+          >
+            <span>About Us</span>
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- Draggable/Scrollable Container -->
     <DragScroll
-      class="flex items-center space-x-6 px-12 md:px-24 h-[55vh]"
+      class="flex items-center space-x-6 px-12 md:px-24 h-[45vh]"
       v-slot="{ isDragging }"
     >
       <CarouselCard
@@ -56,15 +67,22 @@
       />
     </DragScroll>
 
-    <div class="absolute bottom-12 left-12 md:left-24 right-12 md:right-24 flex items-center justify-between pointer-events-none opacity-20 hidden md:flex">
-      <div class="text-[9px] font-black tracking-[0.4em] uppercase">
-        Explore sequential strategic assets
+    <!-- 3-part Footer -->
+    <div class="absolute bottom-12 left-12 right-12 md:left-24 md:right-24 flex items-center justify-between pointer-events-none opacity-50 hidden md:flex text-[9px] font-black tracking-[0.4em] uppercase text-white">
+      <div>01/04</div>
+
+      <div class="flex items-center space-x-4">
+        <span>Drag to explore</span>
+        <div class="flex space-x-2">
+          <div class="w-1.5 h-1.5 rounded-full bg-white opacity-20" />
+          <div class="w-1.5 h-1.5 rounded-full bg-white opacity-50" />
+          <div class="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+          <div class="w-1.5 h-1.5 rounded-full bg-white opacity-50" />
+          <div class="w-1.5 h-1.5 rounded-full bg-white opacity-20" />
+        </div>
       </div>
-      <div class="flex space-x-6">
-        <div class="w-1 h-1 rounded-full bg-white animate-pulse" />
-        <div class="w-1 h-1 rounded-full bg-white opacity-50" />
-        <div class="w-1 h-1 rounded-full bg-white opacity-20" />
-      </div>
+
+      <div>Scroll</div>
     </div>
   </div>
 </template>
