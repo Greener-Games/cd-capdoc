@@ -50,7 +50,7 @@
 
     <!-- Draggable/Scrollable Container -->
     <DragScroll
-      class="flex items-center space-x-6 px-12 md:px-24 h-[45vh]"
+      class="flex items-center space-x-6 px-12 md:px-24 flex-grow pb-12"
       v-slot="{ isDragging }"
     >
       <SelectionCard

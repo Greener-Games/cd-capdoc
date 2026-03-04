@@ -4,7 +4,7 @@
     @click="handleClick"
     @mouseenter="store.setHoveredColor(color)"
     @mouseleave="store.setHoveredColor(null)"
-    class="group relative flex-shrink-0 w-[80vw] sm:w-[35vw] md:w-[22vw] h-full transition-all duration-700 animate-in fade-in zoom-in-90 slide-in-from-right-12 duration-[600ms] fill-mode-both flex flex-col cursor-pointer"
+    class="group relative flex-shrink-0 w-[80vw] sm:w-[45vw] md:w-[30vw] lg:w-[340px] h-full transition-all duration-700 animate-in fade-in zoom-in-90 slide-in-from-right-12 duration-[600ms] fill-mode-both flex flex-col cursor-pointer"
   >
     <div class="relative w-full flex-grow rounded-3xl overflow-hidden border border-white/5 bg-zinc-950/40 mb-4">
       <img
