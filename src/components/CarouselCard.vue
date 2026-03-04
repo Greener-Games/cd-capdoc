@@ -4,7 +4,7 @@
     @click="handleClick"
     @mouseenter="store.setHoveredColor(color)"
     @mouseleave="store.setHoveredColor(null)"
-    class="group relative flex-shrink-0 w-[80vw] sm:w-[35vw] md:w-[22vw] h-full overflow-hidden transition-all duration-700 animate-in fade-in zoom-in-90 slide-in-from-right-12 duration-[600ms] fill-mode-both flex flex-col cursor-pointer"
+    class="group relative flex-shrink-0 w-[85vw] sm:w-[70vw] md:w-[45vw] h-full overflow-hidden transition-all duration-700 animate-in fade-in zoom-in-90 slide-in-from-right-12 duration-[600ms] fill-mode-both flex flex-col cursor-pointer"
   >
     <div class="relative w-full flex-grow rounded-[2.5rem] overflow-hidden border border-white/5 bg-zinc-950/40 mb-6">
       <img
@@ -20,13 +20,25 @@
       />
     </div>
 
-    <div class="flex flex-col justify-start text-left pointer-events-none px-2 h-24">
-      <h2 class="text-xl md:text-2xl font-black tracking-tighter uppercase mb-2 leading-tight transition-transform duration-700 text-white">
-        {{ formattedTitle }}
-      </h2>
-      <p class="text-[9px] font-bold tracking-widest uppercase text-white/50 transition-colors duration-700 group-hover:text-white">
-        {{ subtitle }}
-      </p>
+    <div class="flex flex-row justify-between items-start text-left pointer-events-none px-2 h-24 w-full">
+      <div class="flex flex-col max-w-[70%]">
+        <h2 class="text-xl md:text-2xl font-black tracking-tighter uppercase mb-2 leading-tight transition-transform duration-700 text-white">
+          {{ formattedTitle }}
+        </h2>
+        <p class="text-[9px] font-bold tracking-widest uppercase text-white/50 transition-colors duration-700 group-hover:text-white line-clamp-2">
+          {{ subtitle }}
+        </p>
+      </div>
+
+      <div v-if="services && services.length > 0" class="hidden md:flex flex-col items-end text-right gap-1 max-w-[30%] pt-1">
+        <span
+          v-for="service in services"
+          :key="service"
+          class="text-[9px] font-bold tracking-widest uppercase text-white/40 transition-colors duration-700 group-hover:text-white/80"
+        >
+          {{ service }}
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -44,8 +56,10 @@ const props = withDefaults(defineProps<{
   index: number;
   isDragging: boolean;
   prefix?: string;
+  services?: string[];
 }>(), {
-  prefix: ''
+  prefix: '',
+  services: () => []
 });
 
 const emit = defineEmits(['select']);
