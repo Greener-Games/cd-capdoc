@@ -55,9 +55,6 @@
         @select="handleSelect"
       />
     </DragScroll>
-
-    <!-- Bottom Footer -->
-    <PageFooter :count="currentData.length" :label="currentLabel" />
   </div>
 </template>
 
@@ -69,7 +66,6 @@ import { CategoryType } from '../types';
 import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA } from '../constants';
 import DragScroll from '../components/DragScroll.vue';
 import CarouselCard from '../components/CarouselCard.vue';
-import PageFooter from '../components/PageFooter.vue';
 
 const store = useAppStore();
 const router = useRouter();
@@ -79,11 +75,6 @@ const filterType = ref<CategoryType>(store.filterType || CategoryType.CAPABILITY
 const currentData = computed(() => {
   return filterType.value === CategoryType.CAPABILITY ? CAPABILITY_DATA :
          filterType.value === CategoryType.MARKET ? MARKET_DATA : REGION_DATA;
-});
-
-const currentLabel = computed(() => {
-  return filterType.value === CategoryType.CAPABILITY ? 'CAPABILITIES' :
-         filterType.value === CategoryType.MARKET ? 'MARKETS' : 'REGIONS';
 });
 
 const setFilter = (type: CategoryType) => {
