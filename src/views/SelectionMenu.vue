@@ -53,7 +53,7 @@
       class="flex items-center space-x-6 px-12 md:px-24 h-[45vh]"
       v-slot="{ isDragging }"
     >
-      <CarouselCard
+      <SelectionCard
         v-for="(item, index) in currentData"
         :key="`${filterType}-${item.id}`"
         :id="item.id"
@@ -76,7 +76,7 @@ import { useAppStore } from '../store';
 import { CategoryType } from '../types';
 import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA } from '../constants';
 import DragScroll from '../components/DragScroll.vue';
-import CarouselCard from '../components/CarouselCard.vue';
+import SelectionCard from '../components/SelectionCard.vue';
 
 const store = useAppStore();
 const router = useRouter();
