@@ -36,14 +36,14 @@ const uniforms = {
   uColor: { value: new THREE.Color('#0044ff') },
   uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
 
-  uLineWidth: { value: 7.5 },   // Width of the bright strips
+  uLineWidth: { value: 15 },   // Width of the bright strips
 
   // Now exactly maps to hardware screen pixels!
   uGapWidth: { value: 0 },
 
-  uDistortionZ: { value: 0.5 },
-  uDistortionX: { value: 0.75 },
-  uChaos: { value: 1.5 }
+  uDistortionZ: { value: 0.25 },
+  uDistortionX: { value: 0.5 },
+  uChaos: { value: 0.75 }
 };
 
 watch(() => store.hoveredColor, (newColor) => {

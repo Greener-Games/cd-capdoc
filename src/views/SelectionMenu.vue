@@ -56,16 +56,8 @@
       />
     </DragScroll>
 
-    <div class="absolute bottom-12 left-12 md:left-24 right-12 md:right-24 flex items-center justify-between pointer-events-none opacity-20 hidden md:flex">
-      <div class="text-[9px] font-black tracking-[0.4em] uppercase">
-        Explore sequential strategic assets
-      </div>
-      <div class="flex space-x-6">
-        <div class="w-1 h-1 rounded-full bg-white animate-pulse" />
-        <div class="w-1 h-1 rounded-full bg-white opacity-50" />
-        <div class="w-1 h-1 rounded-full bg-white opacity-20" />
-      </div>
-    </div>
+    <!-- Bottom Footer -->
+    <PageFooter :count="currentData.length" :label="currentLabel" />
   </div>
 </template>
 
@@ -77,6 +69,7 @@ import { CategoryType } from '../types';
 import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA } from '../constants';
 import DragScroll from '../components/DragScroll.vue';
 import CarouselCard from '../components/CarouselCard.vue';
+import PageFooter from '../components/PageFooter.vue';
 
 const store = useAppStore();
 const router = useRouter();
@@ -86,6 +79,11 @@ const filterType = ref<CategoryType>(store.filterType || CategoryType.CAPABILITY
 const currentData = computed(() => {
   return filterType.value === CategoryType.CAPABILITY ? CAPABILITY_DATA :
          filterType.value === CategoryType.MARKET ? MARKET_DATA : REGION_DATA;
+});
+
+const currentLabel = computed(() => {
+  return filterType.value === CategoryType.CAPABILITY ? 'CAPABILITIES' :
+         filterType.value === CategoryType.MARKET ? 'MARKETS' : 'REGIONS';
 });
 
 const setFilter = (type: CategoryType) => {
