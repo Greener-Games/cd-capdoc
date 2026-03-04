@@ -39,6 +39,7 @@
         :index="index"
         :is-dragging="isDragging"
         prefix="Phase "
+        :services="project.services"
         @select="() => handleProjectSelect(project)"
       />
     </DragScroll>
