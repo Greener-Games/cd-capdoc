@@ -11,70 +11,116 @@
         </div>
       </div>
 
-      <div class="max-w-4xl mx-auto px-8 pt-[20vh] pb-32">
+      <!-- Top Header Area -->
+      <div class="fixed top-0 left-0 w-full px-8 py-6 flex items-center justify-between z-50 bg-black/50 backdrop-blur-md border-b border-white/10">
+        <div class="text-sm font-medium tracking-wide text-white/80">Creative Design</div>
+        <div class="flex items-center space-x-6">
+          <div class="text-xl font-bold tracking-tighter text-white">AtkinsRéalis</div>
+          <button class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center hover:scale-105 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="max-w-6xl mx-auto px-8 pt-[15vh] pb-32">
         <div class="animate-in fade-in slide-in-from-bottom-10 duration-[800ms] fill-mode-both">
-          <div class="flex items-center space-x-6 mb-8">
-            <span
-              class="text-caption"
-              :style="{ color: project.accentColor }"
-            >
-              {{ project.id }}
-            </span>
-            <div class="h-[1px] flex-grow bg-white/10"></div>
+          <button
+            @click="handleBack"
+            class="group flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition-colors mb-8 cursor-pointer"
+          >
+            <ArrowLeft class="w-4 h-4 text-white group-hover:-translate-x-1 transition-transform" />
+          </button>
 
-            <button
-              @click="store.toggleFavourite(project.id)"
-              class="group/btn flex items-center space-x-3 cursor-pointer"
-            >
-              <span class="text-[9px] font-black tracking-widest uppercase text-white/40 group-hover/btn:text-white transition-colors">
-                {{ isFavourite ? 'Curated' : 'Add to Curated' }}
-              </span>
-              <div
-                class="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center transition-all group-hover/btn:border-white/30"
-                :class="isFavourite ? 'bg-white/10' : ''"
-              >
-                <Heart
-                  class="w-3.5 h-3.5 transition-colors"
-                  :class="isFavourite ? 'text-red-500 fill-red-500' : 'text-white/40 group-hover/btn:text-white'"
-                />
-              </div>
-            </button>
-          </div>
-
-          <h1 class="text-h2 text-white mb-12 text-shadow-glow leading-tight">
+          <h1 class="text-5xl md:text-7xl font-light text-white mb-16 leading-tight max-w-4xl">
             {{ project.title }}
           </h1>
 
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-24">
-            <div class="md:col-span-4">
-              <div class="glass-panel p-6 sticky top-32">
-                <div class="text-[9px] font-bold tracking-[0.2em] uppercase text-white/40 mb-4">
-                  Overview
-                </div>
-                <p class="text-sm text-white/70 leading-relaxed font-light">
-                  {{ project.description }}
-                </p>
-              </div>
-            </div>
-            <div class="md:col-span-8">
-              <p class="text-xl text-white/80 leading-loose font-light mb-12">
-                {{ project.longDescription }}
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-24 items-start">
+            <div class="md:col-span-6">
+              <p class="text-base text-white/80 leading-relaxed font-light">
+                {{ project.description }}
               </p>
+            </div>
+            <div class="md:col-span-6 flex justify-end">
+              <div class="grid grid-cols-2 gap-x-16 gap-y-4 text-[10px] uppercase tracking-wider text-white/50">
+                <template v-if="project.services && project.services.length">
+                  <div class="flex flex-col space-y-2">
+                    <span v-for="service in project.services" :key="service">{{ service }}</span>
+                  </div>
+                </template>
+                <template v-if="project.client">
+                  <div class="flex flex-col space-y-2">
+                    <span>{{ project.client }}</span>
+                    <span v-if="project.year">{{ project.year }}</span>
+                  </div>
+                </template>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Parallax Image Area -->
-        <div class="relative w-full h-[60vh] rounded-2xl overflow-hidden mb-24 group">
-          <div
-            class="absolute inset-[-10%] bg-cover bg-center transition-transform duration-1000 ease-out will-change-transform group-hover:scale-105"
-            :style="{
-              backgroundImage: `url(${project.imageUrl})`,
-              transform: `translateY(${(scrollProgress - 0.5) * -50}px)`
-            }"
-          ></div>
-          <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
-        </div>
+        <!-- Dynamic Content Blocks -->
+        <template v-if="project.contentBlocks && project.contentBlocks.length > 0">
+          <div class="space-y-32 mb-32">
+            <div v-for="block in project.contentBlocks" :key="block.id" class="w-full">
+              <!-- Image Block -->
+              <div v-if="block.type === 'image'" class="relative w-[100vw] h-[70vh] left-1/2 -translate-x-1/2 overflow-hidden">
+                <div
+                  class="absolute inset-0 bg-cover bg-center"
+                  :style="{ backgroundImage: `url(${(block as any).url})` }"
+                ></div>
+              </div>
+
+              <!-- Text Block -->
+              <div v-else-if="block.type === 'text'" class="max-w-6xl mx-auto px-8">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+                  <div class="md:col-span-4">
+                    <h3 v-if="(block as any).title" class="text-[10px] tracking-[0.2em] uppercase text-white/50 mb-6 font-medium">
+                      {{ (block as any).title }}
+                    </h3>
+                  </div>
+                  <div class="md:col-span-8">
+                    <p class="text-sm md:text-base text-white/80 leading-relaxed font-light whitespace-pre-line">
+                      {{ (block as any).content }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Video Block -->
+              <div v-else-if="block.type === 'video'" class="relative w-[100vw] h-[70vh] left-1/2 -translate-x-1/2 overflow-hidden bg-black flex items-center justify-center">
+                <video
+                  class="w-full h-full object-cover"
+                  autoplay loop muted playsinline
+                  :poster="(block as any).poster"
+                >
+                  <source :src="(block as any).url" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <!-- Fallback Legacy View -->
+        <template v-else>
+          <!-- Parallax Image Area -->
+          <div class="relative w-full h-[60vh] rounded-2xl overflow-hidden mb-24 group">
+            <div
+              class="absolute inset-[-10%] bg-cover bg-center transition-transform duration-1000 ease-out will-change-transform group-hover:scale-105"
+              :style="{
+                backgroundImage: `url(${project.imageUrl})`,
+                transform: `translateY(${(scrollProgress - 0.5) * -50}px)`
+              }"
+            ></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+          </div>
+
+          <div class="max-w-4xl mx-auto">
+            <p class="text-xl text-white/80 leading-loose font-light mb-12">
+              {{ project.longDescription }}
+            </p>
+          </div>
+        </template>
 
         <!-- Navigation Actions -->
         <div class="flex items-center justify-between border-t border-white/10 pt-12 animate-in fade-in slide-in-from-bottom-5 duration-[800ms] delay-200 fill-mode-both">
@@ -88,18 +134,28 @@
             <span class="text-caption">Back to Timeline</span>
           </button>
 
-          <button
-            @click="handleNext"
-            class="group flex items-center space-x-4 text-white hover:text-white transition-colors cursor-pointer"
-          >
-            <span class="text-caption">{{ isLastChapter ? 'Complete Journey' : 'Next Chapter' }}</span>
-            <div
-              class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center transition-all group-hover:scale-110"
-              :style="{ backgroundColor: project.accentColor }"
+          <div class="flex items-center space-x-6">
+            <button
+              @click.stop="toggleFavourite"
+              class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center transition-colors hover:bg-white/10 backdrop-blur-sm cursor-pointer"
+              :class="{ 'bg-white/10': isFavourite }"
             >
-              <ArrowRight class="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
-            </div>
-          </button>
+              <Heart class="w-4 h-4 transition-colors" :class="isFavourite ? 'text-red-500 fill-red-500' : 'text-white'" />
+            </button>
+
+            <button
+              @click="handleNext"
+              class="group flex items-center space-x-4 text-white hover:text-white transition-colors cursor-pointer"
+            >
+              <span class="text-caption">{{ isLastChapter ? 'Complete Journey' : 'Next Chapter' }}</span>
+              <div
+                class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center transition-all group-hover:scale-110"
+                :style="{ backgroundColor: project.accentColor }"
+              >
+                <ArrowRight class="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
+              </div>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -142,6 +198,12 @@ onUnmounted(() => {
     container.removeEventListener('scroll', handleScroll);
   }
 });
+
+const toggleFavourite = () => {
+  if (project.value) {
+    store.toggleFavourite(project.value.id);
+  }
+};
 
 const handleBack = () => {
   store.backToTimeline();
