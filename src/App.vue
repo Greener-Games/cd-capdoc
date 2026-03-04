@@ -21,36 +21,14 @@
 
     <DevToggle />
 
+    <!-- Landing Page White Border Effect -->
+    <div
+      class="fixed inset-[12px] md:inset-[24px] z-[60] pointer-events-none rounded-[2rem] border-[40px] border-[#E8E8E8] transition-opacity duration-[800ms]"
+      :class="view === ViewState.LANDING ? 'opacity-100' : 'opacity-0'"
+    ></div>
+
     <!-- Global Navigation -->
-
-    <div v-if="view !== ViewState.LANDING" class="fixed top-12 left-12 right-12 flex justify-between items-center z-50 pointer-events-none md:top-24 md:left-24 md:right-24">
-      <div class="flex items-center space-x-12">
-        <div class="flex flex-col items-start gap-1">
-          <span class="text-caption font-bold tracking-widest text-white">Creative Design</span>
-          <button
-            @click="handleGoHome"
-            class="text-caption opacity-50 pointer-events-auto hover:opacity-100 transition-opacity cursor-pointer animate-in fade-in slide-in-from-top-4 duration-500"
-          >
-            <span>AtkinsRéalis</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="flex items-center space-x-8 pointer-events-auto">
-        <button
-          @click="handleOpenSearch"
-          class="relative flex items-center justify-center w-12 h-12 bg-white rounded-full transition-all cursor-pointer group animate-in fade-in zoom-in-90 duration-500 active:scale-95 hover:scale-105 shadow-lg"
-        >
-          <Search class="w-5 h-5 text-black" />
-        </button>
-
-        <div v-if="view === ViewState.FAVOURITES" class="flex items-center space-x-3 text-[10px] font-black tracking-widest text-white/40 uppercase">
-          <Heart class="w-3 h-3 text-red-500 fill-red-500" />
-          <span>{{ favouriteIds.length }} Curated</span>
-        </div>
-      </div>
-
-    </div>
+    <GlobalNav />
 
     <!-- Global Footer -->
     <PageFooter
@@ -66,9 +44,9 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAppStore } from './store';
 import { ViewState } from './types';
-import { Search, Heart } from 'lucide-vue-next';
 import Canvas3D from './components/Canvas3D.vue';
 import DevToggle from './components/DevToggle.vue';
+import GlobalNav from './components/GlobalNav.vue';
 import PageFooter from './components/PageFooter.vue';
 import { CategoryType } from './types';
 import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA } from './constants';
@@ -77,7 +55,6 @@ const router = useRouter();
 const store = useAppStore();
 
 const view = computed(() => store.view);
-const favouriteIds = computed(() => store.favouriteIds);
 
 const showFooter = computed(() => {
   return [ViewState.LANDING, ViewState.SELECTOR, ViewState.TIMELINE].includes(view.value);
@@ -101,18 +78,6 @@ const footerProps = computed(() => {
   }
   return { count: 0, label: '' };
 });
-
-const handleGoHome = () => {
-  store.goHome();
-  router.push('/');
-};
-
-const handleOpenSearch = () => {
-  if (view.value !== ViewState.DEVELOPER) {
-    store.setView(ViewState.DEVELOPER);
-    router.push('/developer');
-  }
-};
 </script>
 
 <style scoped>
