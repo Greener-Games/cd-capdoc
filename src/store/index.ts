@@ -23,6 +23,7 @@ export const useAppStore = defineStore('app', {
     fetchedRegions: [] as CategoryItem[],
     fetchedCapabilities: [] as CategoryItem[],
     isFetchingData: false,
+    hasFooterAnimated: false,
   }),
   getters: {
     flattenedAllProjects(state): Project[] {
@@ -143,6 +144,9 @@ export const useAppStore = defineStore('app', {
       } finally {
         this.isFetchingData = false;
       }
+    },
+    setHasFooterAnimated(value: boolean) {
+      this.hasFooterAnimated = value;
     },
     async setUseLocalData(useLocal: boolean) {
       this.useLocalData = useLocal;
