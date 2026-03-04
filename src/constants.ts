@@ -9,7 +9,8 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       description: 'Uncovering the core essence and strategic positioning of the brand.',
       longDescription: 'A deep dive into market positioning, competitor landscapes, and the unique value proposition that defines the future brand trajectory.',
       imageUrl: 'https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800&h=1200',
-      accentColor: '#3b82f6'
+      accentColor: '#3b82f6',
+      services: ['Strategy', 'Research', 'Auditing']
     },
     {
       id: 'B2',
@@ -17,7 +18,8 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       description: 'Defining the logo systems, typography, and color theory.',
       longDescription: 'Crafting a cohesive visual language that scales across every touchpoint, from digital interfaces to physical environments.',
       imageUrl: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=800&h=1200',
-      accentColor: '#3b82f6'
+      accentColor: '#3b82f6',
+      services: ['Identity', 'Typography']
     },
     {
       id: 'B3',
@@ -35,7 +37,8 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       description: 'Mapping the user journey through intuitive information architecture.',
       longDescription: 'Prioritizing usability and conversion through data-driven wireframing and user-centric experience design.',
       imageUrl: 'https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&q=80&w=800&h=1200',
-      accentColor: '#10b981'
+      accentColor: '#10b981',
+      services: ['UX Design', 'Wireframing']
     },
     {
       id: 'D2',
@@ -61,7 +64,8 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       description: 'Visualizing the rhythm and narrative arc of the sequence.',
       longDescription: 'Choreographing movement and timing to ensure the key message resonates with cinematic impact.',
       imageUrl: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=800&h=1200',
-      accentColor: '#f59e0b'
+      accentColor: '#f59e0b',
+      services: ['Direction', 'Storyboarding']
     },
     {
       id: 'M2',
@@ -145,7 +149,8 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       description: 'Merging physical space with digital interaction.',
       longDescription: 'Imagining multi-sensory experiences that blur the lines between reality and the virtual world.',
       imageUrl: 'https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&q=80&w=800&h=1200',
-      accentColor: '#ef4444'
+      accentColor: '#ef4444',
+      services: ['Spatial Design', 'Concepting']
     },
     {
       id: 'I2',

@@ -13,9 +13,9 @@
 
       <!-- Top Header Area -->
       <div class="fixed top-0 left-0 w-full px-8 py-6 flex items-center justify-between z-50 bg-black/50 backdrop-blur-md border-b border-white/10">
-        <div class="text-sm font-medium tracking-wide text-white/80">Creative Design</div>
+        <div class="text-sm font-medium  text-white/80">Creative Design</div>
         <div class="flex items-center space-x-6">
-          <div class="text-xl font-bold tracking-tighter text-white">AtkinsRéalis</div>
+          <div class="text-xl font-bold text-white">AtkinsRéalis</div>
           <button class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center hover:scale-105 transition-transform">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </button>
@@ -31,18 +31,18 @@
             <ArrowLeft class="w-4 h-4 text-white group-hover:-translate-x-1 transition-transform" />
           </button>
 
-          <h1 class="text-5xl md:text-7xl font-light text-white mb-16 leading-tight max-w-4xl">
+          <h1 class="text-5xl md:text-7xl font-light text-white mb-16 max-w-4xl">
             {{ project.title }}
           </h1>
 
           <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-24 items-start">
             <div class="md:col-span-6">
-              <p class="text-base text-white/80 leading-relaxed font-light">
+              <p class="text-base text-white/80 font-light">
                 {{ project.description }}
               </p>
             </div>
             <div class="md:col-span-6 flex justify-end">
-              <div class="grid grid-cols-2 gap-x-16 gap-y-4 text-[10px] uppercase tracking-wider text-white/50">
+              <div class="grid grid-cols-2 gap-x-16 gap-y-4 text-[10px] uppercase text-white/50">
                 <template v-if="project.services && project.services.length">
                   <div class="flex flex-col space-y-2">
                     <span v-for="service in project.services" :key="service">{{ service }}</span>
@@ -75,12 +75,12 @@
               <div v-else-if="block.type === 'text'" class="max-w-6xl mx-auto px-8">
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
                   <div class="md:col-span-4">
-                    <h3 v-if="(block as any).title" class="text-[10px] tracking-[0.2em] uppercase text-white/50 mb-6 font-medium">
+                    <h3 v-if="(block as any).title" class="text-[10px] uppercase text-white/50 mb-6 font-medium">
                       {{ (block as any).title }}
                     </h3>
                   </div>
                   <div class="md:col-span-8">
-                    <p class="text-sm md:text-base text-white/80 leading-relaxed font-light whitespace-pre-line">
+                    <p class="text-sm md:text-base text-white/80 font-light whitespace-pre-line">
                       {{ (block as any).content }}
                     </p>
                   </div>
@@ -116,7 +116,7 @@
           </div>
 
           <div class="max-w-4xl mx-auto">
-            <p class="text-xl text-white/80 leading-loose font-light mb-12">
+            <p class="text-xl text-white/80 font-light mb-12">
               {{ project.longDescription }}
             </p>
           </div>

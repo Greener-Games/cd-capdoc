@@ -33,11 +33,11 @@
       </div>
 
       <div class="p-6 flex-grow flex flex-col">
-        <div class="text-[9px] font-bold tracking-widest uppercase text-white/40 mb-2">
+        <div class="text-[9px] font-bold  uppercase text-white/40 mb-2">
           {{ project.id }}
         </div>
         <h3 class="text-xl font-light text-white mb-2">{{ project.title }}</h3>
-        <p class="text-xs text-white/50 line-clamp-2 leading-relaxed flex-grow">
+        <p class="text-xs text-white/50 line-clamp-2 flex-grow">
           {{ project.description }}
         </p>
       </div>

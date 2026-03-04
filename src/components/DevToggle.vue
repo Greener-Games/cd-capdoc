@@ -1,6 +1,6 @@
 <template>
   <div class="fixed bottom-4 right-4 z-[9999] flex items-center bg-black/50 backdrop-blur-md rounded-full px-4 py-2 border border-white/10 shadow-lg pointer-events-auto">
-    <span class="text-xs font-mono text-white/70 mr-3 uppercase tracking-wider">Local Data</span>
+    <span class="text-xs font-mono text-white/70 mr-3 uppercase">Local Data</span>
     <button
       @click="toggleLocalData"
       class="relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-white/20 focus:ring-offset-2 focus:ring-offset-black cursor-pointer"

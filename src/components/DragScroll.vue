@@ -18,9 +18,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   enableWheelScroll?: boolean;
-}>();
+}>(), {
+  enableWheelScroll: true
+});
 
 const containerRef = ref<HTMLElement | null>(null);
 
@@ -66,9 +68,20 @@ const handleMouseMove = (e: MouseEvent) => {
 };
 
 const handleWheel = (e: WheelEvent) => {
+  console.log("weeeeee")
   if (props.enableWheelScroll && containerRef.value) {
     e.preventDefault();
     containerRef.value.scrollLeft += e.deltaY;
   }
 };
+
+const resetScroll = () => {
+  if (containerRef.value) {
+    containerRef.value.scrollLeft = 0;
+  }
+};
+
+defineExpose({
+  resetScroll
+});
 </script>

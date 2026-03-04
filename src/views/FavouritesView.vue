@@ -37,14 +37,14 @@
       </button>
 
       <div class="text-right pointer-events-auto group animate-in fade-in slide-in-from-right-4 duration-500 fill-mode-both">
-        <div class="text-[10px] font-bold tracking-[0.4em] uppercase text-white/40 mb-2">
+        <div class="text-[10px] font-bold uppercase text-white/40 mb-2">
           Exploring
         </div>
         <div class="flex items-center space-x-4">
           <input
             v-model="curatedTitle"
             type="text"
-            class="bg-transparent border-b border-transparent hover:border-white/20 focus:border-white text-3xl font-light tracking-wide text-white group-hover:text-shadow-glow transition-all focus:outline-none text-right"
+            class="bg-transparent border-b border-transparent hover:border-white/20 focus:border-white text-3xl font-light text-white group-hover:text-shadow-glow transition-all focus:outline-none text-right"
           />
         </div>
       </div>

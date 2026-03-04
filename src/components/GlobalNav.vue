@@ -2,7 +2,7 @@
   <div class="fixed layout-nav px-safe-side flex justify-between items-center z-[70] pointer-events-none">
     <div class="flex items-center space-x-12 pointer-events-auto">
       <div class="flex flex-col items-start gap-1 transition-colors duration-500" :class="view === ViewState.LANDING ? 'text-black' : 'text-white'">
-      <span class="font-gamechanger text-2xl text-caption font-bold tracking-widest">Creative Design</span>
+      <span class="font-gamechanger text-2xl text-caption font-bold">Creative Design</span>
       </div>
     </div>
 
@@ -30,7 +30,7 @@
         <Search class="w-5 h-5" :class="view === ViewState.LANDING ? 'text-white' : 'text-black'"/>
       </button>
 
-      <div v-if="view === ViewState.FAVOURITES" class="flex items-center space-x-3 text-[10px] font-black tracking-widest uppercase transition-colors duration-500" :class="view === ViewState.LANDING ? 'text-black/40' : 'text-white/40'">
+      <div v-if="view === ViewState.FAVOURITES" class="flex items-center space-x-3 text-[10px] font-black uppercase transition-colors duration-500" :class="view === ViewState.LANDING ? 'text-black/40' : 'text-white/40'">
         <Heart class="w-3 h-3 text-red-500 fill-red-500"/>
         <span>{{ favouriteIds.length }} Curated</span>
       </div>

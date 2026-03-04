@@ -16,7 +16,7 @@
             class="flex items-center space-x-3 bg-white text-black px-6 py-3 rounded-full hover:bg-white/90 transition-colors group cursor-pointer"
           >
             <Play class="w-4 h-4" />
-            <span class="text-[11px] font-bold tracking-widest uppercase">
+            <span class="text-[11px] font-bold  uppercase">
               Launch Curated ({{ favouriteIds.length }})
             </span>
           </button>
@@ -43,7 +43,7 @@
           autofocus
         />
         <div class="absolute inset-y-0 right-6 flex items-center">
-          <div class="text-[10px] font-bold tracking-[0.2em] uppercase text-white/20">
+          <div class="text-[10px] font-bold uppercase text-white/20">
             {{ filteredProjects.length }} Results
           </div>
         </div>
@@ -55,7 +55,7 @@
           <div class="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent"></div>
           <div class="relative z-10 flex items-center justify-between">
             <div class="flex-grow max-w-2xl">
-              <div class="text-[10px] font-bold tracking-widest uppercase text-white/40 mb-4 flex items-center space-x-2">
+              <div class="text-[10px] font-bold uppercase text-white/40 mb-4 flex items-center space-x-2">
                 <Heart class="w-3 h-3 text-red-500 fill-red-500" />
                 <span>Curated Journey Title</span>
               </div>
@@ -71,7 +71,7 @@
             </div>
             <div class="text-right">
               <div class="text-3xl font-light text-white mb-2">{{ favouriteIds.length }}</div>
-              <div class="text-[10px] font-bold tracking-widest uppercase text-white/40">Projects</div>
+              <div class="text-[10px] font-bold uppercase text-white/40">Projects</div>
             </div>
           </div>
         </div>

@@ -24,11 +24,11 @@
 
       <!-- Content Card -->
       <div class="mt-4 glass-panel p-6 opacity-60 group-hover:opacity-100 group-hover:bg-white/10 transition-all duration-500 transform group-hover:-translate-y-4">
-        <span class="text-[10px] font-bold tracking-[0.3em] uppercase mb-4 block" :style="{ color: color }">
+        <span class="text-[10px] font-bold uppercase mb-4 block" :style="{ color: color }">
           Curated Step {{ String(index + 1).padStart(2, '0') }}
         </span>
-        <h3 class="text-2xl font-light text-white mb-3 tracking-wide">{{ title }}</h3>
-        <p class="text-sm text-white/50 leading-relaxed font-light">
+        <h3 class="text-2xl font-light text-white mb-3">{{ title }}</h3>
+        <p class="text-sm text-white/50 font-light">
           {{ description }}
         </p>
 
