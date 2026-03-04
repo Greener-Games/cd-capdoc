@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex flex-col w-full h-full overflow-hidden pt-32 z-10 md:pt-48">
+  <div class="relative flex flex-col w-full h-full overflow-hidden pt-safe-top pb-safe-bottom z-10">
     <div class="px-12 md:px-24 mb-16 flex flex-col items-start z-10">
       <div class="h-[80px] mb-8">
         <h2

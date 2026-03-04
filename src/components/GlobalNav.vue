@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed top-12 left-12 right-12 flex justify-between items-center z-[70] pointer-events-none md:top-[40px] md:left-[48px] md:right-[48px]">
+  <div class="fixed layout-nav -translate-y-1/2 flex justify-between items-center z-[70] pointer-events-none">
     <div class="flex items-center space-x-12">
       <div class="flex flex-col items-start gap-1 transition-colors duration-500" :class="view === ViewState.LANDING ? 'text-black' : 'text-white'">
         <span class="text-caption font-bold tracking-widest">Creative Design</span>

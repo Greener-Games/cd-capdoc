@@ -8,7 +8,56 @@
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
 
-@layer utilities {
+:root {
+  --border-width-side: 20px;
+  --border-width-bottom: 20px;
+  --border-width-top: 100px;
+  --border-inner-radius: 1.5rem;
+}
+
+@layer utilities
+{
+  /* Clean positioning classes for Nav and Footer */
+  .layout-nav {
+    top: calc(var(--border-width-top) / 2);
+    left: calc(var(--border-width-side) + 40px);
+    right: calc(var(--border-width-side) + 40px);
+  }
+
+  .layout-footer {
+    bottom: var(--border-width-bottom);
+    left: calc(var(--border-width-side) + 40px);
+    right: calc(var(--border-width-side) + 40px);
+  }
+
+  /* Padding utility to clear the top border + 20px */
+  .pt-safe-top {
+    padding-top: calc(var(--border-width-top) + 20px);
+  }
+
+  /* Padding utility to clear the bottom border + footer + buffer */
+  .pb-safe-bottom {
+    padding-bottom: calc(var(--border-width-bottom) + 40px);
+  }
+
+  /* Padding utility to clear the side borders */
+  .px-safe-side {
+    padding-left: calc(var(--border-width-side) + 40px);
+    padding-right: calc(var(--border-width-side) + 40px);
+  }
+
+  /* The transparent hole that uses a massive shadow to create the white border */
+  .landing-hole {
+    position: fixed;
+    top: var(--border-width-top);
+    bottom: var(--border-width-bottom);
+    left: var(--border-width-side);
+    right: var(--border-width-side);
+    border-radius: var(--border-inner-radius);
+    box-shadow: 0 0 0 100vmax #E8E8E8;
+    pointer-events: none;
+    z-index: 60;
+  }
 
   .text-shadow {
     text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
@@ -18,6 +67,7 @@
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
   }
 }
+
 
 @layer components {
   /* Common UI Element Utilities */
@@ -67,26 +117,4 @@ body {
 #root {
   width: 100vw;
   height: 100vh;
-}
-
-/* Custom slider thumb styling moved from index.html */
-input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 12px;
-  height: 12px;
-  background: white;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
-
-input[type='range']::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
-  background: white;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }

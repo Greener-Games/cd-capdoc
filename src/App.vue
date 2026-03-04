@@ -1,5 +1,6 @@
 <template>
   <div class="relative w-screen h-screen overflow-hidden bg-black selection:bg-white selection:text-black">
+
     <!-- Full Bleed 3D Background -->
     <div class="fixed inset-0 z-0">
       <Canvas3D />
@@ -23,8 +24,8 @@
 
     <!-- Landing Page White Border Effect -->
     <div
-      class="fixed inset-[12px] md:inset-[24px] z-[60] pointer-events-none rounded-[2rem] border-x-[24px] border-b-[24px] border-t-[100px] border-[#E8E8E8] shadow-[0_0_0_100vmax_#E8E8E8] transition-opacity duration-[800ms]"
-      :class="view === ViewState.LANDING ? 'opacity-100' : 'opacity-0'"
+        class="landing-hole transition-opacity duration-[800ms]"
+        :class="view === ViewState.LANDING ? 'opacity-100' : 'opacity-0'"
     ></div>
 
     <!-- Global Navigation -->
@@ -32,9 +33,9 @@
 
     <!-- Global Footer -->
     <PageFooter
-      v-if="showFooter"
-      :count="footerProps.count"
-      :label="footerProps.label"
+        v-if="showFooter"
+        :count="footerProps.count"
+        :label="footerProps.label"
     />
   </div>
 </template>
