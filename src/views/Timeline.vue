@@ -68,16 +68,8 @@
       </div>
     </DragScroll>
 
-    <div class="absolute bottom-12 left-12 md:left-24 right-12 md:right-24 flex items-center justify-between pointer-events-none opacity-20 hidden md:flex z-10">
-      <div class="text-[9px] font-black tracking-[0.4em] uppercase">
-        Explore sequential strategic assets
-      </div>
-      <div class="flex space-x-6">
-        <div class="w-1 h-1 rounded-full bg-white animate-pulse" />
-        <div class="w-1 h-1 rounded-full bg-white opacity-50" />
-        <div class="w-1 h-1 rounded-full bg-white opacity-20" />
-      </div>
-    </div>
+    <!-- Bottom Footer -->
+    <PageFooter :count="currentProjects.length" label="PROJECTS" />
   </div>
 </template>
 
@@ -88,6 +80,7 @@ import { useAppStore } from '../store';
 import { ArrowLeft } from 'lucide-vue-next';
 import { Project } from '../types';
 import DragScroll from '../components/DragScroll.vue';
+import PageFooter from '../components/PageFooter.vue';
 
 const store = useAppStore();
 const router = useRouter();
