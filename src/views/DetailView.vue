@@ -131,7 +131,7 @@
             <div class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-white/40 transition-colors">
               <ArrowLeft class="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             </div>
-            <span class="text-caption">Back to Timeline</span>
+            <span class="">Back to Timeline</span>
           </button>
 
           <div class="flex items-center space-x-6">
@@ -147,7 +147,7 @@
               @click="handleNext"
               class="group flex items-center space-x-4 text-white hover:text-white transition-colors cursor-pointer"
             >
-              <span class="text-caption">{{ isLastChapter ? 'Complete Journey' : 'Next Chapter' }}</span>
+              <span class="">{{ isLastChapter ? 'Complete Journey' : 'Next Chapter' }}</span>
               <div
                 class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center transition-all group-hover:scale-110"
                 :style="{ backgroundColor: project.accentColor }"

@@ -29,7 +29,8 @@
     <!-- Draggable/Scrollable Container -->
     <DragScroll
         ref="dragScrollRef"
-        class="flex items-center space-x-6 w-full flex-grow"
+        class="w-full grow min-h-0"
+        content-class="items-stretch space-x-6 h-full"
         v-slot="{ isDragging }"
     >
       <SelectionCard
@@ -73,7 +74,7 @@ const pills = [
   {label: 'Capabilities', type: CategoryType.CAPABILITY},
   {label: 'Market', type: CategoryType.MARKET},
   {label: 'Region', type: CategoryType.REGION},
-  {label: 'About Us', route: '/about'} // Change '/about' to your actual about us path
+  {label: 'About Us', route: '/about'}
 ];
 
 const handlePillClick = (pill: typeof pills[0]) => {

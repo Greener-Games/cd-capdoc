@@ -30,7 +30,7 @@
     <div class="fixed bottom-8 left-8 right-8 flex justify-between items-end pointer-events-none z-50">
       <button
         @click="handleBack"
-        class="text-caption text-white/40 hover:text-white pointer-events-auto flex items-center space-x-2 transition-colors cursor-pointer animate-in fade-in slide-in-from-left-4 duration-500 fill-mode-both"
+        class="text-white/40 hover:text-white pointer-events-auto flex items-center space-x-2 transition-colors cursor-pointer animate-in fade-in slide-in-from-left-4 duration-500 fill-mode-both"
       >
         <ArrowLeft class="w-3.5 h-3.5" />
         <span>Back to Developer</span>
@@ -44,7 +44,7 @@
           <input
             v-model="curatedTitle"
             type="text"
-            class="bg-transparent border-b border-transparent hover:border-white/20 focus:border-white text-3xl font-light text-white group-hover:text-shadow-glow transition-all focus:outline-none text-right"
+            class="bg-transparent border-b border-transparent hover:border-white/20 focus:border-white text-3xl font-light text-white transition-all focus:outline-none text-right"
           />
         </div>
       </div>

@@ -15,7 +15,8 @@
 
     <!-- Draggable/Scrollable Container -->
     <DragScroll
-        class="flex items-center space-x-6 w-full h-[55vh]"
+        class="w-full grow min-h-0"
+        content-class="items-stretch space-x-6 h-full"
         @scroll="handleScroll"
         :enable-wheel-scroll="true"
         v-slot="{ isDragging }"
@@ -53,11 +54,8 @@ const router = useRouter();
 
 const currentProjects = computed(() => store.currentProjects);
 
-const handleScroll = (e: Event) => {
-  const target = e.target as HTMLElement;
-  const maxScroll = target.scrollWidth - target.clientWidth;
-  const progress = maxScroll > 0 ? target.scrollLeft / maxScroll : 0;
-  store.setScrollProgress(progress);
+const handleScroll = (payload: { progress: number }) => {
+  store.setScrollProgress(payload.progress);
 };
 
 const handleProjectSelect = (project: Project) => {

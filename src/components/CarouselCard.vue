@@ -2,7 +2,7 @@
   <BaseCard
       v-bind="props"
       class="w-[85vw] sm:w-[70vw] md:w-[45vw] overflow-hidden"
-      image-container-class="rounded-[2.5rem] mb-6"
+      image-container-class="rounded-3xl mb-6"
       @select="$emit('select', $event)"
   >
     <template #default="{ formattedTitle }">
