@@ -22,7 +22,7 @@
     <DevToggle />
 
     <!-- Global Navigation -->
-    <div class="fixed top-8 left-8 right-8 flex justify-between items-center z-50 pointer-events-none">
+    <div v-if="view !== ViewState.LANDING" class="fixed top-8 left-8 right-8 flex justify-between items-center z-50 pointer-events-none">
       <button
         @click="handleGoHome"
         class="text-caption opacity-50 pointer-events-auto hover:opacity-100 transition-opacity flex items-center space-x-2 cursor-pointer animate-in fade-in slide-in-from-top-4 duration-500"
