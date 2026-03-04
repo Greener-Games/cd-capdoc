@@ -22,22 +22,26 @@
     <DevToggle />
 
     <!-- Global Navigation -->
-    <div v-if="view !== ViewState.LANDING" class="fixed top-8 left-8 right-8 flex justify-between items-center z-50 pointer-events-none">
-      <button
-        @click="handleGoHome"
-        class="text-caption opacity-50 pointer-events-auto hover:opacity-100 transition-opacity flex items-center space-x-2 cursor-pointer animate-in fade-in slide-in-from-top-4 duration-500"
-      >
-        <span>AtkinsRéalis</span>
-      </button>
+
+    <div v-if="view !== ViewState.LANDING" class="fixed top-12 left-12 right-12 flex justify-between items-center z-50 pointer-events-none md:top-24 md:left-24 md:right-24">
+      <div class="flex items-center space-x-12">
+        <div class="flex flex-col items-start gap-1">
+          <span class="text-caption font-bold tracking-widest text-white">Creative Design</span>
+          <button
+            @click="handleGoHome"
+            class="text-caption opacity-50 pointer-events-auto hover:opacity-100 transition-opacity cursor-pointer animate-in fade-in slide-in-from-top-4 duration-500"
+          >
+            <span>AtkinsRéalis</span>
+          </button>
+        </div>
+      </div>
 
       <div class="flex items-center space-x-8 pointer-events-auto">
         <button
-          v-if="view !== ViewState.DEVELOPER"
           @click="handleOpenSearch"
-          class="relative flex items-center space-x-3 bg-white/5 border border-white/10 rounded-full px-6 py-2.5 backdrop-blur-md hover:bg-white/10 transition-all cursor-pointer group animate-in fade-in zoom-in-90 duration-500 active:scale-95 hover:scale-105"
+          class="relative flex items-center justify-center w-12 h-12 bg-white rounded-full transition-all cursor-pointer group animate-in fade-in zoom-in-90 duration-500 active:scale-95 hover:scale-105 shadow-lg"
         >
-          <Search class="w-3.5 h-3.5 text-white/40 group-hover:text-white transition-colors" />
-          <span class="text-[9px] font-black tracking-[0.2em] uppercase text-white/40 group-hover:text-white">Search Library</span>
+          <Search class="w-5 h-5 text-black" />
         </button>
 
         <div v-if="view === ViewState.FAVOURITES" class="flex items-center space-x-3 text-[10px] font-black tracking-widest text-white/40 uppercase">
@@ -45,6 +49,7 @@
           <span>{{ favouriteIds.length }} Curated</span>
         </div>
       </div>
+
     </div>
 
     <!-- Global Footer -->
