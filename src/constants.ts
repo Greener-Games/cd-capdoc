@@ -83,11 +83,43 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
   '3d': [
     {
       id: 'V1',
-      title: 'Qetaifan Island North Resort',
-      description: 'Next-generation architectural visualization and spatial storytelling.',
+      title: 'Rixos Premium Qetaifan Island North Resort',
+      description: 'Rixos Hotels, established in 2000, stands as a beacon of luxury with a global presence spanning 27 hotels. Their distinctive "All Inclusive – All Exclusive" philosophy distinguishes them from the rest.',
       longDescription: 'Defining the future of luxury hospitality through hyper-realistic 3D environmental design and complex lighting studies for the Qetaifan Island North project.',
       imageUrl: 'https://images.unsplash.com/photo-1582719478237-af1e73990ec9?auto=format&fit=crop&q=80&w=1200&h=800',
-      accentColor: '#8b5cf6'
+      accentColor: '#8b5cf6',
+      client: 'AtkinsRéalis',
+      year: '2023',
+      services: ['Visualization', 'Web Design'],
+      contentBlocks: [
+        {
+          id: 'b1',
+          type: 'image',
+          url: 'https://images.unsplash.com/photo-1582719478237-af1e73990ec9?auto=format&fit=crop&q=80&w=2400&h=1200'
+        },
+        {
+          id: 'b2',
+          type: 'text',
+          title: 'AT A GLANCE',
+          content: 'Rixos Hotels, established in 2000, stands as a beacon of luxury with a global presence spanning 27 hotels. Their distinctive "All Inclusive – All Exclusive" philosophy distinguishes them from the rest. However, a significant hurdle lies in effectively communicating the interior grandeur of their properties. How can they convey the opulence and scale to guests and stakeholders?'
+        },
+        {
+          id: 'b3',
+          type: 'image',
+          url: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&q=80&w=2400&h=1200'
+        },
+        {
+          id: 'b4',
+          type: 'image',
+          url: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&q=80&w=2400&h=1200'
+        },
+        {
+          id: 'b5',
+          type: 'text',
+          title: 'KEY BEHAVIOURAL INSIGHT DISCOVERED THAT SHIFTED THE CREATIVE DIRECTION',
+          content: 'Rixos Hotels, established in 2000, stands as a beacon of luxury with a global presence spanning 27 hotels. Their distinctive "All Inclusive – All Exclusive" philosophy distinguishes them from the rest. However, a significant hurdle lies in effectively communicating the interior grandeur of their properties. How can they convey the opulence and scale to guests and stakeholders?'
+        }
+      ]
     },
     {
       id: 'V2',

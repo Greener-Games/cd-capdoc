@@ -16,6 +16,29 @@ You need to create the following models in your Hygraph project:
     *   `imageUrl` (Asset or Single line text for URL)
     *   `accentColor` (Color or Single line text for hex code e.g. `#3b82f6`)
     *   `category` (Single line text - optional, used to denote if it is brand, digital, motion, 3d, immersive)
+    *   `client` (Single line text - optional)
+    *   `year` (Single line text - optional)
+    *   `services` (List of single line text - optional)
+    *   `contentBlocks` (Modular Components - allowed components: ImageBlock, TextBlock, VideoBlock)
+
+### Dynamic Content Blocks (Modular Components)
+
+To support the dynamic detail view layout (alternating full-bleed images, multi-column text, etc.), you need to create the following Modular Component blocks in Hygraph and allow them in the `contentBlocks` field of the `Project` model:
+
+#### ImageBlock
+*   **Fields:**
+    *   `url` (Asset or Single line text)
+    *   `alt` (Single line text - optional)
+
+#### TextBlock
+*   **Fields:**
+    *   `title` (Single line text - optional)
+    *   `content` (Multi line text)
+
+#### VideoBlock
+*   **Fields:**
+    *   `url` (Asset or Single line text for MP4 URL)
+    *   `poster` (Asset or Single line text for poster image - optional)
 
 ### 2. Market
 *   **API ID:** `Market`

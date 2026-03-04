@@ -1,4 +1,31 @@
 
+export type BlockType = 'image' | 'text' | 'video';
+
+export interface BaseBlock {
+  id: string;
+  type: BlockType;
+}
+
+export interface ImageBlock extends BaseBlock {
+  type: 'image';
+  url: string;
+  alt?: string;
+}
+
+export interface TextBlock extends BaseBlock {
+  type: 'text';
+  title?: string;
+  content: string;
+}
+
+export interface VideoBlock extends BaseBlock {
+  type: 'video';
+  url: string;
+  poster?: string;
+}
+
+export type ContentBlock = ImageBlock | TextBlock | VideoBlock;
+
 export interface Project {
   id: string;
   title: string;
@@ -6,6 +33,10 @@ export interface Project {
   longDescription: string;
   imageUrl: string;
   accentColor: string;
+  client?: string;
+  year?: string;
+  services?: string[];
+  contentBlocks?: ContentBlock[];
 }
 
 export enum ViewState {
