@@ -13,9 +13,8 @@ You need to create the following models in your Hygraph project:
     *   `title` (Single line text, **Required**)
     *   `description` (Multi line text)
     *   `longDescription` (Multi line text)
-    *   `imageUrl` (Asset or Single line text for URL)
+    *   `imageUrl` (Asset) - *Note: Our app will look for an `overrideURL` field on this asset first, and fall back to the Hygraph `url` if not provided.*
     *   `accentColor` (Color or Single line text for hex code e.g. `#3b82f6`)
-    *   `category` (Single line text - optional, used to denote if it is brand, digital, motion, 3d, immersive)
     *   `client` (Single line text - optional)
     *   `year` (Single line text - optional)
     *   `services` (List of single line text - optional)
@@ -27,18 +26,18 @@ To support the dynamic detail view layout (alternating full-bleed images, multi-
 
 #### ImageBlock
 *   **Fields:**
-    *   `url` (Asset or Single line text)
+    *   `url` (Asset) - *Note: Our app will look for an `overrideURL` field on this asset first, and fall back to the Hygraph `url` if not provided.*
     *   `alt` (Single line text - optional)
 
 #### TextBlock
 *   **Fields:**
     *   `title` (Single line text - optional)
-    *   `content` (Multi line text)
+    *   `content` (Rich Text or Multi line text)
 
 #### VideoBlock
 *   **Fields:**
-    *   `url` (Asset or Single line text for MP4 URL)
-    *   `poster` (Asset or Single line text for poster image - optional)
+    *   `url` (Single line text for external video URL like Vimeo/YouTube)
+    *   `poster` (Asset for placeholder image - optional) - *Note: Our app will look for an `overrideURL` field on this asset first, and fall back to the Hygraph `url` if not provided.*
 
 ### 2. Market
 *   **API ID:** `Market`
@@ -46,7 +45,7 @@ To support the dynamic detail view layout (alternating full-bleed images, multi-
     *   `id` (Single line text, **Required**, **Unique**)
     *   `title` (Single line text, **Required**)
     *   `subtitle` (Single line text)
-    *   `image` (Asset or Single line text for URL)
+    *   `image` (Asset) - *Note: Our app will look for an `overrideURL` field on this asset first, and fall back to the Hygraph `url` if not provided.*
     *   `color` (Color or Single line text for hex code)
 *   **Relations:**
     *   `projects` (Reference to `Project` model, Multiple references allowed)
@@ -57,7 +56,7 @@ To support the dynamic detail view layout (alternating full-bleed images, multi-
     *   `id` (Single line text, **Required**, **Unique**)
     *   `title` (Single line text, **Required**)
     *   `subtitle` (Single line text)
-    *   `image` (Asset or Single line text for URL)
+    *   `image` (Asset) - *Note: Our app will look for an `overrideURL` field on this asset first, and fall back to the Hygraph `url` if not provided.*
     *   `color` (Color or Single line text for hex code)
 *   **Relations:**
     *   `projects` (Reference to `Project` model, Multiple references allowed)
@@ -68,7 +67,7 @@ To support the dynamic detail view layout (alternating full-bleed images, multi-
     *   `id` (Single line text, **Required**, **Unique**)
     *   `title` (Single line text, **Required**)
     *   `subtitle` (Single line text)
-    *   `image` (Asset or Single line text for URL)
+    *   `image` (Asset) - *Note: Our app will look for an `overrideURL` field on this asset first, and fall back to the Hygraph `url` if not provided.*
     *   `color` (Color or Single line text for hex code)
 *   **Relations:**
     *   `projects` (Reference to `Project` model, Multiple references allowed)

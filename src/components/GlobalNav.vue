@@ -1,28 +1,37 @@
 <template>
   <div class="fixed layout-nav -translate-y-1/2 flex justify-between items-center z-[70] pointer-events-none">
-    <div class="flex items-center space-x-12">
+    <div class="flex items-center space-x-12 pointer-events-auto">
       <div class="flex flex-col items-start gap-1 transition-colors duration-500" :class="view === ViewState.LANDING ? 'text-black' : 'text-white'">
-        <span class="text-caption font-bold tracking-widest">Creative Design</span>
-        <button
-          @click="handleGoHome"
-          class="text-caption opacity-50 pointer-events-auto hover:opacity-100 transition-opacity cursor-pointer animate-in fade-in slide-in-from-top-4 duration-500"
-        >
-          <span>AtkinsRéalis</span>
-        </button>
+        <span class="font-gamechanger text-2xl text-caption font-bold tracking-widest">Creative Design</span>
       </div>
     </div>
 
     <div class="flex items-center space-x-8 pointer-events-auto">
       <button
-        @click="handleOpenSearch"
-        class="relative flex items-center justify-center w-12 h-12 rounded-full transition-all cursor-pointer group animate-in fade-in zoom-in-90 duration-500 active:scale-95 hover:scale-105 shadow-lg"
-        :class="view === ViewState.LANDING ? 'bg-black' : 'bg-white'"
+          @click="handleGoHome"
+          class="transition-colors duration-500 cursor-pointer animate-in fade-in slide-in-from-top-4 hover:opacity-80"
+          :class="view === ViewState.LANDING ? 'text-black' : 'text-white'"
       >
-        <Search class="w-5 h-5" :class="view === ViewState.LANDING ? 'text-white' : 'text-black'" />
+        <svg width="174" height="23" viewBox="0 0 174 23" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-5 w-auto">
+          <path
+              d="M168.407 22.8196C172.146 22.8196 174 21.3384 174 18.6763V18.5727C174 16.646 172.871 15.3408 170.293 15.0611L166.895 14.709C165.914 14.6054 165.435 14.1185 165.435 13.2484V12.4819C165.435 12.1919 165.627 12.0158 165.914 12.0158H170.303C170.602 12.0158 170.783 12.1919 170.783 12.4819V13.901H173.819C173.638 11.1974 171.784 9.77833 168.098 9.77833C164.604 9.77833 162.602 11.1042 162.602 13.7249V13.7767C162.602 15.6827 163.88 17.05 165.914 17.2571L169.749 17.63C170.729 17.7336 171.177 18.2205 171.177 19.1424V20.0954C171.177 20.375 170.996 20.5511 170.708 20.5511H165.989C165.701 20.5511 165.51 20.375 165.51 20.0954V18.6763H162.367C162.442 21.3384 164.562 22.8196 168.407 22.8196ZM157.35 8.73213H160.652V5.64531H157.35V8.73213ZM157.403 22.571H160.599V10.0373H157.403V22.571ZM151.725 22.571H154.921V5.64531H151.725V22.571ZM146.143 12.4819V15.2994H141.307C138.772 15.2994 137.227 16.6564 137.227 18.9145C137.227 21.4834 139.283 22.8196 142.042 22.8196C143.917 22.8196 145.461 22.1049 146.133 20.5511H140.987C140.7 20.5511 140.508 20.375 140.508 20.0954V17.081H146.133V22.5607H149.328V13.7456C149.328 11.0731 147.07 9.77833 143.704 9.77833C140.338 9.77833 137.642 11.2182 137.589 14.0357H140.508V12.4715C140.508 12.1815 140.7 12.0054 140.987 12.0054H145.664C145.951 12.0054 146.133 12.1815 146.133 12.4715M128.183 8.58711H130.654L132.689 5.63495H129.152L128.183 8.58711ZM126.393 15.2994V12.4819C126.393 12.1919 126.574 12.0158 126.862 12.0158H132.188C132.487 12.0158 132.668 12.1919 132.668 12.4819V15.2994H126.393ZM129.632 22.8196C133.211 22.8196 135.267 20.8205 135.757 18.438H132.572V20.0954C132.572 20.375 132.391 20.5511 132.103 20.5511H126.862C126.574 20.5511 126.393 20.375 126.393 20.0954V17.081H135.831V15.952C135.831 14.2014 135.395 12.6891 134.489 11.6325C133.445 10.4102 131.656 9.77833 129.568 9.77833C127.48 9.77833 125.616 10.3791 124.508 11.6014C123.528 12.7098 123.048 14.2739 123.048 16.2109V16.3767C123.048 18.3241 123.528 19.8571 124.508 20.9448C125.648 22.1774 127.427 22.8093 129.642 22.8093M107.996 22.571H111.043V16.4077C111.043 16.1281 111.224 15.952 111.512 15.952H117.062L119.746 22.5607H122.984L120.066 15.4651C119.576 14.2739 119.16 13.7767 118.382 13.5902C118.031 13.497 117.615 13.4763 117.083 13.4763H111.501C111.213 13.4763 111.032 13.3002 111.032 13.0205V8.10026H117.892C118.18 8.10026 118.372 8.27636 118.372 8.55604V13.5902C120.992 12.6683 121.685 11.3632 121.685 9.78869C121.685 7.19908 119.842 5.63495 116.476 5.63495H107.975V22.5607L107.996 22.571ZM100.475 22.8196C104.214 22.8196 106.068 21.3384 106.068 18.6763V18.5727C106.068 16.646 104.939 15.3408 102.361 15.0611L98.9627 14.709C97.9827 14.6054 97.5033 14.1185 97.5033 13.2484V12.4819C97.5033 12.1919 97.6951 12.0158 97.9827 12.0158H102.372C102.67 12.0158 102.851 12.1919 102.851 12.4819V13.901H105.887C105.706 11.1974 103.852 9.77833 100.166 9.77833C96.6724 9.77833 94.6697 11.1042 94.6697 13.7249V13.7767C94.6697 15.6827 95.948 17.05 97.9827 17.2571L101.818 17.63C102.798 17.7336 103.245 18.2205 103.245 19.1424V20.0954C103.245 20.375 103.064 20.5511 102.776 20.5511H98.0572C97.7696 20.5511 97.5779 20.375 97.5779 20.0954V18.6763H94.4354C94.5099 21.3384 96.6298 22.8196 100.475 22.8196ZM80.9385 22.571H84.1343V10.0373H80.9385V22.571ZM89.4393 12.7719V22.571H92.6351V13.3934C92.6351 11.2285 91.0585 9.81977 88.374 9.81977C86.2541 9.81977 84.8373 10.7106 84.1343 12.3265H88.9705C89.2582 12.3265 89.4393 12.5026 89.4393 12.7823M75.3245 8.73213H78.6268V5.64531H75.3245V8.73213ZM75.3671 22.571H78.5629V10.0373H75.3671V22.571ZM65.1513 15.8484L70.4243 22.571H74.0888L68.8477 15.9727C68.7199 15.7966 68.7199 15.6205 68.869 15.4444L74.0356 10.0373H70.5735L65.1513 15.8484ZM65.1513 5.64531H61.9555V22.571H65.1513V5.64531ZM56.9381 6.36004H53.753V9.55045C53.753 9.85084 53.5719 10.0373 53.2736 10.0373H51.3774V12.1815H53.753V19.277C53.753 21.3902 55.0526 22.5814 57.2896 22.5814H60.038V20.375H57.4068C57.1192 20.375 56.9381 20.1989 56.9381 19.9193V12.1815H60.038V10.0373H56.9381V6.36004ZM48.8741 22.571H52.3149L46.8501 6.88832C46.5092 5.9457 46.0724 5.64531 45.2735 5.64531H41.854C41.087 5.64531 40.6715 5.9457 40.3413 6.88832L34.8232 22.571H38.1895L39.7128 17.7751H47.3507L48.8741 22.571ZM40.5011 15.2994L43.5371 5.76961L46.5624 15.2994H40.5011Z"
+              fill="currentColor"/>
+          <path
+              d="M5.80568 5.64548C5.80568 2.52759 8.40492 0.00012207 11.6007 0.00012207H17.4064V5.64548H5.80568ZM34.8128 5.64548V0.00012207H29.0071C25.8007 0.00012207 23.2014 2.52759 23.2014 5.64548H34.8021H34.8128ZM0 11.2805V16.9259H5.80568V5.64548C2.59924 5.64548 0 8.17295 0 11.2805ZM11.6007 22.5712C14.8071 22.5712 17.4064 20.0438 17.4064 16.9259H5.80568V22.5712H11.6114H11.6007ZM23.2121 22.5712V5.64548H17.4064V16.9259C17.4064 20.0438 20.0056 22.5712 23.2121 22.5712Z"
+              fill="currentColor"/>
+        </svg>
+      </button>
+
+      <button
+          @click="handleOpenSearch"
+          class="relative flex items-center justify-center w-12 h-12 rounded-full transition-all cursor-pointer group animate-in fade-in zoom-in-90 duration-500 active:scale-95 hover:scale-105 shadow-lg"
+          :class="view === ViewState.LANDING ? 'bg-black' : 'bg-white'"
+      >
+        <Search class="w-5 h-5" :class="view === ViewState.LANDING ? 'text-white' : 'text-black'"/>
       </button>
 
       <div v-if="view === ViewState.FAVOURITES" class="flex items-center space-x-3 text-[10px] font-black tracking-widest uppercase transition-colors duration-500" :class="view === ViewState.LANDING ? 'text-black/40' : 'text-white/40'">
-        <Heart class="w-3 h-3 text-red-500 fill-red-500" />
+        <Heart class="w-3 h-3 text-red-500 fill-red-500"/>
         <span>{{ favouriteIds.length }} Curated</span>
       </div>
     </div>
@@ -30,11 +39,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAppStore } from '../store';
-import { ViewState } from '../types';
-import { Search, Heart } from 'lucide-vue-next';
+import {computed} from 'vue';
+import {useRouter} from 'vue-router';
+import {useAppStore} from '../store';
+import {ViewState} from '../types';
+import {Heart, Search} from 'lucide-vue-next';
 
 const router = useRouter();
 const store = useAppStore();

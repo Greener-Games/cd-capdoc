@@ -1,17 +1,22 @@
 @import "tailwindcss";
+@import "./Fonts/bienvenue/stylesheet.css";
+@import "./Fonts/Gamechanger/stylesheet.css";
+
 @plugin "tailwind-scrollbar";
 @plugin "tailwindcss-animate";
 
 @theme {
   --color-primary: #1e293b;
   --color-background: #050505;
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --font-bienvenue: 'Bienvenue', 'ui-sans-serif', 'system-ui', 'sans-serif';
+  --font-gamechanger: 'Gamechanger', 'ui-serif', 'serif';
 }
 
 :root {
   --border-width-side: 20px;
   --border-width-bottom: 20px;
-  --border-width-top: 100px;
+  --border-width-top: 90px;
   --border-inner-radius: 1.5rem;
 }
 
@@ -32,12 +37,12 @@
 
   /* Padding utility to clear the top border + 20px */
   .pt-safe-top {
-    padding-top: calc(var(--border-width-top) + 20px);
+    padding-top: calc(var(--border-width-top) + 10px);
   }
 
   /* Padding utility to clear the bottom border + footer + buffer */
   .pb-safe-bottom {
-    padding-bottom: calc(var(--border-width-bottom) + 40px);
+    padding-bottom: calc(var(--border-width-bottom) + 20px);
   }
 
   /* Padding utility to clear the side borders */
