@@ -56,7 +56,7 @@
           <div class="relative z-10 flex items-center justify-between">
             <div class="flex-grow max-w-2xl">
               <div class="text-[10px] font-bold uppercase text-white/40 mb-4 flex items-center space-x-2">
-                <Heart class="w-3 h-3 text-red-500 fill-red-500" />
+                <Plus class="w-3 h-3 text-white/40" />
                 <span>Curated Journey Title</span>
               </div>
               <div class="flex items-center space-x-4">
@@ -106,7 +106,7 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '../store';
-import { Search, X, Play, Heart, Edit3 } from 'lucide-vue-next';
+import { Search, X, Play, Plus, Edit3 } from 'lucide-vue-next';
 import ProjectCard from '../components/ProjectCard.vue';
 import { Project, ViewState } from '../types';
 

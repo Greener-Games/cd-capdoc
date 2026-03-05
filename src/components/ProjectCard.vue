@@ -11,9 +11,9 @@
         @click.stop="store.toggleFavourite(project.id)"
         class="p-2 rounded-full bg-black/50 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-colors"
       >
-        <Heart
+        <Plus
           class="w-4 h-4 transition-colors"
-          :class="isFavourite ? 'text-red-500 fill-red-500' : 'text-white/40 group-hover:text-white/60'"
+          :class="isFavourite ? 'text-white' : 'text-white/40 group-hover:text-white/60'"
         />
       </button>
     </div>
@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { Heart } from 'lucide-vue-next';
+import { Plus } from 'lucide-vue-next';
 import { Project } from '../types';
 import { useAppStore } from '../store';
 
