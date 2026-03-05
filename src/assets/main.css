@@ -2,7 +2,6 @@
 @import "./Fonts/bienvenue/stylesheet.css";
 @import "./Fonts/Gamechanger/stylesheet.css";
 
-@plugin "tailwind-scrollbar";
 @plugin "tailwindcss-animate";
 
 @theme {
