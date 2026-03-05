@@ -29,6 +29,7 @@
     "@vueuse/core": "^14.2.1",
     "tailwind-scrollbar": "^4.0.2",
     "typescript": "~5.8.2",
-    "vite": "^6.4.1"
+    "vite": "^6.4.1",
+    "vite-svg-loader": "^5.1.0"
   }
 }

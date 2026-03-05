@@ -3,19 +3,13 @@
     <template #header-controls>
       <!-- Styled Pills -->
       <div class="flex items-center space-x-2 pointer-events-auto">
-        <button
+        <RoundedButton
             v-for="pill in pills"
             :key="pill.label"
+            :label="pill.label"
+            :active="pill.type && filterType === pill.type"
             @click="handlePillClick(pill)"
-            class=" font-bienvenue uppercase relative px-6 py-2 rounded-full text-xs transition-all duration-500 cursor-pointer border border-white/20"
-            :class="[
-              pill.type && filterType === pill.type
-                ? 'bg-white text-black border-transparent'
-                : 'bg-transparent text-white/50 hover:bg-white/10 hover:text-white'
-            ]"
-        >
-          <span>{{ pill.label }}</span>
-        </button>
+        />
       </div>
     </template>
 
@@ -57,7 +51,8 @@ import {CategoryType} from '../types';
 import {CAPABILITY_DATA, MARKET_DATA, REGION_DATA} from '../constants';
 import DragScroll from '../components/DragScroll.vue';
 import SelectionCard from '../components/SelectionCard.vue';
-import BaseLayout from "@/src/Layouts/BaseLayout.vue";
+import BaseLayout from "@/Layouts/BaseLayout.vue";
+import RoundedButton from "@/components/RoundedButton.vue";
 
 const store = useAppStore();
 const router = useRouter();

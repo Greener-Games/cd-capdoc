@@ -1,12 +1,12 @@
 <template>
   <BaseLayout>
     <template #header-controls>
-      <button
-          @click="handleBack"
-          class="flex items-center space-x-2 bg-white/5 backdrop-blur-md rounded-full px-6 py-2 border border-white/10 pointer-events-auto text-[9px] font-black uppercase text-white/40 hover:text-white transition-all duration-500 cursor-pointer"
-      >
-        <ArrowLeft class="w-3.5 h-3.5"/>
-      </button>
+      <RoundedButton @click="handleBack" icon-only>
+        <template #icon>
+          <Icon :icon="Arrow" size="md" class="scale-x-[-1] text-white" />
+        </template>
+      </RoundedButton>
+
     </template>
 
     <template #title>
@@ -43,11 +43,13 @@
 import {computed} from 'vue';
 import {useRouter} from 'vue-router';
 import {useAppStore} from '../store';
-import {ArrowLeft} from 'lucide-vue-next';
 import {Project} from '../types';
 import DragScroll from '../components/DragScroll.vue';
 import CarouselCard from '../components/CarouselCard.vue';
-import BaseLayout from "@/src/Layouts/BaseLayout.vue";
+import BaseLayout from "@/Layouts/BaseLayout.vue";
+import RoundedButton from "@/components/RoundedButton.vue";
+import Icon from '../components/Icon.vue';
+import Arrow from '@/assets/icons/Arrow.svg';
 
 const store = useAppStore();
 const router = useRouter();
