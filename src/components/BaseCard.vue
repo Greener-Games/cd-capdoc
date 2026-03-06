@@ -4,21 +4,30 @@
       @click="handleClick"
       @mouseenter="viewStore.setHoveredColor(color)"
       @mouseleave="viewStore.setHoveredColor(null)"
-      class="group relative shrink-0 h-full transition-all duration-700 animate-in fade-in zoom-in-90 slide-in-from-right-12 duration-600 fill-mode-both flex flex-col cursor-pointer"
+      :class="[
+        'group relative shrink-0 transition-all duration-700 animate-in fade-in fill-mode-both flex flex-col cursor-pointer',
+        animationClass
+      ]"
   >
+
     <!-- We apply a dynamic class here to handle different border radius and margins -->
     <div :class="['relative w-full grow overflow-hidden border border-white/5 bg-zinc-950/40 isolate backface-hidden transform-gpu', imageContainerClass]">
       <img
+          v-if="image"
           :src="image"
           :alt="title"
-          class="w-full h-full object-cover transition-all duration-1000 ease-out group-hover:scale-110 pointer-events-none"
+          :class="['w-full h-full object-cover transition-all duration-1000 ease-out pointer-events-none', imageClass]"
       />
-      <div class="absolute inset-0 pointer-events-none transition-opacity duration-700 opacity-0 group-hover:opacity-100 bg-black/20" />
+      <div v-if="showHoverOverlay" class="absolute inset-0 pointer-events-none transition-opacity duration-700 opacity-0 group-hover:opacity-100 bg-black/20"/>
 
       <div
+          v-if="showBottomLine"
           class="absolute bottom-0 left-0 w-full h-1 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-20"
           :style="{ backgroundColor: color }"
       />
+
+      <!-- Overlay slot for custom elements over the image -->
+      <slot name="image-overlay"></slot>
     </div>
 
     <!-- The slot allows children to put their specific text/layout here -->
@@ -27,22 +36,34 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useViewStore } from '../store'; // Adjust path if needed
+import {computed} from 'vue';
+import {useViewStore} from '../store'; // Adjust path if needed
 
 const props = withDefaults(defineProps<{
   id: string;
   title: string;
-  subtitle: string;
-  image: string;
-  color: string;
+  subtitle?: string;
+  image?: string;
+  color?: string;
   index: number;
-  isDragging: boolean;
+  isDragging?: boolean;
   prefix?: string;
   imageContainerClass?: string; // Prop to customize the image wrapper
+  animationClass?: string;
+  imageClass?: string;
+  showHoverOverlay?: boolean;
+  showBottomLine?: boolean;
 }>(), {
+  subtitle: '',
+  image: '',
+  color: '',
+  isDragging: false,
   prefix: '',
-  imageContainerClass: 'rounded-3xl mb-4' // Default to SelectionCard styles
+  imageContainerClass: 'rounded-3xl mb-4', // Default to SelectionCard styles
+  animationClass: 'zoom-in-90 slide-in-from-right-12 duration-600 h-full',
+  imageClass: 'group-hover:scale-110',
+  showHoverOverlay: true,
+  showBottomLine: true,
 });
 
 const emit = defineEmits(['select']);

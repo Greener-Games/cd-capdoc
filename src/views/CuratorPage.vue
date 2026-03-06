@@ -24,7 +24,7 @@
     </template>
 
     <!-- Scrollable Content Area -->
-    <div class="w-full flex-1 overflow-y-auto min-h-0 pb-32 pr-4 custom-scrollbar">
+    <div class="w-full flex-1 overflow-y-auto min-h-0 pb-32 pr-4 scrollbar-none">
       <!-- Search Input -->
       <div class="relative mb-16 group w-full">
         <div class="absolute inset-y-0 left-6 flex items-center pointer-events-none">

@@ -3,6 +3,7 @@
 @import "./Fonts/Gamechanger/stylesheet.css";
 
 @plugin "tailwindcss-animate";
+@plugin "tailwind-scrollbar";
 
 @theme {
   --color-primary: #1e293b;
