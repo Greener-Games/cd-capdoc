@@ -102,6 +102,10 @@ export const useAppStore = defineStore('app', {
         this.favouriteIds.push(id);
       }
     },
+    resetCurator() {
+      this.favouriteIds = [];
+      this.curatedTitle = 'Curated Collection';
+    },
     goHome() {
       this.setView(ViewState.LANDING);
       this.setSelectedProject(null);

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="group relative h-[350px] sm:h-[450px] shrink-0 transition-all duration-700 animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both flex flex-col cursor-pointer overflow-hidden rounded-[1.5rem]"
+    class="group relative h-[340px] shrink-0 transition-all duration-700 animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both flex flex-col cursor-pointer overflow-hidden rounded-[1.5rem] isolate backface-hidden transform-gpu"
     :style="{ animationDelay: `${index * 50}ms` }"
     @click="handleClick"
     @mouseenter="store.setHoveredColor(project.accentColor)"
@@ -16,7 +16,7 @@
 
     <!-- Bottom info section inside a rounded box -->
     <div
-      class="absolute bottom-4 left-4 right-4 z-20 p-5 backdrop-blur-md rounded-2xl flex flex-col pointer-events-auto shadow-lg transition-colors duration-300"
+      class="absolute bottom-[5px] left-[5px] right-[5px] h-[120px] z-20 p-5 backdrop-blur-md rounded-2xl flex flex-col pointer-events-auto shadow-lg transition-colors duration-300"
       :class="isFavourite ? 'bg-[#DFFF00]' : 'bg-[#121212]/80'"
     >
       <div class="flex justify-between items-start w-full gap-4">
@@ -75,14 +75,20 @@ const props = withDefaults(defineProps<{
   project: Project;
   index: number;
   mode?: 'explore' | 'build';
+  isSelected?: boolean;
 }>(), {
-  mode: 'build' // Default to build so toggle button is visible by default or we can keep it backward compatible
+  mode: 'build',
+  isSelected: undefined
 });
 
 const emit = defineEmits(['select']);
 const store = useAppStore();
 
-const isFavourite = computed(() => store.favouriteIds.includes(props.project.id));
+const isFavourite = computed(() => {
+  if (props.mode === 'explore') return false;
+  if (props.isSelected !== undefined) return props.isSelected;
+  return store.favouriteIds.includes(props.project.id);
+});
 
 const handleClick = () => {
   emit('select', props.project);

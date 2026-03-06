@@ -7,7 +7,7 @@
       class="group relative shrink-0 h-full transition-all duration-700 animate-in fade-in zoom-in-90 slide-in-from-right-12 duration-600 fill-mode-both flex flex-col cursor-pointer"
   >
     <!-- We apply a dynamic class here to handle different border radius and margins -->
-    <div :class="['relative w-full grow overflow-hidden border border-white/5 bg-zinc-950/40', imageContainerClass]">
+    <div :class="['relative w-full grow overflow-hidden border border-white/5 bg-zinc-950/40 isolate backface-hidden transform-gpu', imageContainerClass]">
       <img
           :src="image"
           :alt="title"
