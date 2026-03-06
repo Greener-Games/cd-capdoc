@@ -14,37 +14,34 @@
       />
     </div>
 
-    <!-- Bottom info section over the image -->
-    <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/90 via-black/50 to-transparent pointer-events-none z-10" />
-
-    <div class="absolute bottom-0 left-0 w-full p-6 z-20 flex justify-between items-end">
-      <div class="flex flex-col gap-1 pr-4 flex-1 pointer-events-auto">
-        <p class="text-[10px] font-bold tracking-wider uppercase text-white/90">
+    <!-- Bottom info section inside a rounded box -->
+    <div class="absolute bottom-4 left-4 right-4 z-20 p-5 bg-[#121212]/80 backdrop-blur-md rounded-2xl flex flex-col pointer-events-auto shadow-lg">
+      <div class="flex justify-between items-start w-full gap-4">
+        <!-- Services -->
+        <p class="text-xs tracking-wider uppercase text-[#a0a0a0] font-medium leading-relaxed font-mono mt-1">
           {{ project.services?.join(', ') || project.id }}
         </p>
-        <h2 class="font-medium text-white text-lg leading-tight line-clamp-2">
-          {{ project.title }}
-        </h2>
+
+        <!-- Toggle Button -->
+        <button
+          @click.stop="store.toggleFavourite(project.id)"
+          class="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 pointer-events-auto"
+          :class="isFavourite ? 'bg-[#15A15B]' : 'bg-white'"
+        >
+          <component
+            :is="isFavourite ? Check : Plus"
+            class="w-6 h-6 transition-colors duration-300"
+            :class="isFavourite ? 'text-white' : 'text-black'"
+            :stroke-width="2.5"
+          />
+        </button>
       </div>
 
-      <button
-        @click.stop="store.toggleFavourite(project.id)"
-        class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 pointer-events-auto shadow-lg"
-        :class="isFavourite ? 'bg-[#15A15B]' : 'bg-white'"
-      >
-        <component
-          :is="isFavourite ? Check : Plus"
-          class="w-5 h-5 transition-colors duration-300"
-          :class="isFavourite ? 'text-white' : 'text-black'"
-          :stroke-width="1.5"
-        />
-      </button>
+      <!-- Title -->
+      <h2 class="font-medium text-white text-xl leading-tight line-clamp-2 mt-4 uppercase tracking-wide">
+        {{ project.title }}
+      </h2>
     </div>
-
-    <div
-      class="absolute bottom-0 left-0 w-full h-1 translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-30"
-      :style="{ backgroundColor: project.accentColor }"
-    />
   </div>
 </template>
 
