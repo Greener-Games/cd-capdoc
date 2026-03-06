@@ -19,13 +19,13 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useAppStore } from '../store';
+import { useDataStore } from '../store';
 
-const store = useAppStore();
+const dataStore = useDataStore();
 
-const isLocal = computed(() => store.useLocalData);
+const isLocal = computed(() => dataStore.useLocalData);
 
 const toggleLocalData = () => {
-  store.setUseLocalData(!isLocal.value);
+  dataStore.setUseLocalData(!isLocal.value);
 };
 </script>

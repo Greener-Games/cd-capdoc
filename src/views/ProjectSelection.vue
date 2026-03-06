@@ -10,11 +10,11 @@
     </template>
 
     <template #title>
-      <template v-if="store.view === ViewState.FAVOURITES">
-        {{ store.curatedTitle || 'Favourites' }}
+      <template v-if="viewStore.view === ViewState.FAVOURITES">
+        {{ favoriteStore.curatedTitle || 'Favourites' }}
       </template>
       <template v-else>
-        {{ store.currentCategoryData?.title || 'Timeline' }}
+        {{ dataStore.currentCategoryData?.title || 'Timeline' }}
       </template>
     </template>
 
@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 import {useRouter} from 'vue-router';
-import {useAppStore} from '../store';
+import {useAppStore, useViewStore, useDataStore, useFavoriteStore} from '../store';
 import {Project, ViewState} from '../types';
 import DragScroll from '../components/DragScroll.vue';
 import CarouselCard from '../components/CarouselCard.vue';
@@ -56,26 +56,29 @@ import RoundedButton from "@/components/RoundedButton.vue";
 import Icon from '../components/Icon.vue';
 import Arrow from '@/assets/icons/Arrow.svg';
 
-const store = useAppStore();
+const appStore = useAppStore();
+const viewStore = useViewStore();
+const dataStore = useDataStore();
+const favoriteStore = useFavoriteStore();
 const router = useRouter();
 
-const currentProjects = computed(() => store.currentProjects);
+const currentProjects = computed(() => appStore.currentProjects);
 
 const handleScroll = (payload: { progress: number }) => {
-  store.setScrollProgress(payload.progress);
+  viewStore.setScrollProgress(payload.progress);
 };
 
 const handleProjectSelect = (project: Project) => {
-  store.setSelectedProject(project);
+  dataStore.setSelectedProject(project);
   router.push(`/project/${project.id}`);
 };
 
 const handleBack = () => {
-  if (store.view === ViewState.FAVOURITES) {
-    store.setView(ViewState.CURATOR);
+  if (viewStore.view === ViewState.FAVOURITES) {
+    viewStore.setView(ViewState.CURATOR);
     router.push('/curator');
   } else {
-    store.backToSelector();
+    viewStore.backToSelector();
     router.push('/select');
   }
 };

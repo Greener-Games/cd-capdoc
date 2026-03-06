@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import {computed, ref, watch} from 'vue';
 import {useRouter} from 'vue-router';
-import {useAppStore} from '../store';
+import {useViewStore, useDataStore} from '../store';
 import {CategoryType} from '../types';
 import {CAPABILITY_DATA, MARKET_DATA, REGION_DATA} from '../constants';
 import DragScroll from '../components/DragScroll.vue';
@@ -54,10 +54,11 @@ import SelectionCard from '../components/SelectionCard.vue';
 import BaseLayout from "@/Layouts/BaseLayout.vue";
 import RoundedButton from "@/components/RoundedButton.vue";
 
-const store = useAppStore();
+const viewStore = useViewStore();
+const dataStore = useDataStore();
 const router = useRouter();
 
-const filterType = ref<CategoryType>(store.filterType || CategoryType.CAPABILITY);
+const filterType = ref<CategoryType>(dataStore.filterType || CategoryType.CAPABILITY);
 const dragScrollRef = ref<InstanceType<typeof DragScroll> | null>(null);
 
 watch(filterType, () => {
@@ -87,11 +88,11 @@ const currentData = computed(() => {
 
 const setFilter = (type: CategoryType) => {
   filterType.value = type;
-  store.setHoveredColor(null);
+  viewStore.setHoveredColor(null);
 };
 
 const handleSelect = (id: string) => {
-  store.setFilter(filterType.value, id);
+  dataStore.setFilter(filterType.value, id);
   router.push(`/timeline/${filterType.value}/${id}`);
 };
 </script>

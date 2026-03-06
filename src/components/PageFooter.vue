@@ -28,21 +28,21 @@
 
 <script setup lang="ts">
 import {computed, onMounted} from 'vue';
-import {useAppStore} from '../store';
+import {useViewStore} from '../store';
 
 const props = defineProps<{
   count: number | string
   label: string
 }>()
 
-const store = useAppStore();
-const hasFooterAnimated = computed(() => store.hasFooterAnimated);
+const viewStore = useViewStore();
+const hasFooterAnimated = computed(() => viewStore.hasFooterAnimated);
 
 onMounted(() => {
   if (!hasFooterAnimated.value) {
     // 800ms delay + 1000ms duration
     setTimeout(() => {
-      store.setHasFooterAnimated(true);
+      viewStore.setHasFooterAnimated(true);
     }, 1800);
   }
 });

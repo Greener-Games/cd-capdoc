@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { useAppStore } from '../store';
+import { useViewStore, useDataStore } from '../store';
 import { ViewState } from '../types';
 
 import HomeView from '../views/HomeView.vue';
@@ -14,8 +14,8 @@ const routes = [
     name: 'Home',
     component: HomeView,
     beforeEnter: () => {
-      const store = useAppStore();
-      store.setView(ViewState.LANDING);
+      const viewStore = useViewStore();
+      viewStore.setView(ViewState.LANDING);
     }
   },
   {
@@ -23,8 +23,8 @@ const routes = [
     name: 'Select',
     component: SelectionMenu,
     beforeEnter: () => {
-      const store = useAppStore();
-      store.setView(ViewState.SELECTOR);
+      const viewStore = useViewStore();
+      viewStore.setView(ViewState.SELECTOR);
     }
   },
   {
@@ -32,8 +32,8 @@ const routes = [
     name: 'Timeline',
     component: ProjectSelection,
     beforeEnter: () => {
-      const store = useAppStore();
-      store.setView(ViewState.TIMELINE);
+      const viewStore = useViewStore();
+      viewStore.setView(ViewState.TIMELINE);
     }
   },
   {
@@ -41,8 +41,8 @@ const routes = [
     name: 'Detail',
     component: DetailView,
     beforeEnter: () => {
-      const store = useAppStore();
-      store.setView(ViewState.DETAIL);
+      const viewStore = useViewStore();
+      viewStore.setView(ViewState.DETAIL);
     }
   },
   {
@@ -50,8 +50,8 @@ const routes = [
     name: 'Curator',
     component: CuratorPage,
     beforeEnter: () => {
-      const store = useAppStore();
-      store.setView(ViewState.CURATOR);
+      const viewStore = useViewStore();
+      viewStore.setView(ViewState.CURATOR);
     }
   },
   {
@@ -59,8 +59,8 @@ const routes = [
     name: 'Favourites',
     component: ProjectSelection,
     beforeEnter: () => {
-      const store = useAppStore();
-      store.setView(ViewState.FAVOURITES);
+      const viewStore = useViewStore();
+      viewStore.setView(ViewState.FAVOURITES);
     }
   }
 ];
@@ -72,18 +72,18 @@ const router = createRouter({
 
 // Update store selectedProject or filter based on route parameters
 router.beforeEach((to, from) => {
-  const store = useAppStore();
+  const dataStore = useDataStore();
 
   if (to.name === 'Timeline') {
     const type = to.params.type as any;
     const id = to.params.id as string;
-    store.setFilter(type, id);
+    dataStore.setFilter(type, id);
   }
 
   if (to.name === 'Detail') {
     const id = to.params.id as string;
-    const project = store.flattenedAllProjects.find(p => p.id === id) || null;
-    store.setSelectedProject(project);
+    const project = dataStore.flattenedAllProjects.find(p => p.id === id) || null;
+    dataStore.setSelectedProject(project);
   }
 
   return true;

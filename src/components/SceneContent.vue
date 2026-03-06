@@ -20,13 +20,13 @@
 import { shallowRef, onMounted, onUnmounted, watch } from 'vue';
 import { useLoop, useTresContext } from '@tresjs/core';
 import * as THREE from 'three';
-import { useAppStore } from '../store';
+import { useViewStore } from '../store';
 
 const waveRef = shallowRef<THREE.Mesh | null>(null);
 const groupRef = shallowRef<THREE.Group | null>(null);
 const { camera } = useTresContext();
 
-const store = useAppStore();
+const viewStore = useViewStore();
 const defaultColor = new THREE.Color('#0044ff');
 const targetColor = new THREE.Color('#0044ff');
 
@@ -46,7 +46,7 @@ const uniforms = {
   uChaos: { value: 0.75 }
 };
 
-watch(() => store.hoveredColor, (newColor) => {
+watch(() => viewStore.hoveredColor, (newColor) => {
   if (newColor) {
     targetColor.set(newColor);
   } else {

@@ -97,24 +97,26 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAppStore } from '../store';
+import { useViewStore, useDataStore, useFavoriteStore } from '../store';
 import { Search, X, Play, Plus, Edit3 } from 'lucide-vue-next';
 import ProjectCard from '../components/ProjectCard.vue';
 import RoundedButton from '../components/RoundedButton.vue';
 import BaseLayout from "@/Layouts/BaseLayout.vue";
 import { Project, ViewState } from '../types';
 
-const store = useAppStore();
+const viewStore = useViewStore();
+const dataStore = useDataStore();
+const favoriteStore = useFavoriteStore();
 const router = useRouter();
 
 const activeMode = ref<'explore' | 'build'>('explore');
 
 onMounted(() => {
-  store.resetCurator();
+  favoriteStore.resetCurator();
 });
 
 watch(activeMode, () => {
-  store.resetCurator();
+  favoriteStore.resetCurator();
 });
 
 const pills = [
@@ -123,23 +125,23 @@ const pills = [
 ] as const;
 
 const searchQuery = computed({
-  get: () => store.searchQuery,
-  set: (val) => store.searchQuery = val
+  get: () => dataStore.searchQuery,
+  set: (val) => dataStore.searchQuery = val
 });
 
 const curatedTitle = computed({
-  get: () => store.curatedTitle,
-  set: (val) => store.curatedTitle = val
+  get: () => favoriteStore.curatedTitle,
+  set: (val) => favoriteStore.curatedTitle = val
 });
 
-const favouriteIds = computed(() => store.favouriteIds);
+const favouriteIds = computed(() => favoriteStore.favouriteIds);
 
 const filteredProjects = computed(() => {
   if (!searchQuery.value.trim()) {
-    return store.flattenedAllProjects;
+    return dataStore.flattenedAllProjects;
   }
   const query = searchQuery.value.toLowerCase();
-  return store.flattenedAllProjects.filter(p =>
+  return dataStore.flattenedAllProjects.filter(p =>
     p.title.toLowerCase().includes(query) ||
     p.description.toLowerCase().includes(query) ||
     p.id.toLowerCase().includes(query)
@@ -147,18 +149,19 @@ const filteredProjects = computed(() => {
 });
 
 const handleBack = () => {
-  store.resetCurator();
-  store.setView(store.prevView);
+  favoriteStore.resetCurator();
+  const prevView = viewStore.prevView;
+  viewStore.setView(prevView);
 
-  if (store.prevView === ViewState.LANDING) {
+  if (prevView === ViewState.LANDING) {
     router.push('/');
-  } else if (store.prevView === ViewState.SELECTOR) {
+  } else if (prevView === ViewState.SELECTOR) {
     router.push('/select');
-  } else if (store.prevView === ViewState.TIMELINE) {
-    router.push(`/timeline/${store.filterType}/${store.activeCategoryId}`);
-  } else if (store.prevView === ViewState.DETAIL) {
-    router.push(`/project/${store.selectedProject?.id}`);
-  } else if (store.prevView === ViewState.FAVOURITES) {
+  } else if (prevView === ViewState.TIMELINE) {
+    router.push(`/timeline/${dataStore.filterType}/${dataStore.activeCategoryId}`);
+  } else if (prevView === ViewState.DETAIL) {
+    router.push(`/project/${dataStore.selectedProject?.id}`);
+  } else if (prevView === ViewState.FAVOURITES) {
     router.push('/favourites');
   } else {
     router.push('/');
@@ -166,19 +169,19 @@ const handleBack = () => {
 };
 
 const handleLaunchCurated = () => {
-  store.setView(ViewState.FAVOURITES);
+  viewStore.setView(ViewState.FAVOURITES);
   router.push('/favourites');
 };
 
 const handleSelectProject = (project: Project) => {
   if (activeMode.value === 'build') {
-    store.toggleFavourite(project.id);
+    favoriteStore.toggleFavourite(project.id);
   } else {
-    store.resetCurator();
-    store.setSelectedProject(project);
+    favoriteStore.resetCurator();
+    dataStore.setSelectedProject(project);
     router.push(`/project/${project.id}`);
   }
 };
 
-const isFavourite = (id: string) => store.favouriteIds.includes(id);
+const isFavourite = (id: string) => favoriteStore.favouriteIds.includes(id);
 </script>

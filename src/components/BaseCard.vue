@@ -2,8 +2,8 @@
   <div
       :style="{ animationDelay: `${index * 50}ms` }"
       @click="handleClick"
-      @mouseenter="store.setHoveredColor(color)"
-      @mouseleave="store.setHoveredColor(null)"
+      @mouseenter="viewStore.setHoveredColor(color)"
+      @mouseleave="viewStore.setHoveredColor(null)"
       class="group relative shrink-0 h-full transition-all duration-700 animate-in fade-in zoom-in-90 slide-in-from-right-12 duration-600 fill-mode-both flex flex-col cursor-pointer"
   >
     <!-- We apply a dynamic class here to handle different border radius and margins -->
@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useAppStore } from '../store'; // Adjust path if needed
+import { useViewStore } from '../store'; // Adjust path if needed
 
 const props = withDefaults(defineProps<{
   id: string;
@@ -46,7 +46,7 @@ const props = withDefaults(defineProps<{
 });
 
 const emit = defineEmits(['select']);
-const store = useAppStore();
+const viewStore = useViewStore();
 
 const formattedTitle = computed(() => {
   return props.title.toUpperCase().replace('&', 'AND');

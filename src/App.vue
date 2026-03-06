@@ -43,7 +43,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useAppStore } from './store';
+import { useViewStore, useDataStore, useAppStore } from './store';
 import { ViewState } from './types';
 import Canvas3D from './components/Canvas3D.vue';
 import DevToggle from './components/DevToggle.vue';
@@ -53,9 +53,11 @@ import { CategoryType } from './types';
 import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA } from './constants';
 
 const router = useRouter();
-const store = useAppStore();
+const viewStore = useViewStore();
+const dataStore = useDataStore();
+const appStore = useAppStore();
 
-const view = computed(() => store.view);
+const view = computed(() => viewStore.view);
 
 const showFooter = computed(() => {
   return [ViewState.LANDING, ViewState.SELECTOR, ViewState.TIMELINE].includes(view.value);
@@ -63,19 +65,19 @@ const showFooter = computed(() => {
 
 const footerProps = computed(() => {
   if (view.value === ViewState.LANDING) {
-    return { count: store.flattenedAllProjects.length, label: 'PROJECTS' };
+    return { count: dataStore.flattenedAllProjects.length, label: 'PROJECTS' };
   }
   if (view.value === ViewState.SELECTOR) {
-    if (store.filterType === CategoryType.CAPABILITY) {
-      return { count: store.fetchedCapabilities.length || CAPABILITY_DATA.length, label: 'CAPABILITIES' };
-    } else if (store.filterType === CategoryType.MARKET) {
-      return { count: store.fetchedMarkets.length || MARKET_DATA.length, label: 'MARKETS' };
+    if (dataStore.filterType === CategoryType.CAPABILITY) {
+      return { count: dataStore.fetchedCapabilities.length || CAPABILITY_DATA.length, label: 'CAPABILITIES' };
+    } else if (dataStore.filterType === CategoryType.MARKET) {
+      return { count: dataStore.fetchedMarkets.length || MARKET_DATA.length, label: 'MARKETS' };
     } else {
-      return { count: store.fetchedRegions.length || REGION_DATA.length, label: 'REGIONS' };
+      return { count: dataStore.fetchedRegions.length || REGION_DATA.length, label: 'REGIONS' };
     }
   }
   if (view.value === ViewState.TIMELINE) {
-    return { count: store.currentProjects.length, label: 'PROJECTS' };
+    return { count: appStore.currentProjects.length, label: 'PROJECTS' };
   }
   return { count: 0, label: '' };
 });

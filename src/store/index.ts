@@ -1,168 +1,70 @@
 import { defineStore } from 'pinia';
-import { ViewState, CategoryType, Project, CategoryItem } from '../types';
-import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA, ALL_PROJECTS } from '../constants';
-import { fetchHygraphData } from '../services/hygraph';
-
-const DEFAULT_ACCENT = '#1e293b';
+import { ViewState, Project } from '../types';
+import { useViewStore } from './view';
+import { useDataStore } from './data';
+import { useFavoriteStore } from './favorites';
 
 export const useAppStore = defineStore('app', {
-  state: () => ({
-    view: ViewState.LANDING,
-    prevView: ViewState.LANDING,
-    filterType: CategoryType.CAPABILITY,
-    activeCategoryId: 'brand',
-    selectedProjectId: null as string | null,
-    hoveredColor: DEFAULT_ACCENT,
-    scrollProgress: 0,
-    searchQuery: '',
-    favouriteIds: [] as string[],
-    curatedTitle: 'Curated Collection',
-    useLocalData: true,
-    fetchedProjects: [] as Project[],
-    fetchedMarkets: [] as CategoryItem[],
-    fetchedRegions: [] as CategoryItem[],
-    fetchedCapabilities: [] as CategoryItem[],
-    isFetchingData: false,
-    hasFooterAnimated: false,
-  }),
   getters: {
-    flattenedAllProjects(state): Project[] {
-      if (!state.useLocalData && state.fetchedProjects.length > 0) {
-        return state.fetchedProjects;
-      }
-      const all: Project[] = [];
-      const seen = new Set<string>();
-      Object.values(ALL_PROJECTS).forEach(categoryProjects => {
-        categoryProjects.forEach(p => {
-          if (!seen.has(p.id)) {
-            all.push(p);
-            seen.add(p.id);
-          }
-        });
-      });
-      return all;
-    },
-    currentCategoryData(state): CategoryItem {
-      const isLocal = state.useLocalData;
-      let dataSet: CategoryItem[];
+    // Bridges to the new modular stores
+    currentProjects(): Project[] {
+      const viewStore = useViewStore();
+      const dataStore = useDataStore();
+      const favoriteStore = useFavoriteStore();
 
-      if (state.filterType === CategoryType.CAPABILITY) {
-        dataSet = isLocal || state.fetchedCapabilities.length === 0 ? CAPABILITY_DATA : state.fetchedCapabilities;
-      } else if (state.filterType === CategoryType.MARKET) {
-        dataSet = isLocal || state.fetchedMarkets.length === 0 ? MARKET_DATA : state.fetchedMarkets;
-      } else {
-        dataSet = isLocal || state.fetchedRegions.length === 0 ? REGION_DATA : state.fetchedRegions;
+      if (viewStore.view === ViewState.FAVOURITES) {
+        return dataStore.flattenedAllProjects.filter(p => favoriteStore.favouriteIds.includes(p.id));
       }
-
-      return dataSet.find(d => d.id === state.activeCategoryId) || dataSet[0];
+      return dataStore.currentCategoryData.projects;
     },
-    currentProjects(state): Project[] {
-      if (state.view === ViewState.FAVOURITES) {
-        return this.flattenedAllProjects.filter(p => state.favouriteIds.includes(p.id));
-      }
-      return this.currentCategoryData.projects;
+    currentOrbColor(): string {
+      const viewStore = useViewStore();
+      const dataStore = useDataStore();
+      return viewStore.view === ViewState.DETAIL
+        ? (dataStore.selectedProject?.accentColor || viewStore.hoveredColor)
+        : viewStore.hoveredColor;
     },
-    selectedProject(state): Project | null {
-      if (!state.selectedProjectId) return null;
-      return this.flattenedAllProjects.find(p => p.id === state.selectedProjectId) || null;
-    },
-    currentOrbColor(state): string {
-      return state.view === ViewState.DETAIL
-        ? (this.selectedProject?.accentColor || DEFAULT_ACCENT)
-        : state.hoveredColor;
-    },
-    isLastChapter(state): boolean {
-      if (!this.selectedProject) return false;
-      const index = this.currentProjects.findIndex(p => p.id === this.selectedProject!.id);
-      return index !== -1 && index === this.currentProjects.length - 1;
+    isLastChapter(): boolean {
+      const dataStore = useDataStore();
+      if (!dataStore.selectedProject) return false;
+      const projects = this.currentProjects;
+      const index = projects.findIndex(p => p.id === dataStore.selectedProject!.id);
+      return index !== -1 && index === projects.length - 1;
     }
   },
   actions: {
-    setView(view: ViewState) {
-      this.prevView = this.view;
-      this.view = view;
-    },
-    setFilter(type: CategoryType, id: string) {
-      this.filterType = type;
-      this.activeCategoryId = id;
-    },
-    setSelectedProject(project: Project | null) {
-      this.selectedProjectId = project ? project.id : null;
-    },
-    setHoveredColor(color: string | null) {
-      this.hoveredColor = color || this.selectedProject?.accentColor || DEFAULT_ACCENT;
-    },
-    setScrollProgress(progress: number) {
-      this.scrollProgress = progress;
-    },
-    toggleFavourite(id: string) {
-      if (this.favouriteIds.includes(id)) {
-        this.favouriteIds = this.favouriteIds.filter(fid => fid !== id);
-      } else {
-        this.favouriteIds.push(id);
-      }
-    },
-    resetCurator() {
-      this.favouriteIds = [];
-      this.curatedTitle = 'Curated Collection';
-    },
+    // Navigation bridge
     goHome() {
-      this.setView(ViewState.LANDING);
-      this.setSelectedProject(null);
-      this.setHoveredColor(DEFAULT_ACCENT);
-      this.searchQuery = '';
-      this.scrollProgress = 0;
+      const viewStore = useViewStore();
+      const dataStore = useDataStore();
+      viewStore.goHome();
+      dataStore.setSelectedProject(null);
+      dataStore.searchQuery = '';
     },
     nextChapter() {
-      if (!this.selectedProject) return;
-      const currentIndex = this.currentProjects.findIndex(p => p.id === this.selectedProject!.id);
-      if (currentIndex !== -1 && currentIndex < this.currentProjects.length - 1) {
-        this.setSelectedProject(this.currentProjects[currentIndex + 1]);
+      const dataStore = useDataStore();
+      if (!dataStore.selectedProject) return;
+      
+      const projects = this.currentProjects;
+      const currentIndex = projects.findIndex(p => p.id === dataStore.selectedProject!.id);
+      
+      if (currentIndex !== -1 && currentIndex < projects.length - 1) {
+        dataStore.setSelectedProject(projects[currentIndex + 1]);
       } else {
         this.backToTimeline();
       }
     },
     backToTimeline() {
-      if (this.view === ViewState.CURATOR) {
-        this.setView(ViewState.CURATOR);
+      const viewStore = useViewStore();
+      if (viewStore.view === ViewState.CURATOR) {
+        viewStore.setView(ViewState.CURATOR);
       } else {
-        this.setView(this.view === ViewState.FAVOURITES ? ViewState.FAVOURITES : ViewState.TIMELINE);
-      }
-    },
-    backToSelector() {
-      this.setView(ViewState.SELECTOR);
-      this.searchQuery = '';
-      this.scrollProgress = 0;
-    },
-    async fetchHygraphData() {
-      if (this.isFetchingData) return;
-      this.isFetchingData = true;
-      try {
-        const data = await fetchHygraphData();
-        if (data) {
-          this.fetchedProjects = data.projects;
-          this.fetchedMarkets = data.markets;
-          this.fetchedRegions = data.regions;
-          this.fetchedCapabilities = data.capabilities;
-        }
-      } finally {
-        this.isFetchingData = false;
-      }
-    },
-    setHasFooterAnimated(value: boolean) {
-      this.hasFooterAnimated = value;
-    },
-    async setUseLocalData(useLocal: boolean) {
-      this.useLocalData = useLocal;
-      if (!useLocal && this.fetchedProjects.length === 0) {
-        await this.fetchHygraphData();
-      }
-
-      // Make sure activeCategoryId exists in the new dataset, otherwise reset it
-      const currentData = this.currentCategoryData;
-      if (currentData) {
-         this.activeCategoryId = currentData.id;
+        viewStore.setView(viewStore.view === ViewState.FAVOURITES ? ViewState.FAVOURITES : ViewState.TIMELINE);
       }
     }
   }
 });
+
+export * from './view';
+export * from './data';
+export * from './favorites';

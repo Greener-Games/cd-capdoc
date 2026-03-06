@@ -3,8 +3,8 @@
     class="group relative h-[340px] shrink-0 transition-all duration-700 animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both flex flex-col cursor-pointer overflow-hidden rounded-[1.5rem] isolate backface-hidden transform-gpu"
     :style="{ animationDelay: `${index * 50}ms` }"
     @click="handleClick"
-    @mouseenter="store.setHoveredColor(project.accentColor)"
-    @mouseleave="store.setHoveredColor(null)"
+    @mouseenter="viewStore.setHoveredColor(project.accentColor)"
+    @mouseleave="viewStore.setHoveredColor(null)"
   >
     <div class="absolute inset-0 z-0">
       <img
@@ -32,7 +32,7 @@
         <!-- Toggle Button -->
         <button
           v-if="mode === 'build'"
-          @click.stop="store.toggleFavourite(project.id)"
+          @click.stop="favoriteStore.toggleFavourite(project.id)"
           class="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 pointer-events-auto bg-white"
         >
           <svg
@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { Project } from '../types';
-import { useAppStore } from '../store';
+import { useViewStore, useFavoriteStore } from '../store';
 
 const props = withDefaults(defineProps<{
   project: Project;
@@ -82,12 +82,13 @@ const props = withDefaults(defineProps<{
 });
 
 const emit = defineEmits(['select']);
-const store = useAppStore();
+const viewStore = useViewStore();
+const favoriteStore = useFavoriteStore();
 
 const isFavourite = computed(() => {
   if (props.mode === 'explore') return false;
   if (props.isSelected !== undefined) return props.isSelected;
-  return store.favouriteIds.includes(props.project.id);
+  return favoriteStore.favouriteIds.includes(props.project.id);
 });
 
 const handleClick = () => {
