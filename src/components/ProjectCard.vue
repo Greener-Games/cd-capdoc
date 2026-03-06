@@ -34,11 +34,23 @@
           @click.stop="store.toggleFavourite(project.id)"
           class="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 pointer-events-auto bg-white"
         >
-          <component
-            :is="isFavourite ? Minus : Plus"
-            class="w-6 h-6 transition-colors duration-300 text-black"
-            :stroke-width="2.5"
-          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-6 h-6 text-black"
+          >
+            <!-- Horizontal line (always visible) -->
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <!-- Vertical line (animates out when favourite) -->
+            <line x1="12" y1="5" x2="12" y2="19"
+                  class="transition-all duration-300 ease-in-out origin-center"
+                  :class="isFavourite ? 'opacity-0 scale-y-0 -translate-y-2' : 'opacity-100 scale-y-100 translate-y-0'" />
+          </svg>
         </button>
       </div>
 
@@ -55,7 +67,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { Plus, Minus } from 'lucide-vue-next';
 import { Project } from '../types';
 import { useAppStore } from '../store';
 
