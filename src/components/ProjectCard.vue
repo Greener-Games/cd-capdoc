@@ -1,53 +1,61 @@
 <template>
   <div
-    class="group cursor-pointer relative animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both"
+    class="group relative h-[350px] sm:h-[450px] shrink-0 transition-all duration-700 animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both flex flex-col cursor-pointer overflow-hidden rounded-[1.5rem]"
     :style="{ animationDelay: `${index * 50}ms` }"
+    @click="handleClick"
     @mouseenter="store.setHoveredColor(project.accentColor)"
     @mouseleave="store.setHoveredColor(null)"
-    @click="handleClick"
   >
-    <div class="absolute -top-3 -right-3 z-20 pointer-events-auto">
-      <button
-        @click.stop="store.toggleFavourite(project.id)"
-        class="p-2 rounded-full bg-black/50 backdrop-blur-md border border-white/10 hover:bg-white/10 transition-colors"
-      >
-        <Heart
-          class="w-4 h-4 transition-colors"
-          :class="isFavourite ? 'text-red-500 fill-red-500' : 'text-white/40 group-hover:text-white/60'"
-        />
-      </button>
+    <div class="absolute inset-0 z-0">
+      <img
+        :src="project.imageUrl"
+        :alt="project.title"
+        class="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105 pointer-events-none"
+      />
     </div>
 
-    <div class="glass-panel overflow-hidden h-full flex flex-col group-hover:bg-white/10 transition-colors duration-500">
-      <div class="h-48 relative overflow-hidden">
-        <div class="absolute inset-0 bg-black/20 z-10 group-hover:bg-transparent transition-colors duration-500"></div>
-        <img
-          :src="project.imageUrl"
-          :alt="project.title"
-          class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000"
-        />
-        <div
-          class="absolute bottom-0 left-0 w-full h-1"
-          :style="{ backgroundColor: project.accentColor }"
-        ></div>
+    <!-- Bottom info section inside a rounded box -->
+    <div
+      class="absolute bottom-4 left-4 right-4 z-20 p-5 backdrop-blur-md rounded-2xl flex flex-col pointer-events-auto shadow-lg transition-colors duration-300"
+      :class="isFavourite ? 'bg-[#DFFF00]' : 'bg-[#121212]/80'"
+    >
+      <div class="flex justify-between items-start w-full gap-4">
+
+        <!-- Services -->
+        <p
+          class="text-xs tracking-wider uppercase font-medium leading-relaxed font-mono mt-1 transition-colors duration-300"
+          :class="isFavourite ? 'text-black' : 'text-[#a0a0a0]'"
+        >
+          {{ project.services?.join(', ') || project.id }}
+        </p>
+
+        <!-- Toggle Button -->
+        <button
+          @click.stop="store.toggleFavourite(project.id)"
+          class="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 pointer-events-auto bg-white"
+        >
+          <component
+            :is="isFavourite ? Minus : Plus"
+            class="w-6 h-6 transition-colors duration-300 text-black"
+            :stroke-width="2.5"
+          />
+        </button>
       </div>
 
-      <div class="p-6 flex-grow flex flex-col">
-        <div class="text-[9px] font-bold  uppercase text-white/40 mb-2">
-          {{ project.id }}
-        </div>
-        <h3 class="text-xl font-light text-white mb-2">{{ project.title }}</h3>
-        <p class="text-xs text-white/50 line-clamp-2 flex-grow">
-          {{ project.description }}
-        </p>
-      </div>
+      <!-- Title -->
+      <h2
+        class="font-medium text-xl leading-tight line-clamp-2 mt-4 uppercase tracking-wide transition-colors duration-300"
+        :class="isFavourite ? 'text-black' : 'text-white'"
+      >
+        {{ project.title }}
+      </h2>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { Heart } from 'lucide-vue-next';
+import { Plus, Minus } from 'lucide-vue-next';
 import { Project } from '../types';
 import { useAppStore } from '../store';
 
@@ -57,8 +65,8 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(['select']);
-
 const store = useAppStore();
+
 const isFavourite = computed(() => store.favouriteIds.includes(props.project.id));
 
 const handleClick = () => {

@@ -10,7 +10,12 @@
     </template>
 
     <template #title>
-      {{ store.currentCategoryData?.title || 'Timeline' }}
+      <template v-if="store.view === ViewState.FAVOURITES">
+        {{ store.curatedTitle || 'Favourites' }}
+      </template>
+      <template v-else>
+        {{ store.currentCategoryData?.title || 'Timeline' }}
+      </template>
     </template>
 
     <!-- Draggable/Scrollable Container -->
@@ -43,7 +48,7 @@
 import {computed} from 'vue';
 import {useRouter} from 'vue-router';
 import {useAppStore} from '../store';
-import {Project} from '../types';
+import {Project, ViewState} from '../types';
 import DragScroll from '../components/DragScroll.vue';
 import CarouselCard from '../components/CarouselCard.vue';
 import BaseLayout from "@/Layouts/BaseLayout.vue";
@@ -66,8 +71,13 @@ const handleProjectSelect = (project: Project) => {
 };
 
 const handleBack = () => {
-  store.backToSelector();
-  router.push('/select');
+  if (store.view === ViewState.FAVOURITES) {
+    store.setView(ViewState.DEVELOPER);
+    router.push('/developer');
+  } else {
+    store.backToSelector();
+    router.push('/select');
+  }
 };
 </script>
 

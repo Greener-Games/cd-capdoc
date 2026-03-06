@@ -4,10 +4,9 @@ import { ViewState } from '../types';
 
 import HomeView from '../views/HomeView.vue';
 import SelectionMenu from '../views/SelectionMenu.vue';
-import Timeline from '../views/Timeline.vue';
+import ProjectSelection from '../views/ProjectSelection.vue';
 import DetailView from '../views/DetailView.vue';
 import DeveloperPage from '../views/DeveloperPage.vue';
-import FavouritesView from '../views/FavouritesView.vue';
 
 const routes = [
   {
@@ -31,7 +30,7 @@ const routes = [
   {
     path: '/timeline/:type/:id',
     name: 'Timeline',
-    component: Timeline,
+    component: ProjectSelection,
     beforeEnter: () => {
       const store = useAppStore();
       store.setView(ViewState.TIMELINE);
@@ -58,7 +57,7 @@ const routes = [
   {
     path: '/favourites',
     name: 'Favourites',
-    component: FavouritesView,
+    component: ProjectSelection,
     beforeEnter: () => {
       const store = useAppStore();
       store.setView(ViewState.FAVOURITES);

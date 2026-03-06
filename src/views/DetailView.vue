@@ -140,7 +140,7 @@
               class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center transition-colors hover:bg-white/10 backdrop-blur-sm cursor-pointer"
               :class="{ 'bg-white/10': isFavourite }"
             >
-              <Heart class="w-4 h-4 transition-colors" :class="isFavourite ? 'text-red-500 fill-red-500' : 'text-white'" />
+              <Plus class="w-4 h-4 transition-colors" :class="isFavourite ? 'text-white' : 'text-white/40'" />
             </button>
 
             <button
@@ -166,7 +166,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '../store';
-import { ArrowLeft, ArrowRight, Heart } from 'lucide-vue-next';
+import { ArrowLeft, ArrowRight, Plus } from 'lucide-vue-next';
 
 const store = useAppStore();
 const router = useRouter();
