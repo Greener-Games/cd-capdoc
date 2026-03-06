@@ -31,6 +31,7 @@
 
         <!-- Toggle Button -->
         <button
+          v-if="mode === 'build'"
           @click.stop="store.toggleFavourite(project.id)"
           class="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 pointer-events-auto bg-white"
         >
@@ -59,10 +60,13 @@ import { Plus, Minus } from 'lucide-vue-next';
 import { Project } from '../types';
 import { useAppStore } from '../store';
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   project: Project;
   index: number;
-}>();
+  mode?: 'explore' | 'build';
+}>(), {
+  mode: 'build' // Default to build so toggle button is visible by default or we can keep it backward compatible
+});
 
 const emit = defineEmits(['select']);
 const store = useAppStore();

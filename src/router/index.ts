@@ -6,7 +6,7 @@ import HomeView from '../views/HomeView.vue';
 import SelectionMenu from '../views/SelectionMenu.vue';
 import ProjectSelection from '../views/ProjectSelection.vue';
 import DetailView from '../views/DetailView.vue';
-import DeveloperPage from '../views/DeveloperPage.vue';
+import CuratorPage from '../views/CuratorPage.vue';
 
 const routes = [
   {
@@ -46,12 +46,12 @@ const routes = [
     }
   },
   {
-    path: '/developer',
-    name: 'Developer',
-    component: DeveloperPage,
+    path: '/curator',
+    name: 'Curator',
+    component: CuratorPage,
     beforeEnter: () => {
       const store = useAppStore();
-      store.setView(ViewState.DEVELOPER);
+      store.setView(ViewState.CURATOR);
     }
   },
   {
