@@ -9,7 +9,7 @@
     <!-- Frosted Glass Overlay -->
     <div class="fixed inset-0 z-1 pointer-events-none backdrop-blur-[100px] bg-black/40 opacity-50">
       <div class="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style="background-image: url('https://grainy-gradients.vercel.app/noise.svg')"></div>
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.6)_100%)] pointer-events-none"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--color-overlay-radial)_100%)] pointer-events-none"></div>
     </div>
 
     <main class="relative z-10 w-full h-full">
@@ -45,10 +45,10 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useViewStore, useDataStore, useAppStore } from './store';
 import { ViewState } from './types';
-import Canvas3D from './components/Canvas3D.vue';
-import DevToggle from './components/DevToggle.vue';
-import GlobalNav from './components/GlobalNav.vue';
-import PageFooter from './components/PageFooter.vue';
+import Canvas3D from './components/Three/Canvas3D.vue';
+import DevToggle from './components/Common/DevToggle.vue';
+import GlobalNav from './components/Navigation/GlobalNav.vue';
+import PageFooter from './components/Navigation/PageFooter.vue';
 import { CategoryType } from './types';
 import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA } from './constants';
 

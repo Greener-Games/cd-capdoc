@@ -49,10 +49,10 @@ import {useRouter} from 'vue-router';
 import {useViewStore, useDataStore} from '../store';
 import {CategoryType} from '../types';
 import {CAPABILITY_DATA, MARKET_DATA, REGION_DATA} from '../constants';
-import DragScroll from '../components/DragScroll.vue';
-import SelectionCard from '../components/SelectionCard.vue';
+import DragScroll from '../components/Common/DragScroll.vue';
+import SelectionCard from '../components/Cards/SelectionCard.vue';
 import BaseLayout from "@/Layouts/BaseLayout.vue";
-import RoundedButton from "@/components/RoundedButton.vue";
+import RoundedButton from "@/components/Common/RoundedButton.vue";
 
 const viewStore = useViewStore();
 const dataStore = useDataStore();

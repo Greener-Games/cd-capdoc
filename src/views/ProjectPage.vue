@@ -26,7 +26,7 @@
         :enable-wheel-scroll="true"
         v-slot="{ isDragging }"
     >
-      <CarouselCard
+      <ProjectCard
           v-for="(project, index) in currentProjects"
           :key="project.id"
           :id="project.id"
@@ -49,11 +49,11 @@ import {computed} from 'vue';
 import {useRouter} from 'vue-router';
 import {useAppStore, useViewStore, useDataStore, useFavoriteStore} from '../store';
 import {Project, ViewState} from '../types';
-import DragScroll from '../components/DragScroll.vue';
-import CarouselCard from '../components/CarouselCard.vue';
+import DragScroll from '../components/Common/DragScroll.vue';
+import ProjectCard from '../components/Cards/ProjectCard.vue';
 import BaseLayout from "@/Layouts/BaseLayout.vue";
-import RoundedButton from "@/components/RoundedButton.vue";
-import Icon from '../components/Icon.vue';
+import RoundedButton from "@/components/Common/RoundedButton.vue";
+import Icon from '../components/Common/Icon.vue';
 import Arrow from '@/assets/icons/Arrow.svg';
 
 const appStore = useAppStore();

@@ -3,8 +3,8 @@ import { useViewStore, useDataStore } from '../store';
 import { ViewState } from '../types';
 
 import HomeView from '../views/HomeView.vue';
-import SelectionMenu from '../views/SelectionMenu.vue';
-import ProjectSelection from '../views/ProjectSelection.vue';
+import SelectionPage from '../views/SelectionPage.vue';
+import ProjectPage from '../views/ProjectPage.vue';
 import DetailView from '../views/DetailView.vue';
 import CuratorPage from '../views/CuratorPage.vue';
 
@@ -21,7 +21,7 @@ const routes = [
   {
     path: '/select',
     name: 'Select',
-    component: SelectionMenu,
+    component: SelectionPage,
     beforeEnter: () => {
       const viewStore = useViewStore();
       viewStore.setView(ViewState.SELECTOR);
@@ -30,7 +30,7 @@ const routes = [
   {
     path: '/timeline/:type/:id',
     name: 'Timeline',
-    component: ProjectSelection,
+    component: ProjectPage,
     beforeEnter: () => {
       const viewStore = useViewStore();
       viewStore.setView(ViewState.TIMELINE);
@@ -57,7 +57,7 @@ const routes = [
   {
     path: '/favourites',
     name: 'Favourites',
-    component: ProjectSelection,
+    component: ProjectPage,
     beforeEnter: () => {
       const viewStore = useViewStore();
       viewStore.setView(ViewState.FAVOURITES);

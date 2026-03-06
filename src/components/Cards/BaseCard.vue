@@ -11,7 +11,7 @@
   >
 
     <!-- We apply a dynamic class here to handle different border radius and margins -->
-    <div :class="['relative w-full grow overflow-hidden border border-white/5 bg-zinc-950/40 isolate backface-hidden transform-gpu', imageContainerClass]">
+    <div :class="['relative w-full grow overflow-hidden border border-white/5 bg-zinc-950/40 isolate backface-hidden transform-gpu [clip-path:inset(0_round_1.5rem)]', imageContainerClass]">
       <img
           v-if="image"
           :src="image"
@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import {computed} from 'vue';
-import {useViewStore} from '../store'; // Adjust path if needed
+import {useViewStore} from '../../store'; // Adjust path if needed
 
 const props = withDefaults(defineProps<{
   id: string;

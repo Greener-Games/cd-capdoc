@@ -8,6 +8,15 @@
 @theme {
   --color-primary: #1e293b;
   --color-background: #050505;
+  --color-accent: #ccff00;
+  --color-accent-hover: #b3e600;
+  --color-favourite: #DFFF00;
+  --color-card-dark: #121212;
+  --color-muted: #a0a0a0;
+  --color-border-outer: #E8E8E8;
+  --color-overlay-radial: rgba(0,0,0,0.6);
+  --color-three-fog: #02050a;
+  --color-three-default: #0044ff;
 
   --font-bienvenue: 'Bienvenue', 'ui-sans-serif', 'system-ui', 'sans-serif';
   --font-gamechanger: 'Gamechanger', 'ui-serif', 'serif';
@@ -66,7 +75,7 @@
     left: var(--border-width-side);
     right: var(--border-width-side);
     border-radius: var(--border-inner-radius);
-    box-shadow: 0 0 0 100vmax #E8E8E8;
+    box-shadow: 0 0 0 100vmax var(--color-border-outer);
     pointer-events: none;
     z-index: 60;
   }

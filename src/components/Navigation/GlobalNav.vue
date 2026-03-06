@@ -23,7 +23,7 @@
           class="animate-in fade-in zoom-in-90 duration-500 active:scale-95 hover:scale-105"
       >
         <template #icon>
-          <Icon :icon="Magnifying" size="md" />
+          <Icon :icon="Magnifying" size="md" class="scale-x-[-1]" />
         </template>
       </RoundedButton>
     </div>
@@ -33,10 +33,10 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 import {useRouter} from 'vue-router';
-import {useAppStore, useViewStore} from '../store';
-import {ViewState} from '../types';
-import RoundedButton from "@/components/RoundedButton.vue";
-import Icon from './Icon.vue';
+import {useAppStore, useViewStore} from '../../store';
+import {ViewState} from '../../types';
+import RoundedButton from "@/components/Common/RoundedButton.vue";
+import Icon from '../Common/Icon.vue';
 import Magnifying from '@/assets/icons/Magnifying.svg';
 import ARLogo from '@/assets/Images/ARLogo.svg';
 

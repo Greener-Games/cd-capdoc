@@ -1,5 +1,5 @@
 <template>
-  <TresFog :args="['#02050a', 2, 20]" />
+  <TresFog :args="[getCSSVariableValue('--color-three-fog') || '#02050a', 2, 20]" />
 
   <TresGroup ref="groupRef">
     <TresMesh ref="waveRef" :position="[0, 0, -2]">
@@ -20,20 +20,24 @@
 import { shallowRef, onMounted, onUnmounted, watch } from 'vue';
 import { useLoop, useTresContext } from '@tresjs/core';
 import * as THREE from 'three';
-import { useViewStore } from '../store';
+import { useViewStore } from '../../store';
 
 const waveRef = shallowRef<THREE.Mesh | null>(null);
 const groupRef = shallowRef<THREE.Group | null>(null);
 const { camera } = useTresContext();
 
 const viewStore = useViewStore();
-const defaultColor = new THREE.Color('#0044ff');
-const targetColor = new THREE.Color('#0044ff');
+const getCSSVariableValue = (variableName: string) => {
+  return getComputedStyle(document.documentElement).getPropertyValue(variableName).trim();
+};
+
+const defaultColor = new THREE.Color(getCSSVariableValue('--color-three-default') || '#0044ff');
+const targetColor = new THREE.Color(getCSSVariableValue('--color-three-default') || '#0044ff');
 
 // --- Uniforms ---
 const uniforms = {
   uTime: { value: 0 },
-  uColor: { value: new THREE.Color('#0044ff') },
+  uColor: { value: new THREE.Color(getCSSVariableValue('--color-three-default') || '#0044ff') },
   uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
 
   uLineWidth: { value: 15 },   // Width of the bright strips

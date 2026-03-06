@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import {computed, onMounted} from 'vue';
-import {useViewStore} from '../store';
+import {useViewStore} from '../../store';
 
 const props = defineProps<{
   count: number | string
