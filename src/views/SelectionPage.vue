@@ -88,6 +88,7 @@ const currentData = computed(() => {
 
 const setFilter = (type: CategoryType) => {
   filterType.value = type;
+  dataStore.filterType = type; // Ensure store is updated so footer reflects change
   viewStore.setHoveredColor(null);
 };
 
