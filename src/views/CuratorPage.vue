@@ -32,7 +32,7 @@
         v-model="searchQuery"
         type="text"
         placeholder="Search by keyword, project name, or capability..."
-        class="w-full bg-white/5 border border-white/10 rounded-2xl py-6 pl-20 pr-8 text-xl text-white placeholder-white/20 focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all font-light"
+        class="w-full bg-white/5 border border-white/10 rounded-2xl py-6 pl-20 pr-8 text-xl text-white placeholder-white/20 focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all font-light selection:bg-[#ccff00] selection:text-black"
         autofocus
       />
       <div class="absolute inset-y-0 right-6 flex items-center">
@@ -77,7 +77,7 @@
           <input
             v-model="curatedTitle"
             type="text"
-            class="bg-transparent text-black text-sm font-bold uppercase focus:outline-none w-full placeholder-black/40"
+            class="bg-transparent text-black text-sm font-bold uppercase focus:outline-none w-full placeholder-black/40 selection:bg-[#ccff00] selection:text-black"
             placeholder="MY PRESENTATION"
           />
           <Edit3 class="w-4 h-4 text-black shrink-0" />
