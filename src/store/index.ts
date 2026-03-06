@@ -119,8 +119,8 @@ export const useAppStore = defineStore('app', {
       }
     },
     backToTimeline() {
-      if (this.view === ViewState.DEVELOPER) {
-        this.setView(ViewState.DEVELOPER);
+      if (this.view === ViewState.CURATOR) {
+        this.setView(ViewState.CURATOR);
       } else {
         this.setView(this.view === ViewState.FAVOURITES ? ViewState.FAVOURITES : ViewState.TIMELINE);
       }

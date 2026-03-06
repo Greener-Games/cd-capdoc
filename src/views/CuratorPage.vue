@@ -3,21 +3,14 @@
     <div class="max-w-7xl mx-auto px-8 py-24">
 
       <!-- Top Toggle -->
-      <div class="flex items-center space-x-2 mb-8">
-        <button
-          @click="activeMode = 'explore'"
-          class="px-6 py-2 rounded-full text-[11px] font-bold uppercase transition-colors"
-          :class="activeMode === 'explore' ? 'bg-[#1a1a1a] text-white/50 border border-white/10' : 'bg-transparent text-white/50 hover:text-white'"
-        >
-          Explore
-        </button>
-        <button
-          @click="activeMode = 'build'"
-          class="px-6 py-2 rounded-full text-[11px] font-bold uppercase transition-colors"
-          :class="activeMode === 'build' ? 'bg-white text-black' : 'bg-[#1a1a1a] text-white/50 border border-white/10 hover:text-white'"
-        >
-          Build
-        </button>
+      <div class="flex items-center space-x-2 mb-8 pointer-events-auto">
+        <RoundedButton
+            v-for="pill in pills"
+            :key="pill.label"
+            :label="pill.label"
+            :active="activeMode === pill.mode"
+            @click="activeMode = pill.mode"
+        />
       </div>
 
       <div class="flex items-center justify-between mb-16">
@@ -61,6 +54,7 @@
           :key="project.id"
           :project="project"
           :index="index"
+          :mode="activeMode"
           @select="handleSelectProject"
         />
       </div>
@@ -111,12 +105,18 @@ import { useRouter } from 'vue-router';
 import { useAppStore } from '../store';
 import { Search, X, Play, Plus, Edit3 } from 'lucide-vue-next';
 import ProjectCard from '../components/ProjectCard.vue';
+import RoundedButton from '../components/RoundedButton.vue';
 import { Project, ViewState } from '../types';
 
 const store = useAppStore();
 const router = useRouter();
 
 const activeMode = ref<'explore' | 'build'>('explore');
+
+const pills = [
+  { label: 'Explore', mode: 'explore' },
+  { label: 'Build', mode: 'build' }
+] as const;
 
 const searchQuery = computed({
   get: () => store.searchQuery,

@@ -209,8 +209,8 @@ const handleBack = () => {
   store.backToTimeline();
   if (store.view === 'FAVOURITES') {
     router.push('/favourites');
-  } else if (store.view === 'DEVELOPER') {
-    router.push('/developer');
+  } else if (store.view === 'CURATOR') {
+    router.push('/curator');
   } else {
     router.push(`/timeline/${store.filterType}/${store.activeCategoryId}`);
   }

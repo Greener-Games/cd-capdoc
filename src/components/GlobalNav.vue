@@ -16,7 +16,7 @@
         </button>
 
       <RoundedButton
-          v-show="view !== ViewState.DEVELOPER"
+          v-show="view !== ViewState.CURATOR"
           @click="handleOpenSearch"
           iconOnly
           :variant="view === ViewState.LANDING ? 'solid-black' : 'solid-white'"
@@ -52,9 +52,9 @@ const handleGoHome = () => {
 };
 
 const handleOpenSearch = () => {
-  if (view.value !== ViewState.DEVELOPER) {
-    store.setView(ViewState.DEVELOPER);
-    router.push('/developer');
+  if (view.value !== ViewState.CURATOR) {
+    store.setView(ViewState.CURATOR);
+    router.push('/curator');
   }
 };
 </script>

@@ -72,8 +72,8 @@ const handleProjectSelect = (project: Project) => {
 
 const handleBack = () => {
   if (store.view === ViewState.FAVOURITES) {
-    store.setView(ViewState.DEVELOPER);
-    router.push('/developer');
+    store.setView(ViewState.CURATOR);
+    router.push('/curator');
   } else {
     store.backToSelector();
     router.push('/select');
