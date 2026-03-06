@@ -16,24 +16,34 @@
     <template #image-overlay>
       <!-- Bottom info section inside a rounded box -->
       <div
-          class="absolute bottom-1.25 left-1.25 right-1.25 h-30 z-20 p-5 backdrop-blur-md rounded-2xl flex flex-col pointer-events-auto shadow-lg transition-colors duration-300"
+          class="absolute bottom-1.25 left-1.25 right-1.25 h-30 z-20 p-3 backdrop-blur-md rounded-2xl flex flex-row gap-4 items-start pointer-events-auto shadow-lg transition-colors duration-300"
           :class="isFavourite ? 'bg-favourite' : 'bg-card-dark/80'"
       >
-        <div class="flex justify-between items-start w-full gap-4">
-
+        <!-- Column 1: Services and Title -->
+        <div class="flex flex-col h-full flex-1 min-w-0">
           <!-- Services -->
           <p
-              class="text-xs tracking-wider uppercase font-medium leading-relaxed font-mono mt-1 transition-colors duration-300"
+              class="text-xs uppercase font-normal mt-1 transition-colors duration-300 line-clamp-2"
               :class="isFavourite ? 'text-black' : 'text-muted'"
           >
             {{ project.services?.join(', ') || project.id }}
           </p>
 
-          <!-- Toggle Button -->
+          <!-- Title -->
+          <h2
+              class="font-normal text-lg line-clamp-2 uppercase transition-colors duration-300 mt-auto leading-none"
+              :class="isFavourite ? 'text-black' : 'text-white'"
+          >
+            {{ project.title }}
+          </h2>
+        </div>
+
+        <!-- Column 2: Toggle Button -->
+        <div class="w-11 aspect-square shrink-0">
           <button
               v-if="mode === 'build'"
               @click.stop="favoriteStore.toggleFavourite(project.id)"
-              class="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 pointer-events-auto bg-white"
+              class="w-full h-full rounded-xl flex items-center justify-center transition-all duration-300 pointer-events-auto bg-white"
           >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -47,19 +57,11 @@
             >
               <line x1="5" y1="12" x2="19" y2="12"/>
               <line x1="12" y1="5" x2="12" y2="19"
-                    class="transition-all duration-300 ease-in-out origin-center"
-                    :class="isFavourite ? 'opacity-0 scale-y-0 -translate-y-2' : 'opacity-100 scale-y-100 translate-y-0'"/>
+                    class="transition-all duration-300 ease-in-out"
+                    :class="isFavourite ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'"/>
             </svg>
           </button>
         </div>
-
-        <!-- Title -->
-        <h2
-            class="font-medium text-xl leading-tight line-clamp-2 mt-4 uppercase tracking-wide transition-colors duration-300"
-            :class="isFavourite ? 'text-black' : 'text-white'"
-        >
-          {{ project.title }}
-        </h2>
       </div>
     </template>
   </BaseCard>

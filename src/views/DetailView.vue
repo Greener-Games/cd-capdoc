@@ -11,17 +11,6 @@
         </div>
       </div>
 
-      <!-- Top Header Area -->
-      <div class="fixed top-0 left-0 w-full px-8 py-6 flex items-center justify-between z-50 bg-black/50 backdrop-blur-md border-b border-white/10">
-        <div class="text-sm font-medium  text-white/80">Creative Design</div>
-        <div class="flex items-center space-x-6">
-          <div class="text-xl font-bold text-white">AtkinsRéalis</div>
-          <button class="w-8 h-8 bg-white text-black rounded-full flex items-center justify-center hover:scale-105 transition-transform">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          </button>
-        </div>
-      </div>
-
       <div class="max-w-6xl mx-auto px-8 pt-[15vh] pb-32">
         <div class="animate-in fade-in slide-in-from-bottom-10 duration-[800ms] fill-mode-both">
           <button

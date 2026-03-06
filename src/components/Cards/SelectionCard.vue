@@ -7,7 +7,7 @@
   >
     <template #default="{ formattedTitle }">
       <div class="flex flex-col justify-start text-left pointer-events-none px-2 h-45 w-full">
-        <h2 class="font-bienvenue font-white text-3xl uppercase transition-opacity duration-700 opacity-50 group-hover:opacity-100">
+        <h2 class="font-bienvenue font-white text-3xl uppercase transition-opacity duration-700 opacity-50 group-hover:opacity-100 leading-none">
           {{ formattedTitle }}
         </h2>
       </div>
