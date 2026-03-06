@@ -23,47 +23,50 @@
       Project Library
     </template>
 
-    <!-- Search Input -->
-    <div class="relative mb-16 group w-full">
-      <div class="absolute inset-y-0 left-6 flex items-center pointer-events-none">
-        <Search class="w-6 h-6 text-white/40 group-focus-within:text-white transition-colors" />
-      </div>
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="Search by keyword, project name, or capability..."
-        class="w-full bg-white/5 border border-white/10 rounded-2xl py-6 pl-20 pr-8 text-xl text-white placeholder-white/20 focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all font-light"
-        autofocus
-      />
-      <div class="absolute inset-y-0 right-6 flex items-center">
-        <div class="text-[10px] font-bold uppercase text-white/20">
-          {{ filteredProjects.length }} Results
+    <!-- Scrollable Content Area -->
+    <div class="w-full flex-1 overflow-y-auto min-h-0 pb-32 pr-4 custom-scrollbar">
+      <!-- Search Input -->
+      <div class="relative mb-16 group w-full">
+        <div class="absolute inset-y-0 left-6 flex items-center pointer-events-none">
+          <Search class="w-6 h-6 text-white/40 group-focus-within:text-white transition-colors" />
+        </div>
+        <input
+          v-model="searchQuery"
+          type="text"
+          placeholder="Search by keyword, project name, or capability..."
+          class="w-full bg-white/5 border border-white/10 rounded-2xl py-6 pl-20 pr-8 text-xl text-white placeholder-white/20 focus:outline-none focus:bg-white/10 focus:border-white/30 transition-all font-light"
+          autofocus
+        />
+        <div class="absolute inset-y-0 right-6 flex items-center">
+          <div class="text-[10px] font-bold uppercase text-white/20">
+            {{ filteredProjects.length }} Results
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Grid Results -->
-    <div v-if="filteredProjects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full isolate">
-      <ProjectCard
-        v-for="(project, index) in filteredProjects"
-        :key="project.id"
-        :project="project"
-        :index="index"
-        :mode="activeMode"
-        :is-selected="isFavourite(project.id)"
-        @select="handleSelectProject"
-      />
-    </div>
-
-    <!-- Empty State -->
-    <div v-else class="text-center py-32 w-full">
-      <div class="w-24 h-24 rounded-full border border-white/10 flex items-center justify-center mx-auto mb-6 text-white/20">
-        <Search class="w-8 h-8" />
+      <!-- Grid Results -->
+      <div v-if="filteredProjects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full isolate">
+        <ProjectCard
+          v-for="(project, index) in filteredProjects"
+          :key="project.id"
+          :project="project"
+          :index="index"
+          :mode="activeMode"
+          :is-selected="isFavourite(project.id)"
+          @select="handleSelectProject"
+        />
       </div>
-      <h3 class="text-xl font-light text-white mb-2">No projects found</h3>
-      <p class="text-white/40 font-light">
-        Try adjusting your search terms or browse the timeline
-      </p>
+
+      <!-- Empty State -->
+      <div v-else class="text-center py-32 w-full">
+        <div class="w-24 h-24 rounded-full border border-white/10 flex items-center justify-center mx-auto mb-6 text-white/20">
+          <Search class="w-8 h-8" />
+        </div>
+        <h3 class="text-xl font-light text-white mb-2">No projects found</h3>
+        <p class="text-white/40 font-light">
+          Try adjusting your search terms or browse the timeline
+        </p>
+      </div>
     </div>
 
     <!-- Bottom Fixed Curated Journey Bar (only in Build Mode) -->
