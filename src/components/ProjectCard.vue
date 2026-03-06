@@ -15,30 +15,38 @@
     </div>
 
     <!-- Bottom info section inside a rounded box -->
-    <div class="absolute bottom-4 left-4 right-4 z-20 p-5 bg-[#121212]/80 backdrop-blur-md rounded-2xl flex flex-col pointer-events-auto shadow-lg">
+    <div
+      class="absolute bottom-4 left-4 right-4 z-20 p-5 backdrop-blur-md rounded-2xl flex flex-col pointer-events-auto shadow-lg transition-colors duration-300"
+      :class="isFavourite ? 'bg-[#DFFF00]' : 'bg-[#121212]/80'"
+    >
       <div class="flex justify-between items-start w-full gap-4">
+
         <!-- Services -->
-        <p class="text-xs tracking-wider uppercase text-[#a0a0a0] font-medium leading-relaxed font-mono mt-1">
+        <p
+          class="text-xs tracking-wider uppercase font-medium leading-relaxed font-mono mt-1 transition-colors duration-300"
+          :class="isFavourite ? 'text-black' : 'text-[#a0a0a0]'"
+        >
           {{ project.services?.join(', ') || project.id }}
         </p>
 
         <!-- Toggle Button -->
         <button
           @click.stop="store.toggleFavourite(project.id)"
-          class="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 pointer-events-auto"
-          :class="isFavourite ? 'bg-[#15A15B]' : 'bg-white'"
+          class="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 pointer-events-auto bg-white"
         >
           <component
-            :is="isFavourite ? Check : Plus"
-            class="w-6 h-6 transition-colors duration-300"
-            :class="isFavourite ? 'text-white' : 'text-black'"
+            :is="isFavourite ? Minus : Plus"
+            class="w-6 h-6 transition-colors duration-300 text-black"
             :stroke-width="2.5"
           />
         </button>
       </div>
 
       <!-- Title -->
-      <h2 class="font-medium text-white text-xl leading-tight line-clamp-2 mt-4 uppercase tracking-wide">
+      <h2
+        class="font-medium text-xl leading-tight line-clamp-2 mt-4 uppercase tracking-wide transition-colors duration-300"
+        :class="isFavourite ? 'text-black' : 'text-white'"
+      >
         {{ project.title }}
       </h2>
     </div>
@@ -47,7 +55,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { Plus, Check } from 'lucide-vue-next';
+import { Plus, Minus } from 'lucide-vue-next';
 import { Project } from '../types';
 import { useAppStore } from '../store';
 
