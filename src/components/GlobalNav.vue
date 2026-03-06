@@ -16,6 +16,7 @@
         </button>
 
       <RoundedButton
+          v-show="view !== ViewState.DEVELOPER"
           @click="handleOpenSearch"
           iconOnly
           :variant="view === ViewState.LANDING ? 'solid-black' : 'solid-white'"

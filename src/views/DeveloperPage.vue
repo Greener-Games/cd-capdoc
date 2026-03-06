@@ -1,26 +1,31 @@
 <template>
   <div class="absolute inset-0 z-20 overflow-y-auto scrollbar-none pointer-events-auto bg-black/90 backdrop-blur-3xl">
     <div class="max-w-7xl mx-auto px-8 py-24">
+
+      <!-- Top Toggle -->
+      <div class="flex items-center space-x-2 mb-8">
+        <button
+          @click="activeMode = 'explore'"
+          class="px-6 py-2 rounded-full text-[11px] font-bold uppercase transition-colors"
+          :class="activeMode === 'explore' ? 'bg-[#1a1a1a] text-white/50 border border-white/10' : 'bg-transparent text-white/50 hover:text-white'"
+        >
+          Explore
+        </button>
+        <button
+          @click="activeMode = 'build'"
+          class="px-6 py-2 rounded-full text-[11px] font-bold uppercase transition-colors"
+          :class="activeMode === 'build' ? 'bg-white text-black' : 'bg-[#1a1a1a] text-white/50 border border-white/10 hover:text-white'"
+        >
+          Build
+        </button>
+      </div>
+
       <div class="flex items-center justify-between mb-16">
         <div>
-          <h2 class="text-4xl font-light text-white mb-2">Library Search</h2>
-          <p class="text-white/40 text-sm font-light">
-            Search across all capabilities, markets, and regions
-          </p>
+          <h2 class="text-5xl font-light text-white mb-2">Project Library</h2>
         </div>
 
         <div class="flex items-center space-x-6">
-          <button
-            v-if="favouriteIds.length > 0"
-            @click="handleLaunchCurated"
-            class="flex items-center space-x-3 bg-white text-black px-6 py-3 rounded-full hover:bg-white/90 transition-colors group cursor-pointer"
-          >
-            <Play class="w-4 h-4" />
-            <span class="text-[11px] font-bold  uppercase">
-              Launch Curated ({{ favouriteIds.length }})
-            </span>
-          </button>
-
           <button
             @click="handleBack"
             class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white/40 hover:text-white hover:border-white/40 transition-all cursor-pointer"
@@ -49,34 +54,6 @@
         </div>
       </div>
 
-      <!-- Curated Collection Title -->
-      <div v-if="favouriteIds.length > 0" class="mb-16">
-        <div class="glass-panel p-8 relative overflow-hidden group">
-          <div class="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent"></div>
-          <div class="relative z-10 flex items-center justify-between">
-            <div class="flex-grow max-w-2xl">
-              <div class="text-[10px] font-bold uppercase text-white/40 mb-4 flex items-center space-x-2">
-                <Plus class="w-3 h-3 text-white/40" />
-                <span>Curated Journey Title</span>
-              </div>
-              <div class="flex items-center space-x-4">
-                <input
-                  v-model="curatedTitle"
-                  type="text"
-                  class="bg-transparent border-b border-white/20 text-3xl font-light text-white pb-2 focus:outline-none focus:border-white w-full transition-colors"
-                  placeholder="Name your curated journey..."
-                />
-                <Edit3 class="w-5 h-5 text-white/20" />
-              </div>
-            </div>
-            <div class="text-right">
-              <div class="text-3xl font-light text-white mb-2">{{ favouriteIds.length }}</div>
-              <div class="text-[10px] font-bold uppercase text-white/40">Projects</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Grid Results -->
       <div v-if="filteredProjects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <ProjectCard
@@ -98,12 +75,38 @@
           Try adjusting your search terms or browse the timeline
         </p>
       </div>
+      <!-- Bottom Fixed Curated Journey Bar (only in Build Mode) -->
+      <div v-if="activeMode === 'build' && favouriteIds.length > 0" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-50">
+        <div class="bg-white rounded-full p-2 flex items-center shadow-2xl space-x-6 min-w-[600px] border border-white/10">
+          <div class="bg-[#ccff00] text-black w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0 ml-2">
+            {{ favouriteIds.length }}
+          </div>
+
+          <div class="flex-grow flex items-center space-x-2">
+            <input
+              v-model="curatedTitle"
+              type="text"
+              class="bg-transparent text-black text-sm font-bold uppercase focus:outline-none w-full placeholder-black/40"
+              placeholder="MY PRESENTATION"
+            />
+            <Edit3 class="w-4 h-4 text-black shrink-0" />
+          </div>
+
+          <button
+            @click="handleLaunchCurated"
+            class="bg-[#ccff00] hover:bg-[#b3e600] text-black px-6 py-3 rounded-full text-[11px] font-bold uppercase transition-colors shrink-0"
+          >
+            Present Projects
+          </button>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAppStore } from '../store';
 import { Search, X, Play, Plus, Edit3 } from 'lucide-vue-next';
@@ -112,6 +115,8 @@ import { Project, ViewState } from '../types';
 
 const store = useAppStore();
 const router = useRouter();
+
+const activeMode = ref<'explore' | 'build'>('explore');
 
 const searchQuery = computed({
   get: () => store.searchQuery,
