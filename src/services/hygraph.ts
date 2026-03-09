@@ -33,6 +33,7 @@ export const fetchHygraphData = async () => {
         year
         services
         contentBlocks {
+          __typename
           ... on ImageBlock {
             id
             asset {
@@ -115,16 +116,30 @@ export const fetchHygraphData = async () => {
       return asset.overrideUrl || asset.url || '';
     };
 
+    const extractPlainText = (raw: any): string => {
+      if (!raw || !raw.children) return '';
+      return raw.children
+          .map((node: any) => {
+            if (node.text) return node.text;
+            if (node.children) return extractPlainText(node);
+            return '';
+          })
+          .join('\n');
+    };
+
     // Map projects back to the categories based on IDs and resolve asset URLs/nested objects
     const projects = data.projects.map((p: any) => ({
       ...p,
       imageUrl: resolveAssetUrl(p.imageUrl),
       accentColor: p.accentColor?.hex || null, // Extract hex from color object
       contentBlocks: p.contentBlocks?.map((block: any) => {
+        const type = block.__typename?.replace('Block', '').toLowerCase();
+
         // Handle ImageBlock (now uses 'asset' field)
         if (block.asset) {
           return {
             ...block,
+            type,
             url: resolveAssetUrl(block.asset)
           };
         }
@@ -132,7 +147,8 @@ export const fetchHygraphData = async () => {
         if (block.content?.raw) {
           return {
             ...block,
-            content: block.content.raw
+            type,
+            content: extractPlainText(block.content.raw)
           };
         }
         // Handle VideoBlock (now uses 'videoUrl')
@@ -140,6 +156,7 @@ export const fetchHygraphData = async () => {
           return {
             ...block,
             url: block.videoUrl, // Map videoUrl back to 'url' for UI consistency if needed
+            type,
             poster: resolveAssetUrl(block.poster)
           };
         }

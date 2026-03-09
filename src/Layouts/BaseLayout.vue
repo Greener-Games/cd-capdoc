@@ -18,7 +18,10 @@
       <div class="grow flex justify-end">
         <slot name="title-right"></slot>
       </div>
+    </div>
 
+    <div v-if="$slots['header-bottom']" class="w-full">
+      <slot name="header-bottom"></slot>
     </div>
 
     <!-- Main content area -->
