@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ViewState, CategoryType } from '../types';
-import { useProjectStore } from './project';
+import { useDataStore } from './data';
 
 const DEFAULT_ACCENT = '#1e293b';
 
@@ -9,16 +9,16 @@ export const useViewStore = defineStore('view', {
     view: ViewState.LANDING,
     prevView: ViewState.LANDING,
     filterType: CategoryType.CAPABILITY,
-    activeCategoryId: 'brand',
+    activeCategoryId: null as string | null,
     hoveredColor: DEFAULT_ACCENT,
     scrollProgress: 0,
     hasFooterAnimated: false,
   }),
   getters: {
     currentOrbColor(): string {
-      const projectStore = useProjectStore();
+      const dataStore = useDataStore();
       return this.view === ViewState.DETAIL
-        ? (projectStore.selectedProject?.accentColor || this.hoveredColor)
+        ? (dataStore.selectedProject?.accentColor || this.hoveredColor)
         : this.hoveredColor;
     }
   },
@@ -41,15 +41,17 @@ export const useViewStore = defineStore('view', {
       this.hasFooterAnimated = value;
     },
     goHome() {
-      const projectStore = useProjectStore();
+      const dataStore = useDataStore();
       this.setView(ViewState.LANDING);
       this.setHoveredColor(DEFAULT_ACCENT);
       this.scrollProgress = 0;
-      projectStore.setSelectedProject(null);
+      this.activeCategoryId = null;
+      dataStore.setSelectedProject(null);
     },
     backToSelector() {
       this.setView(ViewState.SELECTOR);
       this.scrollProgress = 0;
+      this.activeCategoryId = null;
     }
   }
 });

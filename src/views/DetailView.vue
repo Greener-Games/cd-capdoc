@@ -41,7 +41,6 @@
     </template>
 
     <!-- Main Scrollable Content Area -->
-    <!-- Removed absolute inset-0 and pt-64 as BaseLayout flex handles it now -->
     <div class="w-full h-full overflow-y-auto scrollbar-none pointer-events-auto pb-32" @scroll="handleScroll">
       <div class="relative">
         <!-- Fixed Progress indicator -->
@@ -116,15 +115,46 @@
             </p>
           </div>
         </template>
+
+        <!-- Inline Bottom Navigation -->
+        <div class="flex items-center justify-center space-x-8 py-32 border-t border-white/10 mt-32">
+          <RoundedButton
+              @click="handlePrev"
+              icon-only
+              :disabled="!hasPrev"
+              :class="{ 'opacity-20 cursor-not-allowed pointer-events-none': !hasPrev }"
+          >
+            <template #icon>
+              <Icon :icon="Arrow" size="md" class="scale-x-[-1]" />
+            </template>
+          </RoundedButton>
+
+          <div class="text-white/40 font-bienvenue text-xs uppercase tracking-widest font-bold">
+            <span class="text-white">{{ currentIndex + 1 }}</span>
+            <span class="mx-2">of</span>
+            <span>{{ currentProjects.length }}</span>
+          </div>
+
+          <RoundedButton
+              @click="handleNext"
+              icon-only
+              :disabled="!hasNext"
+              :class="{ 'opacity-20 cursor-not-allowed pointer-events-none': !hasNext }"
+          >
+            <template #icon>
+              <Icon :icon="Arrow" size="md" />
+            </template>
+          </RoundedButton>
+        </div>
       </div>
     </div>
   </BaseLayout>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { useViewStore, useDataStore, useCuratedStore, useProjectStore } from '../store';
+import { useViewStore, useDataStore, useCuratedStore } from '../store';
 import { ViewState } from '../types';
 import BaseLayout from "@/Layouts/BaseLayout.vue";
 import Arrow from "@/assets/icons/Arrow.svg";
@@ -134,11 +164,19 @@ import Icon from "@/components/Common/Icon.vue";
 const viewStore = useViewStore();
 const dataStore = useDataStore();
 const curatedStore = useCuratedStore();
-const projectStore = useProjectStore();
 const router = useRouter();
 
-const project = computed(() => projectStore.selectedProject);
-const isLastChapter = computed(() => projectStore.isLastChapter);
+const project = computed(() => dataStore.selectedProject);
+const currentProjects = computed(() => dataStore.currentProjects);
+
+const currentIndex = computed(() => {
+  if (!project.value) return -1;
+  return currentProjects.value.findIndex(p => p.id === project.value!.id);
+});
+
+const hasNext = computed(() => currentIndex.value !== -1 && currentIndex.value < currentProjects.value.length - 1);
+const hasPrev = computed(() => currentIndex.value > 0);
+
 const isCurated = computed(() => curatedStore.curatedIds.includes(project.value?.id || ''));
 
 const scrollProgress = ref(0);
@@ -146,11 +184,15 @@ const scrollProgress = ref(0);
 const handleScroll = (e: Event) => {
   const target = e.target as HTMLElement;
   const maxScroll = target.scrollHeight - target.clientHeight;
-  scrollProgress.value = target.scrollTop / maxScroll;
+  if (maxScroll <= 0) {
+    scrollProgress.value = 0;
+  } else {
+    scrollProgress.value = target.scrollTop / maxScroll;
+  }
 };
 
 const handleBack = () => {
-  projectStore.setSelectedProject(null);
+  dataStore.setSelectedProject(null);
 
   if (viewStore.prevView === ViewState.CURATED || viewStore.view === ViewState.CURATED) {
     viewStore.setView(ViewState.CURATED);
@@ -163,13 +205,25 @@ const handleBack = () => {
 };
 
 const handleNext = () => {
-  projectStore.nextChapter();
-  if (projectStore.selectedProject && projectStore.selectedProject.id !== project.value?.id) {
-    router.push(`/project/${projectStore.selectedProject.id}`);
-    const container = document.querySelector('.overflow-y-auto');
-    if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
-  } else {
-    handleBack();
+  if (hasNext.value) {
+    dataStore.nextChapter();
   }
 };
+
+const handlePrev = () => {
+  if (hasPrev.value) {
+    dataStore.prevChapter();
+  }
+};
+
+// Scroll to top and update route when project changes
+watch(() => project.value?.id, (newId) => {
+  if (newId) {
+    router.push(`/project/${newId}`);
+    const container = document.querySelector('.overflow-y-auto');
+    if (container) {
+      container.scrollTo({ top: 0, behavior: 'auto' });
+    }
+  }
+});
 </script>

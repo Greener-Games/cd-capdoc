@@ -1,5 +1,5 @@
 
-import { Project } from './types';
+import { Project, CategoryItem } from './types';
 
 export const ALL_PROJECTS: Record<string, Project[]> = {
   brand: [
@@ -171,15 +171,20 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
   ]
 };
 
+export const FLAT_PROJECTS: Project[] = Object.values(ALL_PROJECTS).flat();
+
+const getIds = (projects: Project[]) => projects.map(p => p.id);
+
 // Map Markets to existing Projects/Categories with fixed, reliable images
-export const MARKET_DATA = [
+export const MARKET_DATA: CategoryItem[] = [
   { 
     id: 'transportation', 
     title: 'Transportation', 
     subtitle: 'High-speed infrastructure & future mobility', 
     image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=800&h=1200', 
-    color: '#3b82f6', 
-    projects: ALL_PROJECTS.digital 
+    color: '#3b82f6',
+    accentColor: '#3b82f6',
+    projectIds: getIds(ALL_PROJECTS.digital) 
   },
   { 
     id: 'water', 
@@ -187,7 +192,8 @@ export const MARKET_DATA = [
     subtitle: 'Strategic hydro-engineering & management', 
     image: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&q=80&w=800&h=1200', 
     color: '#06b6d4', 
-    projects: ALL_PROJECTS['3d'] 
+    accentColor: '#06b6d4',
+    projectIds: getIds(ALL_PROJECTS['3d']) 
   },
   { 
     id: 'nuclear', 
@@ -195,7 +201,8 @@ export const MARKET_DATA = [
     subtitle: 'Zero-carbon energy & secure facilities', 
     image: 'https://images.unsplash.com/photo-1585909665970-21c5bc4f58d3?auto=format&fit=crop&q=80&w=800&h=1200', 
     color: '#10b981', 
-    projects: ALL_PROJECTS.immersive 
+    accentColor: '#10b981',
+    projectIds: getIds(ALL_PROJECTS.immersive) 
   },
   { 
     id: 'renewables', 
@@ -203,7 +210,8 @@ export const MARKET_DATA = [
     subtitle: 'Sustainable networks & solar integration', 
     image: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=800&h=1200', 
     color: '#84cc16', 
-    projects: ALL_PROJECTS.brand 
+    accentColor: '#84cc16',
+    projectIds: getIds(ALL_PROJECTS.brand) 
   },
   { 
     id: 'defence', 
@@ -211,7 +219,8 @@ export const MARKET_DATA = [
     subtitle: 'Tactical security & aerospace systems', 
     image: 'https://images.unsplash.com/photo-1444491741275-3747c53c99b4?auto=format&fit=crop&q=80&w=800&h=1200', 
     color: '#475569', 
-    projects: ALL_PROJECTS.motion 
+    accentColor: '#475569',
+    projectIds: getIds(ALL_PROJECTS.motion) 
   },
   { 
     id: 'industrial', 
@@ -219,19 +228,21 @@ export const MARKET_DATA = [
     subtitle: 'Advanced manufacturing & robotic systems', 
     image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800&h=1200', 
     color: '#ea580c', 
-    projects: [...ALL_PROJECTS.brand.slice(0, 1), ...ALL_PROJECTS.digital.slice(1, 2)] 
+    accentColor: '#ea580c',
+    projectIds: [...getIds(ALL_PROJECTS.brand.slice(0, 1)), ...getIds(ALL_PROJECTS.digital.slice(1, 2))] 
   }
 ];
 
 // Map Regions to existing Projects/Categories with evocative geographic imagery
-export const REGION_DATA = [
+export const REGION_DATA: CategoryItem[] = [
   { 
     id: 'uk', 
     title: 'UK', 
     subtitle: 'European operations and HQ systems', 
     image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&q=80&w=800&h=1200', 
     color: '#ef4444', 
-    projects: ALL_PROJECTS.brand 
+    accentColor: '#ef4444',
+    projectIds: getIds(ALL_PROJECTS.brand) 
   },
   { 
     id: 'me', 
@@ -239,7 +250,8 @@ export const REGION_DATA = [
     subtitle: 'Gulf region flagship developments', 
     image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&q=80&w=800&h=1200', 
     color: '#fbbf24', 
-    projects: ALL_PROJECTS['3d'] 
+    accentColor: '#fbbf24',
+    projectIds: getIds(ALL_PROJECTS['3d']) 
   },
   { 
     id: 'aus', 
@@ -247,7 +259,8 @@ export const REGION_DATA = [
     subtitle: 'APAC infrastructure and mining', 
     image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&q=80&w=800&h=1200', 
     color: '#1e40af', 
-    projects: ALL_PROJECTS.digital 
+    accentColor: '#1e40af',
+    projectIds: getIds(ALL_PROJECTS.digital) 
   },
   { 
     id: 'can', 
@@ -255,19 +268,21 @@ export const REGION_DATA = [
     subtitle: 'North American resource engineering', 
     image: 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?auto=format&fit=crop&q=80&w=800&h=1200', 
     color: '#dc2626', 
-    projects: ALL_PROJECTS.motion 
+    accentColor: '#dc2626',
+    projectIds: getIds(ALL_PROJECTS.motion) 
   }
 ];
 
 // Map Capabilities to existing high-end digital craftsmanship assets
-export const CAPABILITY_DATA = [
+export const CAPABILITY_DATA: CategoryItem[] = [
   { 
     id: 'brand', 
     title: 'Brand & Visual Design', 
     subtitle: 'Strategic identity and visual systems', 
     image: 'https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800&h=1200', 
     color: '#3b82f6', 
-    projects: ALL_PROJECTS.brand 
+    accentColor: '#3b82f6',
+    projectIds: getIds(ALL_PROJECTS.brand) 
   },
   { 
     id: 'digital', 
@@ -275,7 +290,8 @@ export const CAPABILITY_DATA = [
     subtitle: 'High-performance interactive ecosystems', 
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800&h=1200', 
     color: '#10b981', 
-    projects: ALL_PROJECTS.digital 
+    accentColor: '#10b981',
+    projectIds: getIds(ALL_PROJECTS.digital) 
   },
   { 
     id: 'motion', 
@@ -283,7 +299,8 @@ export const CAPABILITY_DATA = [
     subtitle: 'Cinematic narratives and fluid motion', 
     image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800&h=1200', 
     color: '#f59e0b', 
-    projects: ALL_PROJECTS.motion 
+    accentColor: '#f59e0b',
+    projectIds: getIds(ALL_PROJECTS.motion) 
   },
   { 
     id: '3d', 
@@ -291,7 +308,8 @@ export const CAPABILITY_DATA = [
     subtitle: 'Photorealistic rendering and spatial design', 
     image: 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=800&h=1200', 
     color: '#8b5cf6', 
-    projects: ALL_PROJECTS['3d'] 
+    accentColor: '#8b5cf6',
+    projectIds: getIds(ALL_PROJECTS['3d']) 
   },
   { 
     id: 'immersive', 
@@ -299,7 +317,8 @@ export const CAPABILITY_DATA = [
     subtitle: 'Multi-sensory digital installations', 
     image: 'https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&q=80&w=800&h=1200', 
     color: '#ef4444', 
-    projects: ALL_PROJECTS.immersive 
+    accentColor: '#ef4444',
+    projectIds: getIds(ALL_PROJECTS.immersive) 
   }
 ];
 

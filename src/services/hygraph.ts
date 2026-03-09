@@ -173,7 +173,8 @@ export const fetchHygraphData = async () => {
         subtitle: item.subtitle,
         image: resolveAssetUrl(item.image),
         color: item.color?.hex || null, // Extract hex from color object
-        projects: item.projects.map((p: any) => projectMap.get(p.id)).filter(Boolean) as Project[]
+        accentColor: item.color?.hex || null,
+        projectIds: item.projects.map((p: any) => p.id)
       })) as CategoryItem[];
     };
 

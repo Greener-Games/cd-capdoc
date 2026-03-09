@@ -101,7 +101,7 @@
 <script setup lang="ts">
 import {computed, onMounted, ref, watch} from 'vue';
 import {useRouter} from 'vue-router';
-import {useDataStore, useCuratedStore, useViewStore, useProjectStore} from '../store';
+import {useDataStore, useCuratedStore, useViewStore} from '../store';
 import {Edit3, Search, X} from 'lucide-vue-next';
 import CuratorCard from '../components/Cards/CuratorCard.vue';
 import RoundedButton from '../components/Common/RoundedButton.vue';
@@ -113,7 +113,6 @@ import Icon from "@/components/Common/Icon.vue";
 const viewStore = useViewStore();
 const dataStore = useDataStore();
 const curatedStore = useCuratedStore();
-const projectStore = useProjectStore();
 const router = useRouter();
 
 const activeMode = ref<'explore' | 'build'>('explore');
@@ -143,10 +142,10 @@ const curatedIds = computed(() => curatedStore.curatedIds);
 
 const filteredProjects = computed(() => {
   if (!searchQuery.value.trim()) {
-    return projectStore.allProjects;
+    return dataStore.loadedProjects;
   }
   const query = searchQuery.value.toLowerCase();
-  return projectStore.allProjects.filter(p =>
+  return dataStore.loadedProjects.filter(p =>
       p.title.toLowerCase().includes(query) ||
       p.description.toLowerCase().includes(query) ||
       p.id.toLowerCase().includes(query)
@@ -163,7 +162,7 @@ const handleSelectProject = (project: Project) => {
     curatedStore.toggleCurated(project.id);
   } else {
     curatedStore.resetCurator();
-    projectStore.setSelectedProject(project);
+    dataStore.setSelectedProject(project);
     router.push(`/project/${project.id}`);
   }
 };

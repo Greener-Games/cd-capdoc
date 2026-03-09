@@ -57,7 +57,7 @@ export interface CategoryItem {
   image: string;
   color: string;
   accentColor: string;
-  projects: Project[];
+  projectIds: string[];
 }
 
 export enum CategoryType {

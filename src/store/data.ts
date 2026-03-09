@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import { CategoryType, Project, CategoryItem } from '../types';
-import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA, ALL_PROJECTS } from '../constants';
+import { CategoryType, Project, CategoryItem, ViewState } from '../types';
+import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA, FLAT_PROJECTS } from '../constants';
 import { fetchHygraphData } from '../services/hygraph';
-import { useProjectStore } from './project';
 import { useViewStore } from './view';
+import { useCuratedStore } from './curated';
 
 export const useDataStore = defineStore('data', {
   state: () => ({
@@ -19,11 +19,19 @@ export const useDataStore = defineStore('data', {
     loadedRegions: [] as CategoryItem[],
     loadedCapabilities: [] as CategoryItem[],
 
+    selectedProjectId: null as string | null,
     isFetchingData: false,
   }),
   getters: {
-    currentCategoryData(state): CategoryItem {
+    selectedProject(state): Project | null {
+      if (!state.selectedProjectId) return null;
+      return state.loadedProjects.find(p => p.id === state.selectedProjectId) || null;
+    },
+    
+    currentCategoryData(state): CategoryItem | null {
       const viewStore = useViewStore();
+      if (!viewStore.activeCategoryId) return null;
+      
       let dataSet: CategoryItem[];
 
       if (viewStore.filterType === CategoryType.CAPABILITY) {
@@ -34,8 +42,24 @@ export const useDataStore = defineStore('data', {
         dataSet = state.loadedRegions;
       }
 
-      return dataSet.find(d => d.id === viewStore.activeCategoryId) || dataSet[0];
+      return dataSet.find(d => d.id === viewStore.activeCategoryId) || null;
     },
+
+    currentProjects(state): Project[] {
+      const viewStore = useViewStore();
+      const curatedStore = useCuratedStore();
+
+      if (viewStore.view === ViewState.CURATED) {
+        return state.loadedProjects.filter(p => curatedStore.curatedIds.includes(p.id));
+      }
+
+      const currentCat = this.currentCategoryData;
+      if (!currentCat) return [];
+
+      return currentCat.projectIds
+        .map(id => state.loadedProjects.find(p => p.id === id))
+        .filter((p): p is Project => !!p);
+    }
   },
   actions: {
     updateLoadedData() {
@@ -43,18 +67,7 @@ export const useDataStore = defineStore('data', {
         this.loadedCapabilities = CAPABILITY_DATA;
         this.loadedMarkets = MARKET_DATA;
         this.loadedRegions = REGION_DATA;
-
-        const all: Project[] = [];
-        const seen = new Set<string>();
-        Object.values(ALL_PROJECTS).forEach(categoryProjects => {
-          categoryProjects.forEach(p => {
-            if (!seen.has(p.id)) {
-              all.push(p);
-              seen.add(p.id);
-            }
-          });
-        });
-        this.loadedProjects = all;
+        this.loadedProjects = FLAT_PROJECTS;
       } else {
         this.loadedCapabilities = this.fetchedCapabilities;
         this.loadedMarkets = this.fetchedMarkets;
@@ -62,19 +75,16 @@ export const useDataStore = defineStore('data', {
         this.loadedProjects = this.fetchedProjects;
       }
     },
-    pushToProjectStore() {
-      const projectStore = useProjectStore();
-      const currentCat = this.currentCategoryData;
-      projectStore.setLoadedData(
-        this.loadedProjects,
-        currentCat ? currentCat.projects : []
-      );
+    
+    setSelectedProject(project: Project | null) {
+      this.selectedProjectId = project ? project.id : null;
     },
+
     setFilter(type: CategoryType, id: string) {
       const viewStore = useViewStore();
       viewStore.setFilter(type, id);
-      this.pushToProjectStore();
     },
+
     async fetchHygraphData() {
       if (this.isFetchingData) return;
       this.isFetchingData = true;
@@ -88,13 +98,13 @@ export const useDataStore = defineStore('data', {
 
           if (!this.useLocalData) {
             this.updateLoadedData();
-            this.pushToProjectStore();
           }
         }
       } finally {
         this.isFetchingData = false;
       }
     },
+
     async setUseLocalData(useLocal: boolean) {
       const viewStore = useViewStore();
       this.useLocalData = useLocal;
@@ -118,13 +128,32 @@ export const useDataStore = defineStore('data', {
             viewStore.activeCategoryId = nextData.id;
          }
       }
-      this.pushToProjectStore();
     },
-    init() {
-      // populate the initial state explicitly using updateLoadedData
-      this.updateLoadedData();
 
-      // If we are using remote data by default, trigger the fetch
+    nextChapter() {
+      if (!this.selectedProject) return;
+
+      const projects = this.currentProjects;
+      const currentIndex = projects.findIndex(p => p.id === this.selectedProject!.id);
+
+      if (currentIndex !== -1 && currentIndex < projects.length - 1) {
+        this.setSelectedProject(projects[currentIndex + 1]);
+      }
+    },
+
+    prevChapter() {
+      if (!this.selectedProject) return;
+
+      const projects = this.currentProjects;
+      const currentIndex = projects.findIndex(p => p.id === this.selectedProject!.id);
+
+      if (currentIndex > 0) {
+        this.setSelectedProject(projects[currentIndex - 1]);
+      }
+    },
+
+    init() {
+      this.updateLoadedData();
       if (!this.useLocalData) {
         this.fetchHygraphData();
       }
