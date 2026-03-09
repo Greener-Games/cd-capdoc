@@ -48,7 +48,6 @@ import {computed, ref, watch} from 'vue';
 import {useRouter} from 'vue-router';
 import {useViewStore, useDataStore} from '../store';
 import {CategoryType} from '../types';
-import {CAPABILITY_DATA, MARKET_DATA, REGION_DATA} from '../constants';
 import DragScroll from '../components/Common/DragScroll.vue';
 import SelectionCard from '../components/Cards/SelectionCard.vue';
 import BaseLayout from "@/Layouts/BaseLayout.vue";
@@ -82,8 +81,8 @@ const handlePillClick = (pill: typeof pills[0]) => {
 };
 
 const currentData = computed(() => {
-  return filterType.value === CategoryType.CAPABILITY ? CAPABILITY_DATA :
-      filterType.value === CategoryType.MARKET ? MARKET_DATA : REGION_DATA;
+  return filterType.value === CategoryType.CAPABILITY ? dataStore.loadedCapabilities :
+      filterType.value === CategoryType.MARKET ? dataStore.loadedMarkets : dataStore.loadedRegions;
 });
 
 const setFilter = (type: CategoryType) => {

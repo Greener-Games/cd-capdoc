@@ -85,6 +85,7 @@ router.beforeEach((to, from) => {
     const id = to.params.id as string;
     // ensure data is initialized before trying to find
     if (projectStore.allProjects.length === 0) {
+      dataStore.init();
       dataStore.pushToProjectStore();
     }
     const project = projectStore.allProjects.find(p => p.id === id) || null;

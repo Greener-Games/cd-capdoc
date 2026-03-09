@@ -13,46 +13,60 @@ export const useDataStore = defineStore('data', {
     fetchedMarkets: [] as CategoryItem[],
     fetchedRegions: [] as CategoryItem[],
     fetchedCapabilities: [] as CategoryItem[],
+
+    // Loaded lists that components should read from
+    loadedProjects: [] as Project[],
+    loadedMarkets: [] as CategoryItem[],
+    loadedRegions: [] as CategoryItem[],
+    loadedCapabilities: [] as CategoryItem[],
+
     isFetchingData: false,
   }),
   getters: {
-    flattenedAllProjects(state): Project[] {
-      if (!state.useLocalData && state.fetchedProjects.length > 0) {
-        return state.fetchedProjects;
-      }
-      const all: Project[] = [];
-      const seen = new Set<string>();
-      Object.values(ALL_PROJECTS).forEach(categoryProjects => {
-        categoryProjects.forEach(p => {
-          if (!seen.has(p.id)) {
-            all.push(p);
-            seen.add(p.id);
-          }
-        });
-      });
-      return all;
-    },
     currentCategoryData(state): CategoryItem {
-      const isLocal = state.useLocalData;
       let dataSet: CategoryItem[];
 
       if (state.filterType === CategoryType.CAPABILITY) {
-        dataSet = isLocal ? CAPABILITY_DATA : state.fetchedCapabilities;
+        dataSet = state.loadedCapabilities;
       } else if (state.filterType === CategoryType.MARKET) {
-        dataSet = isLocal ? MARKET_DATA : state.fetchedMarkets;
+        dataSet = state.loadedMarkets;
       } else {
-        dataSet = isLocal ? REGION_DATA : state.fetchedRegions;
+        dataSet = state.loadedRegions;
       }
 
       return dataSet.find(d => d.id === state.activeCategoryId) || dataSet[0];
     },
   },
   actions: {
+    updateLoadedData() {
+      if (this.useLocalData) {
+        this.loadedCapabilities = CAPABILITY_DATA;
+        this.loadedMarkets = MARKET_DATA;
+        this.loadedRegions = REGION_DATA;
+
+        const all: Project[] = [];
+        const seen = new Set<string>();
+        Object.values(ALL_PROJECTS).forEach(categoryProjects => {
+          categoryProjects.forEach(p => {
+            if (!seen.has(p.id)) {
+              all.push(p);
+              seen.add(p.id);
+            }
+          });
+        });
+        this.loadedProjects = all;
+      } else {
+        this.loadedCapabilities = this.fetchedCapabilities;
+        this.loadedMarkets = this.fetchedMarkets;
+        this.loadedRegions = this.fetchedRegions;
+        this.loadedProjects = this.fetchedProjects;
+      }
+    },
     pushToProjectStore() {
       const projectStore = useProjectStore();
       const currentCat = this.currentCategoryData;
       projectStore.setLoadedData(
-        this.flattenedAllProjects,
+        this.loadedProjects,
         currentCat ? currentCat.projects : []
       );
     },
@@ -71,7 +85,11 @@ export const useDataStore = defineStore('data', {
           this.fetchedMarkets = data.markets;
           this.fetchedRegions = data.regions;
           this.fetchedCapabilities = data.capabilities;
-          this.pushToProjectStore();
+
+          if (!this.useLocalData) {
+            this.updateLoadedData();
+            this.pushToProjectStore();
+          }
         }
       } finally {
         this.isFetchingData = false;
@@ -83,17 +101,16 @@ export const useDataStore = defineStore('data', {
         await this.fetchHygraphData();
       }
 
+      this.updateLoadedData();
+
       // Make sure activeCategoryId exists in the new dataset, otherwise reset it
       const currentData = this.currentCategoryData;
       if (currentData) {
          this.activeCategoryId = currentData.id;
       } else {
-         const isLocalData = this.useLocalData;
-         const dataSet = this.filterType === CategoryType.CAPABILITY
-            ? (isLocalData ? CAPABILITY_DATA : this.fetchedCapabilities)
-            : this.filterType === CategoryType.MARKET
-               ? (isLocalData ? MARKET_DATA : this.fetchedMarkets)
-               : (isLocalData ? REGION_DATA : this.fetchedRegions);
+         const dataSet = this.filterType === CategoryType.CAPABILITY ? this.loadedCapabilities
+            : this.filterType === CategoryType.MARKET ? this.loadedMarkets
+            : this.loadedRegions;
 
          const nextData = dataSet[0];
          if (nextData) {
@@ -101,6 +118,10 @@ export const useDataStore = defineStore('data', {
          }
       }
       this.pushToProjectStore();
+    },
+    init() {
+      // populate the initial state explicitly using updateLoadedData
+      this.updateLoadedData();
     }
   }
 });

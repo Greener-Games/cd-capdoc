@@ -50,7 +50,6 @@ import DevToggle from './components/Common/DevToggle.vue';
 import GlobalNav from './components/Navigation/GlobalNav.vue';
 import PageFooter from './components/Navigation/PageFooter.vue';
 import { CategoryType } from './types';
-import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA } from './constants';
 
 const router = useRouter();
 const viewStore = useViewStore();
@@ -60,6 +59,7 @@ const projectStore = useProjectStore();
 const view = computed(() => viewStore.view);
 
 onMounted(() => {
+  dataStore.init();
   dataStore.pushToProjectStore();
 });
 
@@ -73,11 +73,11 @@ const footerProps = computed(() => {
   }
   if (view.value === ViewState.SELECTOR) {
     if (dataStore.filterType === CategoryType.CAPABILITY) {
-      return { count: dataStore.fetchedCapabilities.length || CAPABILITY_DATA.length, label: 'CAPABILITIES' };
+      return { count: dataStore.loadedCapabilities.length, label: 'CAPABILITIES' };
     } else if (dataStore.filterType === CategoryType.MARKET) {
-      return { count: dataStore.fetchedMarkets.length || MARKET_DATA.length, label: 'MARKETS' };
+      return { count: dataStore.loadedMarkets.length, label: 'MARKETS' };
     } else {
-      return { count: dataStore.fetchedRegions.length || REGION_DATA.length, label: 'REGIONS' };
+      return { count: dataStore.loadedRegions.length, label: 'REGIONS' };
     }
   }
   if (view.value === ViewState.TIMELINE) {

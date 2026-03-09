@@ -158,6 +158,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useViewStore, useDataStore, useFavoriteStore, useProjectStore } from '../store';
+import { ViewState } from '../types';
 import { ArrowLeft, ArrowRight, Plus } from 'lucide-vue-next';
 
 const viewStore = useViewStore();
@@ -203,14 +204,14 @@ const toggleFavourite = () => {
 const handleBack = () => {
   projectStore.setSelectedProject(null);
 
-  if (viewStore.prevView === 'FAVOURITES' || viewStore.view === 'FAVOURITES') {
-    viewStore.setView('FAVOURITES' as any);
+  if (viewStore.prevView === ViewState.FAVOURITES || viewStore.view === ViewState.FAVOURITES) {
+    viewStore.setView(ViewState.FAVOURITES);
     router.push('/favourites');
-  } else if (viewStore.prevView === 'CURATOR' || viewStore.view === 'CURATOR') {
-    viewStore.setView('CURATOR' as any);
+  } else if (viewStore.prevView === ViewState.CURATOR || viewStore.view === ViewState.CURATOR) {
+    viewStore.setView(ViewState.CURATOR);
     router.push('/curator');
   } else {
-    viewStore.setView('TIMELINE' as any);
+    viewStore.setView(ViewState.TIMELINE);
     router.push(`/timeline/${dataStore.filterType}/${dataStore.activeCategoryId}`);
   }
 };
