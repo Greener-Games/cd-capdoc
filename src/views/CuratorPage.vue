@@ -58,7 +58,7 @@
         </div>
         <h3 class="text-xl font-light text-white mb-2">No projects found</h3>
         <p class="text-white/40 font-light">
-          Try adjusting your search terms or browse the timeline
+          Try adjusting your search terms or browse the library
         </p>
       </div>
     </div>
@@ -100,20 +100,19 @@
 
 <script setup lang="ts">
 import {computed, onMounted, ref, watch} from 'vue';
-import {useRouter} from 'vue-router';
-import {useDataStore, useCuratedStore, useViewStore} from '../store';
+import {useDataStore, useCuratedStore} from '../store';
 import {Edit3, Search, X} from 'lucide-vue-next';
 import CuratorCard from '../components/Cards/CuratorCard.vue';
 import RoundedButton from '../components/Common/RoundedButton.vue';
 import BaseLayout from "@/Layouts/BaseLayout.vue";
-import {Project, ViewState} from '../types';
+import {Project} from '../types';
 import Magnifying from "@/assets/icons/Magnifying.svg";
 import Icon from "@/components/Common/Icon.vue";
+import { useAppNavigation } from '../composables/useAppNavigation';
 
-const viewStore = useViewStore();
 const dataStore = useDataStore();
 const curatedStore = useCuratedStore();
-const router = useRouter();
+const { goToProject, launchCuratedPresentation } = useAppNavigation();
 
 const activeMode = ref<'explore' | 'build'>('explore');
 const searchQuery = ref('');
@@ -153,8 +152,7 @@ const filteredProjects = computed(() => {
 });
 
 const handleLaunchCurated = () => {
-  viewStore.setView(ViewState.CURATED);
-  router.push('/curated');
+  launchCuratedPresentation();
 };
 
 const handleSelectProject = (project: Project) => {
@@ -162,8 +160,7 @@ const handleSelectProject = (project: Project) => {
     curatedStore.toggleCurated(project.id);
   } else {
     curatedStore.resetCurator();
-    dataStore.setSelectedProject(project);
-    router.push(`/project/${project.id}`);
+    goToProject(project.id, { type: 'capabilities', catId: 'brand' });
   }
 };
 

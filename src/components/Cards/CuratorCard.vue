@@ -71,7 +71,7 @@
 import {computed} from 'vue';
 import BaseCard from './BaseCard.vue';
 import {Project} from '../../types';
-import {useCuratedStore, useViewStore} from '../../store';
+import {useCuratedStore} from '../../store';
 
 const props = withDefaults(defineProps<{
   project: Project;
@@ -84,7 +84,6 @@ const props = withDefaults(defineProps<{
 });
 
 const emit = defineEmits(['select']);
-const viewStore = useViewStore();
 const curatedStore = useCuratedStore();
 
 const isCurated = computed(() => {

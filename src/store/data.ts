@@ -2,8 +2,9 @@ import { defineStore } from 'pinia';
 import { CategoryType, Project, CategoryItem, ViewState } from '../types';
 import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA, FLAT_PROJECTS } from '../constants';
 import { fetchHygraphData } from '../services/hygraph';
-import { useViewStore } from './view';
 import { useCuratedStore } from './curated';
+import { useCategoryFilter } from '../composables/useCategoryFilter';
+import { useRoute } from 'vue-router';
 
 export const useDataStore = defineStore('data', {
   state: () => ({
@@ -21,6 +22,7 @@ export const useDataStore = defineStore('data', {
 
     selectedProjectId: null as string | null,
     isFetchingData: false,
+    fetchingPromise: null as Promise<any> | null,
   }),
   getters: {
     selectedProject(state): Project | null {
@@ -29,36 +31,58 @@ export const useDataStore = defineStore('data', {
     },
     
     currentCategoryData(state): CategoryItem | null {
-      const viewStore = useViewStore();
-      if (!viewStore.activeCategoryId) return null;
+      const route = useRoute();
+      const { filterType } = useCategoryFilter();
+      
+      const catId = route.params.id as string;
+      if (!catId) return null;
       
       let dataSet: CategoryItem[];
 
-      if (viewStore.filterType === CategoryType.CAPABILITY) {
+      if (filterType.value === CategoryType.CAPABILITY) {
         dataSet = state.loadedCapabilities;
-      } else if (viewStore.filterType === CategoryType.MARKET) {
+      } else if (filterType.value === CategoryType.MARKET) {
         dataSet = state.loadedMarkets;
       } else {
         dataSet = state.loadedRegions;
       }
 
-      return dataSet.find(d => d.id === viewStore.activeCategoryId) || null;
+      return dataSet.find(d => d.id === catId) || null;
     },
 
     currentProjects(state): Project[] {
-      const viewStore = useViewStore();
       const curatedStore = useCuratedStore();
+      const route = useRoute();
 
-      if (viewStore.view === ViewState.CURATED) {
+      if (!route) return [];
+
+      // Check if we are in curated mode based on route name
+      const isCuratedMode = route.name === 'Curated' || route.name === 'CuratedDetail';
+
+      if (isCuratedMode) {
         return state.loadedProjects.filter(p => curatedStore.curatedIds.includes(p.id));
       }
 
+      // If we have an active category from route
       const currentCat = this.currentCategoryData;
-      if (!currentCat) return [];
+      if (currentCat) {
+        return currentCat.projectIds
+          .map(id => state.loadedProjects.find(p => p.id === id))
+          .filter((p): p is Project => !!p);
+      }
 
-      return currentCat.projectIds
-        .map(id => state.loadedProjects.find(p => p.id === id))
-        .filter((p): p is Project => !!p);
+      // Fallback for contextless direct links: Find the first category this project belongs to
+      if (state.selectedProjectId) {
+        const allCategories = [...state.loadedCapabilities, ...state.loadedMarkets, ...state.loadedRegions];
+        const foundCat = allCategories.find(cat => cat.projectIds.includes(state.selectedProjectId!));
+        if (foundCat) {
+          return foundCat.projectIds
+            .map(id => state.loadedProjects.find(p => p.id === id))
+            .filter((p): p is Project => !!p);
+        }
+      }
+
+      return [];
     }
   },
   actions: {
@@ -76,58 +100,49 @@ export const useDataStore = defineStore('data', {
       }
     },
     
-    setSelectedProject(project: Project | null) {
-      this.selectedProjectId = project ? project.id : null;
-    },
-
-    setFilter(type: CategoryType, id: string) {
-      const viewStore = useViewStore();
-      viewStore.setFilter(type, id);
-    },
-
-    async fetchHygraphData() {
-      if (this.isFetchingData) return;
-      this.isFetchingData = true;
-      try {
-        const data = await fetchHygraphData();
-        if (data) {
-          this.fetchedProjects = data.projects;
-          this.fetchedMarkets = data.markets;
-          this.fetchedRegions = data.regions;
-          this.fetchedCapabilities = data.capabilities;
-
-          if (!this.useLocalData) {
-            this.updateLoadedData();
-          }
-        }
-      } finally {
-        this.isFetchingData = false;
+    setSelectedProject(projectOrId: Project | string | null) {
+      if (!projectOrId) {
+        this.selectedProjectId = null;
+      } else if (typeof projectOrId === 'string') {
+        this.selectedProjectId = projectOrId;
+      } else {
+        this.selectedProjectId = projectOrId.id;
       }
     },
 
+    async fetchHygraphData() {
+      if (this.fetchingPromise) return this.fetchingPromise;
+
+      this.isFetchingData = true;
+      this.fetchingPromise = (async () => {
+        try {
+          const data = await fetchHygraphData();
+          if (data) {
+            this.fetchedProjects = data.projects;
+            this.fetchedMarkets = data.markets;
+            this.fetchedRegions = data.regions;
+            this.fetchedCapabilities = data.capabilities;
+
+            if (!this.useLocalData) {
+              this.updateLoadedData();
+            }
+          }
+          return data;
+        } finally {
+          this.isFetchingData = false;
+          this.fetchingPromise = null;
+        }
+      })();
+
+      return this.fetchingPromise;
+    },
+
     async setUseLocalData(useLocal: boolean) {
-      const viewStore = useViewStore();
       this.useLocalData = useLocal;
       if (!useLocal && this.fetchedProjects.length === 0) {
         await this.fetchHygraphData();
       }
-
       this.updateLoadedData();
-
-      // Make sure activeCategoryId exists in the new dataset, otherwise reset it
-      const currentData = this.currentCategoryData;
-      if (currentData) {
-         viewStore.activeCategoryId = currentData.id;
-      } else {
-         const dataSet = viewStore.filterType === CategoryType.CAPABILITY ? this.loadedCapabilities
-            : viewStore.filterType === CategoryType.MARKET ? this.loadedMarkets
-            : this.loadedRegions;
-
-         const nextData = dataSet[0];
-         if (nextData) {
-            viewStore.activeCategoryId = nextData.id;
-         }
-      }
     },
 
     nextChapter() {
@@ -152,10 +167,16 @@ export const useDataStore = defineStore('data', {
       }
     },
 
-    init() {
-      this.updateLoadedData();
-      if (!this.useLocalData) {
-        this.fetchHygraphData();
+    async init() {
+      if (this.useLocalData) {
+        this.updateLoadedData();
+        return;
+      }
+      
+      if (this.fetchedProjects.length === 0) {
+        await this.fetchHygraphData();
+      } else {
+        this.updateLoadedData();
       }
     }
   }

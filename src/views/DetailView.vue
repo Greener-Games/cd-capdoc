@@ -1,7 +1,7 @@
 <template>
   <BaseLayout v-if="project" :disable-padding-bottom="true">
     <template #header-controls>
-      <RoundedButton @click="handleBack" icon-only>
+      <RoundedButton @click="goBack" icon-only>
         <template #icon>
           <Icon :icon="Arrow" size="md" class="scale-x-[-1] text-white" />
         </template>
@@ -152,19 +152,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
-import { useRouter } from 'vue-router';
-import { useViewStore, useDataStore, useCuratedStore } from '../store';
-import { ViewState } from '../types';
+import { computed, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useDataStore } from '../store';
+import { useScrollState } from '../composables/useScrollState';
+import { useAppNavigation } from '../composables/useAppNavigation';
 import BaseLayout from "@/Layouts/BaseLayout.vue";
 import Arrow from "@/assets/icons/Arrow.svg";
 import RoundedButton from "@/components/Common/RoundedButton.vue";
 import Icon from "@/components/Common/Icon.vue";
 
-const viewStore = useViewStore();
 const dataStore = useDataStore();
-const curatedStore = useCuratedStore();
-const router = useRouter();
+const route = useRoute();
+const { goBack, goToProject } = useAppNavigation();
+const { scrollProgress, setScrollProgress } = useScrollState();
 
 const project = computed(() => dataStore.selectedProject);
 const currentProjects = computed(() => dataStore.currentProjects);
@@ -177,53 +178,35 @@ const currentIndex = computed(() => {
 const hasNext = computed(() => currentIndex.value !== -1 && currentIndex.value < currentProjects.value.length - 1);
 const hasPrev = computed(() => currentIndex.value > 0);
 
-const isCurated = computed(() => curatedStore.curatedIds.includes(project.value?.id || ''));
-
-const scrollProgress = ref(0);
-
 const handleScroll = (e: Event) => {
   const target = e.target as HTMLElement;
   const maxScroll = target.scrollHeight - target.clientHeight;
   if (maxScroll <= 0) {
-    scrollProgress.value = 0;
+    setScrollProgress(0);
   } else {
-    scrollProgress.value = target.scrollTop / maxScroll;
-  }
-};
-
-const handleBack = () => {
-  dataStore.setSelectedProject(null);
-
-  if (viewStore.prevView === ViewState.CURATED || viewStore.view === ViewState.CURATED) {
-    viewStore.setView(ViewState.CURATED);
-    router.push('/curated');
-  } else if (viewStore.view === 'CURATOR') {
-    router.push('/curator');
-  } else {
-    router.push(`/timeline/${viewStore.filterType}/${viewStore.activeCategoryId}`);
+    setScrollProgress(target.scrollTop / maxScroll);
   }
 };
 
 const handleNext = () => {
   if (hasNext.value) {
-    dataStore.nextChapter();
+    const nextProject = currentProjects.value[currentIndex.value + 1];
+    goToProject(nextProject.id);
   }
 };
 
 const handlePrev = () => {
   if (hasPrev.value) {
-    dataStore.prevChapter();
+    const prevProject = currentProjects.value[currentIndex.value - 1];
+    goToProject(prevProject.id);
   }
 };
 
-// Scroll to top and update route when project changes
-watch(() => project.value?.id, (newId) => {
-  if (newId) {
-    router.push(`/project/${newId}`);
-    const container = document.querySelector('.overflow-y-auto');
-    if (container) {
-      container.scrollTo({ top: 0, behavior: 'auto' });
-    }
+// Scroll to top when project ID changes in route
+watch(() => route.params.projectId, () => {
+  const container = document.querySelector('.overflow-y-auto');
+  if (container) {
+    container.scrollTo({ top: 0, behavior: 'auto' });
   }
 });
 </script>

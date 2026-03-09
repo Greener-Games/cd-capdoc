@@ -27,11 +27,11 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { useAppNavigation } from '../composables/useAppNavigation';
 
-const router = useRouter();
+const { goToCategorySelect } = useAppNavigation();
 
 const handleEnter = () => {
-  router.push('/select');
+  goToCategorySelect('capabilities');
 };
 </script>

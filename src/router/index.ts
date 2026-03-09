@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { useViewStore, useDataStore } from '../store';
-import { ViewState } from '../types';
+import { useDataStore } from '../store';
 
 import HomeView from '../views/HomeView.vue';
 import CategorySelectionPage from '../views/CategorySelectionPage.vue';
@@ -12,57 +11,50 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: HomeView,
-    beforeEnter: () => {
-      const viewStore = useViewStore();
-      viewStore.setView(ViewState.LANDING);
-    }
+    component: HomeView
   },
   {
-    path: '/select',
-    name: 'Select',
-    component: CategorySelectionPage,
-    beforeEnter: () => {
-      const viewStore = useViewStore();
-      viewStore.setView(ViewState.SELECTOR);
-    }
+    path: '/navigation',
+    redirect: '/navigation/capabilities'
   },
   {
-    path: '/timeline/:type/:id',
+    path: '/navigation/:type',
+    name: 'CategorySelect',
+    component: CategorySelectionPage
+  },
+  {
+    path: '/navigation/:type/:id',
     name: 'Timeline',
-    component: ProjectPage,
-    beforeEnter: () => {
-      const viewStore = useViewStore();
-      viewStore.setView(ViewState.TIMELINE);
-    }
+    component: ProjectPage
   },
   {
-    path: '/project/:id',
+    path: '/navigation/:type/:id/:projectId',
     name: 'Detail',
-    component: DetailView,
-    beforeEnter: () => {
-      const viewStore = useViewStore();
-      viewStore.setView(ViewState.DETAIL);
-    }
+    component: DetailView
+  },
+  {
+    path: '/project/:projectId',
+    name: 'ProjectDirect',
+    component: DetailView
   },
   {
     path: '/curator',
     name: 'Curator',
-    component: CuratorPage,
-    beforeEnter: () => {
-      const viewStore = useViewStore();
-      viewStore.setView(ViewState.CURATOR);
-    }
+    component: CuratorPage
   },
   {
-    path: '/curated',
+    path: '/curator/present',
     name: 'Curated',
-    component: ProjectPage,
-    beforeEnter: () => {
-      const viewStore = useViewStore();
-      viewStore.setView(ViewState.CURATED);
-    }
-  }
+    component: ProjectPage
+  },
+  {
+    path: '/curator/present/:projectId',
+    name: 'CuratedDetail',
+    component: DetailView
+  },
+  // Legacy Redirects
+  { path: '/select', redirect: '/navigation/capabilities' },
+  { path: '/timeline/:type/:id', redirect: (to: any) => `/navigation/${to.params.type.toLowerCase() === 'capability' ? 'capabilities' : to.params.type.toLowerCase() === 'market' ? 'markets' : 'regions'}/${to.params.id}` },
 ];
 
 const router = createRouter({
@@ -70,33 +62,20 @@ const router = createRouter({
   routes
 });
 
-// Update store selectedProject or filter based on route parameters
-router.beforeEach((to, from) => {
+// Update store selectedProject based on route parameters
+router.beforeEach(async (to) => {
   const dataStore = useDataStore();
-  const viewStore = useViewStore();
 
-  if (to.name === 'Timeline') {
-    const type = to.params.type as any;
-    const id = to.params.id as string;
-    dataStore.setFilter(type, id);
-  } else if (to.name !== 'Detail') {
-    // If we're not on timeline or detail, we should clear the active category
-    // Detail view handles its own project selection, but we keep the category if we're coming from timeline
-    if (to.name !== 'Detail') {
-      viewStore.activeCategoryId = null;
-    }
+  // Ensure data is loaded
+  if (dataStore.loadedProjects.length === 0) {
+    await dataStore.init();
   }
 
-  if (to.name === 'Detail') {
-    const id = to.params.id as string;
-    // ensure data is initialized before trying to find
-    if (dataStore.loadedProjects.length === 0) {
-      dataStore.init();
-    }
-    const project = dataStore.loadedProjects.find(p => p.id === id) || null;
-    dataStore.setSelectedProject(project);
+  // Handle Project Selection from route params
+  const projectId = to.params.projectId as string;
+  if (projectId) {
+    dataStore.setSelectedProject(projectId);
   } else {
-    // Clear project selection if not on detail view
     dataStore.setSelectedProject(null);
   }
 

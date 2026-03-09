@@ -1,0 +1,95 @@
+import { useRouter, useRoute } from 'vue-router';
+import { ViewState } from '../types';
+import { useAppView } from './useAppView';
+import { useDataStore } from '../store/data';
+import { useOrbState } from './useOrbState';
+import { useScrollState } from './useScrollState';
+
+export function useAppNavigation() {
+  const router = useRouter();
+  const route = useRoute();
+  const { view, prevView, setView } = useAppView();
+  const dataStore = useDataStore();
+  const { setHoveredColor, DEFAULT_ACCENT } = useOrbState();
+  const { setScrollProgress } = useScrollState();
+
+  const isCuratedContext = () => {
+    return route.name === 'CuratedDetail' || route.name === 'Curated';
+  };
+
+  const goToCategorySelect = (type: string = 'capabilities') => {
+    router.push(`/navigation/${type}`);
+  };
+
+  const goToTimeline = (type: string, catId: string) => {
+    router.push(`/navigation/${type}/${catId}`);
+  };
+
+  const goToProject = (projectId: string, context?: { type?: string, catId?: string }) => {
+    if (isCuratedContext()) {
+      router.push(`/curator/present/${projectId}`);
+    } else {
+      const type = context?.type || (route.params.type as string);
+      const catId = context?.catId || (route.params.id as string);
+
+      if (type && catId) {
+        router.push(`/navigation/${type}/${catId}/${projectId}`);
+      } else {
+        router.push(`/project/${projectId}`);
+      }
+    }
+  };
+
+  const goBack = () => {
+    if (isCuratedContext()) {
+      if (route.name === 'CuratedDetail') {
+        router.push('/curator/present');
+      } else {
+        router.push('/curator');
+      }
+    } else if (view.value === ViewState.DETAIL) {
+      const type = route.params.type as string;
+      const catId = route.params.id as string;
+      if (type && catId) {
+        router.push(`/navigation/${type}/${catId}`);
+      } else {
+        router.push('/navigation/capabilities');
+      }
+    } else if (view.value === ViewState.TIMELINE) {
+      const type = route.params.type as string;
+      router.push(`/navigation/${type}`);
+    } else if (view.value === ViewState.SELECTOR) {
+      router.push('/');
+    } else if (view.value === ViewState.CURATOR) {
+      router.push('/navigation/capabilities');
+    }
+  };
+
+  const goHome = () => {
+    setHoveredColor(DEFAULT_ACCENT);
+    setScrollProgress(0);
+    dataStore.setSelectedProject(null);
+    router.push('/');
+  };
+
+  const backToSelector = () => {
+    setScrollProgress(0);
+    const type = route.params.type as string || 'capabilities';
+    router.push(`/navigation/${type}`);
+  };
+
+  const launchCuratedPresentation = () => {
+    router.push('/curator/present');
+  };
+
+  return {
+    isCuratedContext,
+    goToCategorySelect,
+    goToTimeline,
+    goToProject,
+    goBack,
+    goHome,
+    backToSelector,
+    launchCuratedPresentation
+  };
+}

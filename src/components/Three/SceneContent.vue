@@ -20,13 +20,14 @@
 import { shallowRef, onMounted, onUnmounted, watch } from 'vue';
 import { useLoop, useTresContext } from '@tresjs/core';
 import * as THREE from 'three';
-import { useViewStore } from '../../store';
+import { useOrbState } from '../../composables/useOrbState';
 
 const waveRef = shallowRef<THREE.Mesh | null>(null);
 const groupRef = shallowRef<THREE.Group | null>(null);
 const { camera } = useTresContext();
 
-const viewStore = useViewStore();
+const { currentOrbColor, DEFAULT_ACCENT } = useOrbState();
+
 const getCSSVariableValue = (variableName: string) => {
   return getComputedStyle(document.documentElement).getPropertyValue(variableName).trim();
 };
@@ -50,13 +51,13 @@ const uniforms = {
   uChaos: { value: 0.75 }
 };
 
-watch(() => viewStore.hoveredColor, (newColor) => {
-  if (newColor) {
+watch(currentOrbColor, (newColor) => {
+  if (newColor && newColor !== DEFAULT_ACCENT) {
     targetColor.set(newColor);
   } else {
     targetColor.copy(defaultColor);
   }
-});
+}, { immediate: true });
 
 const handleResize = () => {
   uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);

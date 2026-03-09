@@ -7,7 +7,7 @@
             v-for="pill in pills"
             :key="pill.label"
             :label="pill.label"
-            :active="pill.type && filterType === pill.type"
+            :active="pill.routePath === route.path"
             @click="handlePillClick(pill)"
         />
       </div>
@@ -45,19 +45,23 @@
 
 <script setup lang="ts">
 import {computed, ref, watch} from 'vue';
-import {useRouter} from 'vue-router';
-import {useViewStore, useDataStore} from '../store';
+import {useRoute} from 'vue-router';
+import {useDataStore} from '../store';
 import {CategoryType} from '../types';
 import DragScroll from '../components/Common/DragScroll.vue';
 import SelectionCard from '../components/Cards/SelectionCard.vue';
 import BaseLayout from "@/Layouts/BaseLayout.vue";
 import RoundedButton from "@/components/Common/RoundedButton.vue";
+import { useCategoryFilter } from '../composables/useCategoryFilter';
+import { useOrbState } from '../composables/useOrbState';
+import { useAppNavigation } from '../composables/useAppNavigation';
 
-const viewStore = useViewStore();
 const dataStore = useDataStore();
-const router = useRouter();
+const route = useRoute();
+const { filterType } = useCategoryFilter();
+const { setHoveredColor } = useOrbState();
+const { goToCategorySelect, goToTimeline } = useAppNavigation();
 
-const filterType = ref<CategoryType>(viewStore.filterType || CategoryType.CAPABILITY);
 const dragScrollRef = ref<InstanceType<typeof DragScroll> | null>(null);
 
 watch(filterType, () => {
@@ -66,18 +70,20 @@ watch(filterType, () => {
 
 // Pill Configuration
 const pills = [
-  {label: 'Capabilities', type: CategoryType.CAPABILITY},
-  {label: 'Market', type: CategoryType.MARKET},
-  {label: 'Region', type: CategoryType.REGION},
-  {label: 'About Us', route: '/about'}
+  {label: 'Capabilities', type: 'capabilities', routePath: '/navigation/capabilities'},
+  {label: 'Market', type: 'markets', routePath: '/navigation/markets'},
+  {label: 'Region', type: 'regions', routePath: '/navigation/regions'},
+  {label: 'About Us', routePath: '/about'}
 ];
 
 const handlePillClick = (pill: typeof pills[0]) => {
-  if (pill.route) {
-    router.push(pill.route);
-  } else if (pill.type) {
-    setFilter(pill.type);
+  if (pill.type) {
+    goToCategorySelect(pill.type);
+  } else {
+    // Direct link or handle specifically
+    window.location.href = pill.routePath;
   }
+  setHoveredColor(null);
 };
 
 const currentData = computed(() => {
@@ -85,17 +91,8 @@ const currentData = computed(() => {
       filterType.value === CategoryType.MARKET ? dataStore.loadedMarkets : dataStore.loadedRegions;
 });
 
-const setFilter = (type: CategoryType) => {
-  filterType.value = type;
-  viewStore.filterType = type; // Ensure store is updated so footer reflects change
-  viewStore.setHoveredColor(null);
-};
-
 const handleSelect = (id: string) => {
-  dataStore.setFilter(filterType.value, id);
-  router.push(`/timeline/${filterType.value}/${id}`);
+  const typeParam = route.params.type as string;
+  goToTimeline(typeParam, id);
 };
 </script>
-
-<style scoped>
-</style>

@@ -1,7 +1,7 @@
 <template>
   <BaseLayout>
     <template #header-controls>
-      <RoundedButton @click="handleBack" icon-only>
+      <RoundedButton @click="goBack" icon-only>
         <template #icon>
           <Icon :icon="Arrow" size="md" class="scale-x-[-1] text-white" />
         </template>
@@ -10,7 +10,7 @@
     </template>
 
     <template #title>
-      <template v-if="viewStore.view === ViewState.CURATED">
+      <template v-if="view === ViewState.CURATED">
         {{ curatedStore.curatedTitle || 'Curated' }}
       </template>
       <template v-else>
@@ -46,9 +46,11 @@
 
 <script setup lang="ts">
 import {computed} from 'vue';
-import {useRouter} from 'vue-router';
-import {useViewStore, useDataStore, useCuratedStore} from '../store';
+import {useDataStore, useCuratedStore} from '../store';
 import {Project, ViewState} from '../types';
+import { useAppView } from '../composables/useAppView';
+import { useScrollState } from '../composables/useScrollState';
+import { useAppNavigation } from '../composables/useAppNavigation';
 import DragScroll from '../components/Common/DragScroll.vue';
 import ProjectCard from '../components/Cards/ProjectCard.vue';
 import BaseLayout from "@/Layouts/BaseLayout.vue";
@@ -56,32 +58,20 @@ import RoundedButton from "@/components/Common/RoundedButton.vue";
 import Icon from '../components/Common/Icon.vue';
 import Arrow from '@/assets/icons/Arrow.svg';
 
-const viewStore = useViewStore();
 const dataStore = useDataStore();
 const curatedStore = useCuratedStore();
-const router = useRouter();
+
+const { view } = useAppView();
+const { setScrollProgress } = useScrollState();
+const { goBack, goToProject } = useAppNavigation();
 
 const currentProjects = computed(() => dataStore.currentProjects);
 
 const handleScroll = (payload: { progress: number }) => {
-  viewStore.setScrollProgress(payload.progress);
+  setScrollProgress(payload.progress);
 };
 
 const handleProjectSelect = (project: Project) => {
-  dataStore.setSelectedProject(project);
-  router.push(`/project/${project.id}`);
-};
-
-const handleBack = () => {
-  if (viewStore.view === ViewState.CURATED) {
-    viewStore.setView(ViewState.CURATOR);
-    router.push('/curator');
-  } else {
-    viewStore.backToSelector();
-    router.push('/select');
-  }
+  goToProject(project.id);
 };
 </script>
-
-<style scoped>
-</style>

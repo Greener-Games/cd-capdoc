@@ -42,20 +42,21 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { useViewStore, useDataStore } from './store';
+import { useDataStore } from './store';
 import { ViewState } from './types';
+import { useCategoryFilter } from './composables/useCategoryFilter';
+import { useAppView } from './composables/useAppView';
+import { useOrbState } from './composables/useOrbState';
 import Canvas3D from './components/Three/Canvas3D.vue';
 import DevToggle from './components/Common/DevToggle.vue';
 import GlobalNav from './components/Navigation/GlobalNav.vue';
 import PageFooter from './components/Navigation/PageFooter.vue';
 import { CategoryType } from './types';
 
-const router = useRouter();
-const viewStore = useViewStore();
 const dataStore = useDataStore();
-
-const view = computed(() => viewStore.view);
+const { filterType } = useCategoryFilter();
+const { view } = useAppView();
+const { currentOrbColor } = useOrbState();
 
 onMounted(() => {
   dataStore.init();
@@ -70,9 +71,9 @@ const footerProps = computed(() => {
     return { count: dataStore.loadedProjects.length, label: 'PROJECTS' };
   }
   if (view.value === ViewState.SELECTOR) {
-    if (viewStore.filterType === CategoryType.CAPABILITY) {
+    if (filterType.value === CategoryType.CAPABILITY) {
       return { count: dataStore.loadedCapabilities.length, label: 'CAPABILITIES' };
-    } else if (viewStore.filterType === CategoryType.MARKET) {
+    } else if (filterType.value === CategoryType.MARKET) {
       return { count: dataStore.loadedMarkets.length, label: 'MARKETS' };
     } else {
       return { count: dataStore.loadedRegions.length, label: 'REGIONS' };

@@ -1,6 +1,6 @@
 <template>
   <div class="absolute layout-footer px-safe-side h-(--footer-height) items-center flex justify-between z-10 pointer-events-none text-[10px] font-bold uppercase text-white">
-    <!-- Dynamic part: always animates (with delay on initial load if desired, but here we just keep the animation logic as it's unmounted/remounted) -->
+    <!-- Dynamic part -->
     <div
         class="flex-1 text-left font-bienvenue animate-in fade-in slide-in-from-bottom-5 duration-1000 fill-mode-both"
         :class="[!hasFooterAnimated ? 'delay-800' : 'delay-0']"
@@ -9,7 +9,7 @@
       {{ count }} {{ label }}
     </div>
 
-    <!-- Static parts: only animate on first load -->
+    <!-- Static parts -->
     <div
         class="shrink-0 font-bienvenue text-center text-white"
         :class="[!hasFooterAnimated ? 'animate-in fade-in slide-in-from-bottom-5 duration-1000 delay-800 fill-mode-both' : '']"
@@ -27,22 +27,21 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted} from 'vue';
-import {useViewStore} from '../../store';
+import { onMounted } from 'vue';
+import { useFooterState } from '../../composables/useFooterState';
 
 const props = defineProps<{
   count: number | string
   label: string
 }>()
 
-const viewStore = useViewStore();
-const hasFooterAnimated = computed(() => viewStore.hasFooterAnimated);
+const { hasFooterAnimated, setHasFooterAnimated } = useFooterState();
 
 onMounted(() => {
   if (!hasFooterAnimated.value) {
     // 800ms delay + 1000ms duration
     setTimeout(() => {
-      viewStore.setHasFooterAnimated(true);
+      setHasFooterAnimated(true);
     }, 1800);
   }
 });

@@ -2,8 +2,8 @@
   <div
       :style="{ animationDelay: `${index * 50}ms` }"
       @click="handleClick"
-      @mouseenter="viewStore.setHoveredColor(color)"
-      @mouseleave="viewStore.setHoveredColor(null)"
+      @mouseenter="setHoveredColor(color)"
+      @mouseleave="setHoveredColor(null)"
       :class="[
         'group relative shrink-0 transition-all duration-700 animate-in fade-in fill-mode-both flex flex-col cursor-pointer',
         animationClass
@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import {computed} from 'vue';
-import {useViewStore} from '../../store'; // Adjust path if needed
+import { useOrbState } from '../../composables/useOrbState';
 
 const props = withDefaults(defineProps<{
   id: string;
@@ -67,7 +67,7 @@ const props = withDefaults(defineProps<{
 });
 
 const emit = defineEmits(['select']);
-const viewStore = useViewStore();
+const { setHoveredColor } = useOrbState();
 
 const formattedTitle = computed(() => {
   return props.title.toUpperCase().replace('&', 'AND');

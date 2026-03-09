@@ -31,28 +31,25 @@
 </template>
 
 <script setup lang="ts">
-import {computed} from 'vue';
-import {useRouter} from 'vue-router';
-import {useViewStore} from '../../store';
-import {ViewState} from '../../types';
+import { useRouter } from 'vue-router';
+import { ViewState } from '../../types';
 import RoundedButton from "@/components/Common/RoundedButton.vue";
 import Icon from '../Common/Icon.vue';
 import Magnifying from '@/assets/icons/Magnifying.svg';
 import ARLogo from '@/assets/Images/ARLogo.svg';
+import { useAppView } from '../../composables/useAppView';
+import { useAppNavigation } from '../../composables/useAppNavigation';
 
 const router = useRouter();
-const viewStore = useViewStore();
-
-const view = computed(() => viewStore.view);
+const { view } = useAppView();
+const { goHome } = useAppNavigation();
 
 const handleGoHome = () => {
-  viewStore.goHome();
-  router.push('/');
+  goHome();
 };
 
 const handleOpenSearch = () => {
   if (view.value !== ViewState.CURATOR) {
-    viewStore.setView(ViewState.CURATOR);
     router.push('/curator');
   }
 };
