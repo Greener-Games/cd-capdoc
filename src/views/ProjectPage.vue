@@ -69,7 +69,7 @@ const handleScroll = (payload: { progress: number }) => {
 };
 
 const handleProjectSelect = (project: Project) => {
-  dataStore.setSelectedProject(project);
+  projectStore.setSelectedProject(project);
   router.push(`/project/${project.id}`);
 };
 
