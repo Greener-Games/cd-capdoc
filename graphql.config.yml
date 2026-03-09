@@ -1,0 +1,6 @@
+schema: schema.graphql
+extensions:
+  endpoints:
+    default:
+      url: "https://eu-west-2.cdn.hygraph.com/content/cmm66ttsr028007vw5cz9h2a0/master"
+      introspect: true

@@ -24,32 +24,35 @@ export const fetchHygraphData = async () => {
         longDescription
         imageUrl {
           url
-          overrideURL
+          overrideUrl
         }
-        accentColor
+        accentColor {
+          hex
+        }
         client
         year
         services
         contentBlocks {
           ... on ImageBlock {
             id
-            url {
+            asset {
               url
-              overrideURL
+              overrideUrl
             }
-            alt
           }
           ... on TextBlock {
             id
             title
-            content
+            content {
+              raw
+            }
           }
           ... on VideoBlock {
             id
-            url
+            videoUrl
             poster {
               url
-              overrideURL
+              overrideUrl
             }
           }
         }
@@ -60,9 +63,11 @@ export const fetchHygraphData = async () => {
         subtitle
         image {
           url
-          overrideURL
+          overrideUrl
         }
-        color
+        color {
+          hex
+        }
         projects {
           id
         }
@@ -73,9 +78,11 @@ export const fetchHygraphData = async () => {
         subtitle
         image {
           url
-          overrideURL
+          overrideUrl
         }
-        color
+        color {
+          hex
+        }
         projects {
           id
         }
@@ -86,9 +93,11 @@ export const fetchHygraphData = async () => {
         subtitle
         image {
           url
-          overrideURL
+          overrideUrl
         }
-        color
+        color {
+          hex
+        }
         projects {
           id
         }
@@ -102,19 +111,37 @@ export const fetchHygraphData = async () => {
     // Helper to resolve the correct URL from an Asset object
     const resolveAssetUrl = (asset: any) => {
       if (!asset) return '';
-      return asset.overrideURL || asset.url || '';
+      // Matching 'overrideUrl' from your new query
+      return asset.overrideUrl || asset.url || '';
     };
 
-    // Map projects back to the categories based on IDs and resolve asset URLs
+    // Map projects back to the categories based on IDs and resolve asset URLs/nested objects
     const projects = data.projects.map((p: any) => ({
       ...p,
       imageUrl: resolveAssetUrl(p.imageUrl),
+      accentColor: p.accentColor?.hex || null, // Extract hex from color object
       contentBlocks: p.contentBlocks?.map((block: any) => {
-        if (block.__typename === 'ImageBlock') {
-          return { ...block, url: resolveAssetUrl(block.url) };
+        // Handle ImageBlock (now uses 'asset' field)
+        if (block.asset) {
+          return {
+            ...block,
+            url: resolveAssetUrl(block.asset)
+          };
         }
-        if (block.__typename === 'VideoBlock') {
-          return { ...block, poster: resolveAssetUrl(block.poster) };
+        // Handle TextBlock (now uses 'content.raw')
+        if (block.content?.raw) {
+          return {
+            ...block,
+            content: block.content.raw
+          };
+        }
+        // Handle VideoBlock (now uses 'videoUrl')
+        if (block.videoUrl || block.poster) {
+          return {
+            ...block,
+            url: block.videoUrl, // Map videoUrl back to 'url' for UI consistency if needed
+            poster: resolveAssetUrl(block.poster)
+          };
         }
         return block;
       })
@@ -128,7 +155,7 @@ export const fetchHygraphData = async () => {
         title: item.title,
         subtitle: item.subtitle,
         image: resolveAssetUrl(item.image),
-        color: item.color,
+        color: item.color?.hex || null, // Extract hex from color object
         projects: item.projects.map((p: any) => projectMap.get(p.id)).filter(Boolean) as Project[]
       })) as CategoryItem[];
     };

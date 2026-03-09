@@ -112,6 +112,7 @@
         </template>
 
         <!-- Navigation Actions -->
+<!--
         <div class="flex items-center justify-between border-t border-white/10 pt-12 animate-in fade-in slide-in-from-bottom-5 duration-[800ms] delay-200 fill-mode-both">
           <button
             @click="handleBack"
@@ -146,6 +147,8 @@
             </button>
           </div>
         </div>
+-->
+
       </div>
     </div>
   </div>
