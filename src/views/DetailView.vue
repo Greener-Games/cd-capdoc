@@ -124,7 +124,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useViewStore, useDataStore, useFavoriteStore, useProjectStore } from '../store';
+import { useViewStore, useDataStore, useCuratedStore, useProjectStore } from '../store';
 import { ViewState } from '../types';
 import BaseLayout from "@/Layouts/BaseLayout.vue";
 import Arrow from "@/assets/icons/Arrow.svg";
@@ -133,13 +133,13 @@ import Icon from "@/components/Common/Icon.vue";
 
 const viewStore = useViewStore();
 const dataStore = useDataStore();
-const favoriteStore = useFavoriteStore();
+const curatedStore = useCuratedStore();
 const projectStore = useProjectStore();
 const router = useRouter();
 
 const project = computed(() => projectStore.selectedProject);
 const isLastChapter = computed(() => projectStore.isLastChapter);
-const isFavourite = computed(() => favoriteStore.favouriteIds.includes(project.value?.id || ''));
+const isCurated = computed(() => curatedStore.curatedIds.includes(project.value?.id || ''));
 
 const scrollProgress = ref(0);
 
@@ -152,13 +152,13 @@ const handleScroll = (e: Event) => {
 const handleBack = () => {
   projectStore.setSelectedProject(null);
 
-  if (viewStore.prevView === ViewState.FAVOURITES || viewStore.view === ViewState.FAVOURITES) {
-    viewStore.setView(ViewState.FAVOURITES);
-    router.push('/favourites');
+  if (viewStore.prevView === ViewState.CURATED || viewStore.view === ViewState.CURATED) {
+    viewStore.setView(ViewState.CURATED);
+    router.push('/curated');
   } else if (viewStore.view === 'CURATOR') {
     router.push('/curator');
   } else {
-    router.push(`/timeline/${dataStore.filterType}/${dataStore.activeCategoryId}`);
+    router.push(`/timeline/${viewStore.filterType}/${viewStore.activeCategoryId}`);
   }
 };
 

@@ -57,7 +57,7 @@ const viewStore = useViewStore();
 const dataStore = useDataStore();
 const router = useRouter();
 
-const filterType = ref<CategoryType>(dataStore.filterType || CategoryType.CAPABILITY);
+const filterType = ref<CategoryType>(viewStore.filterType || CategoryType.CAPABILITY);
 const dragScrollRef = ref<InstanceType<typeof DragScroll> | null>(null);
 
 watch(filterType, () => {
@@ -87,7 +87,7 @@ const currentData = computed(() => {
 
 const setFilter = (type: CategoryType) => {
   filterType.value = type;
-  dataStore.filterType = type; // Ensure store is updated so footer reflects change
+  viewStore.filterType = type; // Ensure store is updated so footer reflects change
   viewStore.setHoveredColor(null);
 };
 

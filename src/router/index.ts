@@ -55,12 +55,12 @@ const routes = [
     }
   },
   {
-    path: '/favourites',
-    name: 'Favourites',
+    path: '/curated',
+    name: 'Curated',
     component: ProjectPage,
     beforeEnter: () => {
       const viewStore = useViewStore();
-      viewStore.setView(ViewState.FAVOURITES);
+      viewStore.setView(ViewState.CURATED);
     }
   }
 ];

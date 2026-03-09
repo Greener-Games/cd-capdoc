@@ -72,9 +72,9 @@ const footerProps = computed(() => {
     return { count: projectStore.allProjects.length, label: 'PROJECTS' };
   }
   if (view.value === ViewState.SELECTOR) {
-    if (dataStore.filterType === CategoryType.CAPABILITY) {
+    if (viewStore.filterType === CategoryType.CAPABILITY) {
       return { count: dataStore.loadedCapabilities.length, label: 'CAPABILITIES' };
-    } else if (dataStore.filterType === CategoryType.MARKET) {
+    } else if (viewStore.filterType === CategoryType.MARKET) {
       return { count: dataStore.loadedMarkets.length, label: 'MARKETS' };
     } else {
       return { count: dataStore.loadedRegions.length, label: 'REGIONS' };

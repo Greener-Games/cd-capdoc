@@ -10,8 +10,8 @@
     </template>
 
     <template #title>
-      <template v-if="viewStore.view === ViewState.FAVOURITES">
-        {{ favoriteStore.curatedTitle || 'Favourites' }}
+      <template v-if="viewStore.view === ViewState.CURATED">
+        {{ curatedStore.curatedTitle || 'Curated' }}
       </template>
       <template v-else>
         {{ dataStore.currentCategoryData?.title || 'Timeline' }}
@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 import {useRouter} from 'vue-router';
-import {useProjectStore, useViewStore, useDataStore, useFavoriteStore} from '../store';
+import {useProjectStore, useViewStore, useDataStore, useCuratedStore} from '../store';
 import {Project, ViewState} from '../types';
 import DragScroll from '../components/Common/DragScroll.vue';
 import ProjectCard from '../components/Cards/ProjectCard.vue';
@@ -59,7 +59,7 @@ import Arrow from '@/assets/icons/Arrow.svg';
 const projectStore = useProjectStore();
 const viewStore = useViewStore();
 const dataStore = useDataStore();
-const favoriteStore = useFavoriteStore();
+const curatedStore = useCuratedStore();
 const router = useRouter();
 
 const currentProjects = computed(() => projectStore.currentProjects);
@@ -74,7 +74,7 @@ const handleProjectSelect = (project: Project) => {
 };
 
 const handleBack = () => {
-  if (viewStore.view === ViewState.FAVOURITES) {
+  if (viewStore.view === ViewState.CURATED) {
     viewStore.setView(ViewState.CURATOR);
     router.push('/curator');
   } else {

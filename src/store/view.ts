@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ViewState } from '../types';
+import { ViewState, CategoryType } from '../types';
 import { useProjectStore } from './project';
 
 const DEFAULT_ACCENT = '#1e293b';
@@ -8,6 +8,8 @@ export const useViewStore = defineStore('view', {
   state: () => ({
     view: ViewState.LANDING,
     prevView: ViewState.LANDING,
+    filterType: CategoryType.CAPABILITY,
+    activeCategoryId: 'brand',
     hoveredColor: DEFAULT_ACCENT,
     scrollProgress: 0,
     hasFooterAnimated: false,
@@ -25,6 +27,10 @@ export const useViewStore = defineStore('view', {
       this.prevView = this.view;
       this.view = view;
     },
+    setFilter(type: CategoryType, id: string) {
+      this.filterType = type;
+      this.activeCategoryId = id;
+    },
     setHoveredColor(color: string | null, fallback?: string) {
       this.hoveredColor = color || fallback || DEFAULT_ACCENT;
     },
@@ -40,7 +46,6 @@ export const useViewStore = defineStore('view', {
       this.setHoveredColor(DEFAULT_ACCENT);
       this.scrollProgress = 0;
       projectStore.setSelectedProject(null);
-      projectStore.setSearchQuery('');
     },
     backToSelector() {
       this.setView(ViewState.SELECTOR);

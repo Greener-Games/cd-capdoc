@@ -1,7 +1,6 @@
 <template>
   <BaseLayout :disable-padding-bottom="true">
     <template #header-controls>
-
       <div class="flex items-center space-x-2 pointer-events-auto">
         <RoundedButton
             v-for="pill in pills"
@@ -19,7 +18,6 @@
 
     <template #title-right>
       <div class="group w-full max-w-100 flex items-center bg-white/10 rounded-full px-4 h-12 transition-all">
-
         <div class="flex items-center pointer-events-none mr-3">
           <Icon :icon="Magnifying" size="md" class="scale-x-[-1]"/>
         </div>
@@ -37,13 +35,11 @@
             <X class="w-4 h-4 text-white"/>
           </button>
         </div>
-
       </div>
     </template>
 
     <!-- Scrollable Content Area -->
     <div class="absolute inset-0 overflow-y-auto overflow-x-hidden scrollbar-none pb-8 scroll-smooth">
-      <!-- Grid Results -->
       <div v-if="filteredProjects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full isolate">
         <CuratorCard
             v-for="(project, index) in filteredProjects"
@@ -51,12 +47,11 @@
             :project="project"
             :index="index"
             :mode="activeMode"
-            :is-selected="isFavourite(project.id)"
+            :is-selected="isCurated(project.id)"
             @select="handleSelectProject"
         />
       </div>
 
-      <!-- Empty State -->
       <div v-else class="text-center py-32 w-full">
         <div class="w-24 h-24 rounded-full border border-white/10 flex items-center justify-center mx-auto mb-6 text-white/20">
           <Search class="w-8 h-8" />
@@ -68,21 +63,26 @@
       </div>
     </div>
 
-    <!-- Bottom Fixed Curated Journey Bar (only in Build Mode) -->
-    <div v-if="activeMode === 'build' && favouriteIds.length > 0" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] drop-shadow-2xl">
-      <div class="bg-white rounded-full p-2 flex items-center shadow-2xl space-x-6 min-w-150 border border-white/10 backdrop-blur-md">
+    <!-- FIXED SECTION START -->
+    <div
+        v-if="activeMode === 'build' && curatedIds.length > 0"
+        class="fixed bottom-10 left-1/2 -translate-x-1/2 z-100 isolate drop-shadow-2xl"
+    >
+      <div class="bg-white rounded-full p-2 flex items-center shadow-2xl space-x-6 min-w-150 border border-white/10">
+
         <div class="bg-accent text-black w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0 ml-2">
-          {{ favouriteIds.length }}
+          {{ curatedIds.length }}
         </div>
 
-        <div class="grow flex items-center space-x-2">
+        <!-- Input Container with explicit isolation -->
+        <div class="grow flex items-center space-x-2 relative isolate">
           <input
               v-model="curatedTitle"
               type="text"
-              class="bg-transparent text-black text-sm font-bold uppercase focus:outline-none w-full placeholder-black/40 selection:bg-accent selection:text-black"
+              class="font-bienvenue relative z-20 w-full bg-transparent text-black text-sm font-bold uppercase focus:outline-none placeholder-black/40 selection:bg-zinc-900 selection:text-white"
               placeholder="MY PRESENTATION"
           />
-          <Edit3 class="w-4 h-4 text-black shrink-0" />
+          <Edit3 class="w-4 h-4 text-black shrink-0 relative z-20" />
         </div>
 
         <button
@@ -93,6 +93,7 @@
         </button>
       </div>
     </div>
+    <!-- FIXED SECTION END -->
 
   </BaseLayout>
 </template>
@@ -100,7 +101,7 @@
 <script setup lang="ts">
 import {computed, onMounted, ref, watch} from 'vue';
 import {useRouter} from 'vue-router';
-import {useDataStore, useFavoriteStore, useViewStore, useProjectStore} from '../store';
+import {useDataStore, useCuratedStore, useViewStore, useProjectStore} from '../store';
 import {Edit3, Search, X} from 'lucide-vue-next';
 import CuratorCard from '../components/Cards/CuratorCard.vue';
 import RoundedButton from '../components/Common/RoundedButton.vue';
@@ -111,18 +112,21 @@ import Icon from "@/components/Common/Icon.vue";
 
 const viewStore = useViewStore();
 const dataStore = useDataStore();
-const favoriteStore = useFavoriteStore();
+const curatedStore = useCuratedStore();
 const projectStore = useProjectStore();
 const router = useRouter();
 
 const activeMode = ref<'explore' | 'build'>('explore');
+const searchQuery = ref('');
 
 onMounted(() => {
-  favoriteStore.resetCurator();
+  curatedStore.resetCurator();
+  searchQuery.value = '';
 });
 
 watch(activeMode, () => {
-  favoriteStore.resetCurator();
+  curatedStore.resetCurator();
+  searchQuery.value = '';
 });
 
 const pills = [
@@ -130,17 +134,12 @@ const pills = [
   {label: 'Build', mode: 'build'}
 ] as const;
 
-const searchQuery = computed({
-  get: () => projectStore.searchQuery,
-  set: (val) => projectStore.setSearchQuery(val)
-});
-
 const curatedTitle = computed({
-  get: () => favoriteStore.curatedTitle,
-  set: (val) => favoriteStore.curatedTitle = val
+  get: () => curatedStore.curatedTitle,
+  set: (val) => curatedStore.curatedTitle = val
 });
 
-const favouriteIds = computed(() => favoriteStore.favouriteIds);
+const curatedIds = computed(() => curatedStore.curatedIds);
 
 const filteredProjects = computed(() => {
   if (!searchQuery.value.trim()) {
@@ -154,40 +153,20 @@ const filteredProjects = computed(() => {
   );
 });
 
-const handleBack = () => {
-  favoriteStore.resetCurator();
-  const prevView = viewStore.prevView;
-  viewStore.setView(prevView);
-
-  if (prevView === ViewState.LANDING) {
-    router.push('/');
-  } else if (prevView === ViewState.SELECTOR) {
-    router.push('/select');
-  } else if (prevView === ViewState.TIMELINE) {
-    router.push(`/timeline/${dataStore.filterType}/${dataStore.activeCategoryId}`);
-  } else if (prevView === ViewState.DETAIL) {
-    router.push(`/project/${projectStore.selectedProject?.id}`);
-  } else if (prevView === ViewState.FAVOURITES) {
-    router.push('/favourites');
-  } else {
-    router.push('/');
-  }
-};
-
 const handleLaunchCurated = () => {
-  viewStore.setView(ViewState.FAVOURITES);
-  router.push('/favourites');
+  viewStore.setView(ViewState.CURATED);
+  router.push('/curated');
 };
 
 const handleSelectProject = (project: Project) => {
   if (activeMode.value === 'build') {
-    favoriteStore.toggleFavourite(project.id);
+    curatedStore.toggleCurated(project.id);
   } else {
-    favoriteStore.resetCurator();
+    curatedStore.resetCurator();
     projectStore.setSelectedProject(project);
     router.push(`/project/${project.id}`);
   }
 };
 
-const isFavourite = (id: string) => favoriteStore.favouriteIds.includes(id);
+const isCurated = (id: string) => curatedStore.curatedIds.includes(id);
 </script>

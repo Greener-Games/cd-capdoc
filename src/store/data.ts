@@ -3,12 +3,11 @@ import { CategoryType, Project, CategoryItem } from '../types';
 import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA, ALL_PROJECTS } from '../constants';
 import { fetchHygraphData } from '../services/hygraph';
 import { useProjectStore } from './project';
+import { useViewStore } from './view';
 
 export const useDataStore = defineStore('data', {
   state: () => ({
-    filterType: CategoryType.CAPABILITY,
-    activeCategoryId: 'brand',
-    useLocalData: true,
+    useLocalData: false,
     fetchedProjects: [] as Project[],
     fetchedMarkets: [] as CategoryItem[],
     fetchedRegions: [] as CategoryItem[],
@@ -24,17 +23,18 @@ export const useDataStore = defineStore('data', {
   }),
   getters: {
     currentCategoryData(state): CategoryItem {
+      const viewStore = useViewStore();
       let dataSet: CategoryItem[];
 
-      if (state.filterType === CategoryType.CAPABILITY) {
+      if (viewStore.filterType === CategoryType.CAPABILITY) {
         dataSet = state.loadedCapabilities;
-      } else if (state.filterType === CategoryType.MARKET) {
+      } else if (viewStore.filterType === CategoryType.MARKET) {
         dataSet = state.loadedMarkets;
       } else {
         dataSet = state.loadedRegions;
       }
 
-      return dataSet.find(d => d.id === state.activeCategoryId) || dataSet[0];
+      return dataSet.find(d => d.id === viewStore.activeCategoryId) || dataSet[0];
     },
   },
   actions: {
@@ -71,8 +71,8 @@ export const useDataStore = defineStore('data', {
       );
     },
     setFilter(type: CategoryType, id: string) {
-      this.filterType = type;
-      this.activeCategoryId = id;
+      const viewStore = useViewStore();
+      viewStore.setFilter(type, id);
       this.pushToProjectStore();
     },
     async fetchHygraphData() {
@@ -96,6 +96,7 @@ export const useDataStore = defineStore('data', {
       }
     },
     async setUseLocalData(useLocal: boolean) {
+      const viewStore = useViewStore();
       this.useLocalData = useLocal;
       if (!useLocal && this.fetchedProjects.length === 0) {
         await this.fetchHygraphData();
@@ -106,15 +107,15 @@ export const useDataStore = defineStore('data', {
       // Make sure activeCategoryId exists in the new dataset, otherwise reset it
       const currentData = this.currentCategoryData;
       if (currentData) {
-         this.activeCategoryId = currentData.id;
+         viewStore.activeCategoryId = currentData.id;
       } else {
-         const dataSet = this.filterType === CategoryType.CAPABILITY ? this.loadedCapabilities
-            : this.filterType === CategoryType.MARKET ? this.loadedMarkets
+         const dataSet = viewStore.filterType === CategoryType.CAPABILITY ? this.loadedCapabilities
+            : viewStore.filterType === CategoryType.MARKET ? this.loadedMarkets
             : this.loadedRegions;
 
          const nextData = dataSet[0];
          if (nextData) {
-            this.activeCategoryId = nextData.id;
+            viewStore.activeCategoryId = nextData.id;
          }
       }
       this.pushToProjectStore();
@@ -122,6 +123,11 @@ export const useDataStore = defineStore('data', {
     init() {
       // populate the initial state explicitly using updateLoadedData
       this.updateLoadedData();
+
+      // If we are using remote data by default, trigger the fetch
+      if (!this.useLocalData) {
+        this.fetchHygraphData();
+      }
     }
   }
 });

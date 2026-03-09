@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia';
 import { Project, ViewState } from '../types';
 import { useViewStore } from './view';
-import { useFavoriteStore } from './favorites';
+import { useCuratedStore } from './curated';
 
 export const useProjectStore = defineStore('project', {
   state: () => ({
     selectedProjectId: null as string | null,
-    searchQuery: '',
     // "Loaded" list of all projects, regardless of dev/remote origin
     allProjects: [] as Project[],
     // "Loaded" categories, populated when data swaps
@@ -19,10 +18,10 @@ export const useProjectStore = defineStore('project', {
     },
     currentProjects(state): Project[] {
       const viewStore = useViewStore();
-      const favoriteStore = useFavoriteStore();
+      const curatedStore = useCuratedStore();
 
-      if (viewStore.view === ViewState.FAVOURITES) {
-        return state.allProjects.filter(p => favoriteStore.favouriteIds.includes(p.id));
+      if (viewStore.view === ViewState.CURATED) {
+        return state.allProjects.filter(p => curatedStore.curatedIds.includes(p.id));
       }
 
       return state.currentCategoryProjects;
@@ -37,9 +36,6 @@ export const useProjectStore = defineStore('project', {
   actions: {
     setSelectedProject(project: Project | null) {
       this.selectedProjectId = project ? project.id : null;
-    },
-    setSearchQuery(query: string) {
-      this.searchQuery = query;
     },
     setLoadedData(allProjects: Project[], categoryProjects: Project[]) {
       this.allProjects = allProjects;
@@ -58,7 +54,7 @@ export const useProjectStore = defineStore('project', {
         if (viewStore.view === ViewState.CURATOR) {
           viewStore.setView(ViewState.CURATOR);
         } else {
-          viewStore.setView(viewStore.view === ViewState.FAVOURITES ? ViewState.FAVOURITES : ViewState.TIMELINE);
+          viewStore.setView(viewStore.view === ViewState.CURATED ? ViewState.CURATED : ViewState.TIMELINE);
         }
       }
     }
