@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 import {useRouter} from 'vue-router';
-import {useAppStore, useViewStore, useDataStore, useFavoriteStore} from '../store';
+import {useProjectStore, useViewStore, useDataStore, useFavoriteStore} from '../store';
 import {Project, ViewState} from '../types';
 import DragScroll from '../components/Common/DragScroll.vue';
 import ProjectCard from '../components/Cards/ProjectCard.vue';
@@ -56,13 +56,13 @@ import RoundedButton from "@/components/Common/RoundedButton.vue";
 import Icon from '../components/Common/Icon.vue';
 import Arrow from '@/assets/icons/Arrow.svg';
 
-const appStore = useAppStore();
+const projectStore = useProjectStore();
 const viewStore = useViewStore();
 const dataStore = useDataStore();
 const favoriteStore = useFavoriteStore();
 const router = useRouter();
 
-const currentProjects = computed(() => appStore.currentProjects);
+const currentProjects = computed(() => projectStore.currentProjects);
 
 const handleScroll = (payload: { progress: number }) => {
   viewStore.setScrollProgress(payload.progress);

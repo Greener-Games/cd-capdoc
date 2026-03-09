@@ -100,7 +100,7 @@
 <script setup lang="ts">
 import {computed, onMounted, ref, watch} from 'vue';
 import {useRouter} from 'vue-router';
-import {useDataStore, useFavoriteStore, useViewStore} from '../store';
+import {useDataStore, useFavoriteStore, useViewStore, useProjectStore} from '../store';
 import {Edit3, Search, X} from 'lucide-vue-next';
 import CuratorCard from '../components/Cards/CuratorCard.vue';
 import RoundedButton from '../components/Common/RoundedButton.vue';
@@ -112,6 +112,7 @@ import Icon from "@/components/Common/Icon.vue";
 const viewStore = useViewStore();
 const dataStore = useDataStore();
 const favoriteStore = useFavoriteStore();
+const projectStore = useProjectStore();
 const router = useRouter();
 
 const activeMode = ref<'explore' | 'build'>('explore');
@@ -130,8 +131,8 @@ const pills = [
 ] as const;
 
 const searchQuery = computed({
-  get: () => dataStore.searchQuery,
-  set: (val) => dataStore.searchQuery = val
+  get: () => projectStore.searchQuery,
+  set: (val) => projectStore.setSearchQuery(val)
 });
 
 const curatedTitle = computed({
@@ -143,10 +144,10 @@ const favouriteIds = computed(() => favoriteStore.favouriteIds);
 
 const filteredProjects = computed(() => {
   if (!searchQuery.value.trim()) {
-    return dataStore.flattenedAllProjects;
+    return projectStore.allProjects;
   }
   const query = searchQuery.value.toLowerCase();
-  return dataStore.flattenedAllProjects.filter(p =>
+  return projectStore.allProjects.filter(p =>
       p.title.toLowerCase().includes(query) ||
       p.description.toLowerCase().includes(query) ||
       p.id.toLowerCase().includes(query)
@@ -165,7 +166,7 @@ const handleBack = () => {
   } else if (prevView === ViewState.TIMELINE) {
     router.push(`/timeline/${dataStore.filterType}/${dataStore.activeCategoryId}`);
   } else if (prevView === ViewState.DETAIL) {
-    router.push(`/project/${dataStore.selectedProject?.id}`);
+    router.push(`/project/${projectStore.selectedProject?.id}`);
   } else if (prevView === ViewState.FAVOURITES) {
     router.push('/favourites');
   } else {
@@ -183,7 +184,7 @@ const handleSelectProject = (project: Project) => {
     favoriteStore.toggleFavourite(project.id);
   } else {
     favoriteStore.resetCurator();
-    dataStore.setSelectedProject(project);
+    projectStore.setSelectedProject(project);
     router.push(`/project/${project.id}`);
   }
 };

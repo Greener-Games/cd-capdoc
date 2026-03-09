@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 import {useRouter} from 'vue-router';
-import {useAppStore, useViewStore} from '../../store';
+import {useProjectStore, useViewStore} from '../../store';
 import {ViewState} from '../../types';
 import RoundedButton from "@/components/Common/RoundedButton.vue";
 import Icon from '../Common/Icon.vue';
@@ -41,13 +41,13 @@ import Magnifying from '@/assets/icons/Magnifying.svg';
 import ARLogo from '@/assets/Images/ARLogo.svg';
 
 const router = useRouter();
-const appStore = useAppStore();
+const projectStore = useProjectStore();
 const viewStore = useViewStore();
 
 const view = computed(() => viewStore.view);
 
 const handleGoHome = () => {
-  appStore.goHome();
+  viewStore.goHome();
   router.push('/');
 };
 

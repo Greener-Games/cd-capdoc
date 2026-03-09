@@ -41,9 +41,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useViewStore, useDataStore, useAppStore } from './store';
+import { useViewStore, useDataStore, useProjectStore } from './store';
 import { ViewState } from './types';
 import Canvas3D from './components/Three/Canvas3D.vue';
 import DevToggle from './components/Common/DevToggle.vue';
@@ -55,9 +55,13 @@ import { CAPABILITY_DATA, MARKET_DATA, REGION_DATA } from './constants';
 const router = useRouter();
 const viewStore = useViewStore();
 const dataStore = useDataStore();
-const appStore = useAppStore();
+const projectStore = useProjectStore();
 
 const view = computed(() => viewStore.view);
+
+onMounted(() => {
+  dataStore.pushToProjectStore();
+});
 
 const showFooter = computed(() => {
   return [ViewState.LANDING, ViewState.SELECTOR, ViewState.TIMELINE].includes(view.value);
@@ -65,7 +69,7 @@ const showFooter = computed(() => {
 
 const footerProps = computed(() => {
   if (view.value === ViewState.LANDING) {
-    return { count: dataStore.flattenedAllProjects.length, label: 'PROJECTS' };
+    return { count: projectStore.allProjects.length, label: 'PROJECTS' };
   }
   if (view.value === ViewState.SELECTOR) {
     if (dataStore.filterType === CategoryType.CAPABILITY) {
@@ -77,7 +81,7 @@ const footerProps = computed(() => {
     }
   }
   if (view.value === ViewState.TIMELINE) {
-    return { count: appStore.currentProjects.length, label: 'PROJECTS' };
+    return { count: projectStore.currentProjects.length, label: 'PROJECTS' };
   }
   return { count: 0, label: '' };
 });

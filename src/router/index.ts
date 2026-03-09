@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { useViewStore, useDataStore } from '../store';
+import { useViewStore, useDataStore, useProjectStore } from '../store';
 import { ViewState } from '../types';
 
 import HomeView from '../views/HomeView.vue';
@@ -73,6 +73,7 @@ const router = createRouter({
 // Update store selectedProject or filter based on route parameters
 router.beforeEach((to, from) => {
   const dataStore = useDataStore();
+  const projectStore = useProjectStore();
 
   if (to.name === 'Timeline') {
     const type = to.params.type as any;
@@ -82,8 +83,12 @@ router.beforeEach((to, from) => {
 
   if (to.name === 'Detail') {
     const id = to.params.id as string;
-    const project = dataStore.flattenedAllProjects.find(p => p.id === id) || null;
-    dataStore.setSelectedProject(project);
+    // ensure data is initialized before trying to find
+    if (projectStore.allProjects.length === 0) {
+      dataStore.pushToProjectStore();
+    }
+    const project = projectStore.allProjects.find(p => p.id === id) || null;
+    projectStore.setSelectedProject(project);
   }
 
   return true;
