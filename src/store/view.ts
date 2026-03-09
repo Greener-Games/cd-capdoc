@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ViewState } from '../types';
+import { useProjectStore } from './project';
 
 const DEFAULT_ACCENT = '#1e293b';
 
@@ -11,6 +12,14 @@ export const useViewStore = defineStore('view', {
     scrollProgress: 0,
     hasFooterAnimated: false,
   }),
+  getters: {
+    currentOrbColor(): string {
+      const projectStore = useProjectStore();
+      return this.view === ViewState.DETAIL
+        ? (projectStore.selectedProject?.accentColor || this.hoveredColor)
+        : this.hoveredColor;
+    }
+  },
   actions: {
     setView(view: ViewState) {
       this.prevView = this.view;
@@ -26,9 +35,12 @@ export const useViewStore = defineStore('view', {
       this.hasFooterAnimated = value;
     },
     goHome() {
+      const projectStore = useProjectStore();
       this.setView(ViewState.LANDING);
       this.setHoveredColor(DEFAULT_ACCENT);
       this.scrollProgress = 0;
+      projectStore.setSelectedProject(null);
+      projectStore.setSearchQuery('');
     },
     backToSelector() {
       this.setView(ViewState.SELECTOR);

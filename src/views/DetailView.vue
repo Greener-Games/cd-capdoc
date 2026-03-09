@@ -124,8 +124,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { useViewStore, useDataStore, useFavoriteStore, useAppStore } from '../store';
-import { ArrowLeft } from 'lucide-vue-next';
+import { useViewStore, useDataStore, useFavoriteStore, useProjectStore } from '../store';
+import { ViewState } from '../types';
 import BaseLayout from "@/Layouts/BaseLayout.vue";
 import Arrow from "@/assets/icons/Arrow.svg";
 import RoundedButton from "@/components/Common/RoundedButton.vue";
@@ -134,10 +134,13 @@ import Icon from "@/components/Common/Icon.vue";
 const viewStore = useViewStore();
 const dataStore = useDataStore();
 const favoriteStore = useFavoriteStore();
-const appStore = useAppStore();
+const projectStore = useProjectStore();
 const router = useRouter();
 
-const project = computed(() => dataStore.selectedProject);
+const project = computed(() => projectStore.selectedProject);
+const isLastChapter = computed(() => projectStore.isLastChapter);
+const isFavourite = computed(() => favoriteStore.favouriteIds.includes(project.value?.id || ''));
+
 const scrollProgress = ref(0);
 
 const handleScroll = (e: Event) => {
@@ -147,8 +150,10 @@ const handleScroll = (e: Event) => {
 };
 
 const handleBack = () => {
-  appStore.backToTimeline();
-  if (viewStore.view === 'FAVOURITES') {
+  projectStore.setSelectedProject(null);
+
+  if (viewStore.prevView === ViewState.FAVOURITES || viewStore.view === ViewState.FAVOURITES) {
+    viewStore.setView(ViewState.FAVOURITES);
     router.push('/favourites');
   } else if (viewStore.view === 'CURATOR') {
     router.push('/curator');
@@ -158,9 +163,9 @@ const handleBack = () => {
 };
 
 const handleNext = () => {
-  appStore.nextChapter();
-  if (dataStore.selectedProject && dataStore.selectedProject.id !== project.value?.id) {
-    router.push(`/project/${dataStore.selectedProject.id}`);
+  projectStore.nextChapter();
+  if (projectStore.selectedProject && projectStore.selectedProject.id !== project.value?.id) {
+    router.push(`/project/${projectStore.selectedProject.id}`);
     const container = document.querySelector('.overflow-y-auto');
     if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
   } else {
