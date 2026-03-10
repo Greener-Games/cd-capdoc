@@ -56,7 +56,7 @@ onMounted(() => {
 });
 
 const show3D = computed(() => {
-  return ![ViewState.DETAIL, ViewState.CURATOR, ViewState.CURATED].includes(view.value);
+  return ![ViewState.DETAIL, ViewState.CURATOR, ViewState.CURATED, ViewState.ABOUT].includes(view.value);
 });
 
 const showFooter = computed(() => {

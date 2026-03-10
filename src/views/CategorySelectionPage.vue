@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import {computed, ref, watch} from 'vue';
-import {useRoute} from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 import {useDataStore} from '../store';
 import {CategoryType} from '../types';
 import DragScroll from '../components/Common/DragScroll.vue';
@@ -58,6 +58,7 @@ import { useAppNavigation } from '../composables/useAppNavigation';
 
 const dataStore = useDataStore();
 const route = useRoute();
+const router = useRouter();
 const { filterType } = useCategoryFilter();
 const { setHoveredColor } = useOrbState();
 const { goToCategorySelect, goToProjectList } = useAppNavigation();
@@ -80,8 +81,7 @@ const handlePillClick = (pill: typeof pills[0]) => {
   if (pill.type) {
     goToCategorySelect(pill.type);
   } else {
-    // Direct link or handle specifically
-    window.location.href = pill.routePath;
+    router.push(pill.routePath);
   }
   setHoveredColor(null);
 };

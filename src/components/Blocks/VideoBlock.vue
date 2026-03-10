@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-[100vw] h-[70vh] left-1/2 -translate-x-1/2 overflow-hidden bg-black flex items-center justify-center">
+  <div class="relative w-full h-[70vh] overflow-hidden bg-black flex items-center justify-center">
     <video
         class="w-full h-full object-cover"
         autoplay loop muted playsinline

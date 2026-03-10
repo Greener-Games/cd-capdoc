@@ -68,7 +68,7 @@ export function useAppNavigation() {
       router.push(`/navigation/${type}`);
     } else if (view.value === ViewState.SELECTOR) {
       router.push('/');
-    } else if (view.value === ViewState.CURATOR) {
+    } else if (view.value === ViewState.CURATOR || view.value === ViewState.ABOUT) {
       router.push('/navigation/capabilities');
     }
   };

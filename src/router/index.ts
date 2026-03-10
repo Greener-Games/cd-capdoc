@@ -7,12 +7,18 @@ const CategorySelectionPage = () => import('../views/CategorySelectionPage.vue')
 const ProjectPage = () => import('../views/ProjectPage.vue');
 const DetailView = () => import('../views/DetailView.vue');
 const CuratorPage = () => import('../views/CuratorPage.vue');
+const AboutView = () => import('../views/AboutView.vue');
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: HomeView
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: AboutView
   },
   {
     path: '/navigation',

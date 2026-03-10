@@ -46,6 +46,7 @@ export enum ViewState {
   DETAIL = 'DETAIL',
   CURATOR = 'CURATOR',
   CURATED = 'CURATED',
+  ABOUT = 'ABOUT'
 }
 
 export interface CategoryItem {
