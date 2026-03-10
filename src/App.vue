@@ -26,8 +26,8 @@
 
     <!-- Landing Page White Border Effect - ONLY visible on Landing -->
     <div
-        class="landing-hole transition-opacity duration-[800ms] pointer-events-none"
-        :class="view === ViewState.LANDING ? 'opacity-100' : 'opacity-0'"
+        class="landing-hole pointer-events-none"
+        :class="view === ViewState.LANDING ? 'landing-hole-active' : 'landing-hole-inactive'"
     ></div>
 
     <!-- Global Navigation -->

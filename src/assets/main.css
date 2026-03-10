@@ -69,14 +69,34 @@
   /* The transparent hole that uses a massive shadow to create the white border */
   .landing-hole {
     position: fixed;
+    box-shadow: 0 0 0 150vmax var(--color-border-outer);
+    pointer-events: none;
+    z-index: 60;
+    transition:
+        top 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+        bottom 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+        left 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+        right 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.6s ease-in-out,
+        border-radius 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .landing-hole-active {
     top: var(--border-width-top);
     bottom: var(--border-width-bottom);
     left: var(--border-width-side);
     right: var(--border-width-side);
     border-radius: var(--border-inner-radius);
-    box-shadow: 0 0 0 100vmax var(--color-border-outer);
-    pointer-events: none;
-    z-index: 60;
+    opacity: 1;
+  }
+
+  .landing-hole-inactive {
+    top: -10vh;
+    bottom: -10vh;
+    left: -10vw;
+    right: -10vw;
+    border-radius: 10rem;
+    opacity: 0;
   }
 }
 
