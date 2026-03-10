@@ -22,6 +22,16 @@ import { useLoop, useTresContext } from '@tresjs/core';
 import * as THREE from 'three';
 import { useOrbState } from '../../composables/useOrbState';
 
+const props = withDefaults(defineProps<{
+  waveSpeed?: number
+  lightSpeed?: number
+  lightIntensity?: number
+}>(), {
+  waveSpeed: 1,
+  lightSpeed: 0.5,
+  lightIntensity: 0.5
+})
+
 const waveRef = shallowRef<THREE.Mesh | null>(null);
 const groupRef = shallowRef<THREE.Group | null>(null);
 const { camera } = useTresContext();
@@ -41,15 +51,24 @@ const uniforms = {
   uColor: { value: new THREE.Color(getCSSVariableValue('--color-three-default') || '#0044ff') },
   uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
 
-  uLineWidth: { value: 15 },   // Width of the bright strips
+  uLineWidth: { value: 10 },   // Width of the bright strips
 
   // Now exactly maps to hardware screen pixels!
   uGapWidth: { value: 0 },
 
-  uDistortionZ: { value: 0.25 },
+  uDistortionZ: { value: 0.75},
   uDistortionX: { value: 0.5 },
-  uChaos: { value: 0.75 }
+  uChaos: { value: 0.75 },
+
+  // New Variables
+  uWaveSpeed: { value: props.waveSpeed },
+  uLightSpeed: { value: props.lightSpeed },
+  uLightIntensity: { value: props.lightIntensity }
 };
+
+watch(() => props.waveSpeed, (v) => uniforms.uWaveSpeed.value = v);
+watch(() => props.lightSpeed, (v) => uniforms.uLightSpeed.value = v);
+watch(() => props.lightIntensity, (v) => uniforms.uLightIntensity.value = v);
 
 watch(currentOrbColor, (newColor) => {
   if (newColor && newColor !== DEFAULT_ACCENT) {
@@ -71,6 +90,7 @@ const vertexShader = `
   uniform float uDistortionX;
   uniform float uDistortionZ;
   uniform float uChaos;
+  uniform float uWaveSpeed;
 
   varying vec2 vUv;
   varying float vZ;
@@ -127,11 +147,11 @@ const vertexShader = `
     vUv = uv;
     vec3 pos = position;
 
-    float baseWaveZ = sin(pos.y * 0.15 + uTime * 0.5) * 2.5;
-    float baseWaveX = sin(pos.y * 0.12 + uTime * 0.4) * 2.0;
+    float baseWaveZ = sin(pos.y * 0.15 + uTime * 0.5 * uWaveSpeed) * 2.5;
+    float baseWaveX = sin(pos.y * 0.12 + uTime * 0.4 * uWaveSpeed) * 2.0;
 
-    float noiseZ = snoise(vec3(pos.x * 0.1, pos.y * 0.2, uTime * 0.3)) * 2.0;
-    float noiseX = snoise(vec3(pos.y * 0.2, pos.z * 0.1, uTime * 0.25)) * 1.5;
+    float noiseZ = snoise(vec3(pos.x * 0.1, pos.y * 0.2, uTime * 0.3 * uWaveSpeed)) * 2.0;
+    float noiseX = snoise(vec3(pos.y * 0.2, pos.z * 0.1, uTime * 0.25 * uWaveSpeed)) * 1.5;
 
     float finalWaveZ = baseWaveZ + (noiseZ * uChaos);
     float finalWaveX = baseWaveX + (noiseX * uChaos);
@@ -153,6 +173,8 @@ const fragmentShader = `
   uniform vec2 uResolution;
   uniform float uLineWidth;
   uniform float uGapWidth;
+  uniform float uLightSpeed;
+  uniform float uLightIntensity;
 
   varying vec2 vUv;
   varying float vZ;
@@ -173,8 +195,8 @@ const fragmentShader = `
     vec2 stripUv = vec2(stripUvX, vUv.y);
 
     vec2 lightPos = vec2(
-      0.5 + cos(uTime * 0.6) * 0.35,
-      0.5 + sin(uTime * 0.4) * 0.25
+      0.5 + cos(uTime * 0.6 * uLightSpeed) * 0.35,
+      0.5 + sin(uTime * 0.4 * uLightSpeed) * 0.25
     );
 
     float distToLight = distance(stripUv, lightPos);
@@ -186,8 +208,8 @@ const fragmentShader = `
     vec3 darkBackground = vec3(0.01, 0.02, 0.05);
     vec3 brightCyan = vec3(0.6, 0.85, 1.0);
 
-    vec3 stripColor = mix(darkBackground, uColor * 0.6, combinedLight);
-    stripColor += brightCyan * pow(combinedLight, 3.0);
+    vec3 stripColor = mix(darkBackground, uColor * 0.6 * uLightIntensity, combinedLight);
+    stripColor += brightCyan * pow(combinedLight, 3.0) * uLightIntensity;
 
     // --- PIXEL PERFECT GAP MATH ---
     // fwidth tells us exactly how much 'xPos' changes from one physical screen pixel to the next.

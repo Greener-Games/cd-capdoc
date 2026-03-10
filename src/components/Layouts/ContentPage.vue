@@ -60,7 +60,7 @@
         </div>
 
         <!-- Dynamic Content Blocks -->
-        <div v-if="blocks && blocks.length > 0" class="mb-8">
+        <div v-if="blocks && blocks.length > 0" class="">
           <BlockRenderer :blocks="blocks" />
         </div>
 

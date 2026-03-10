@@ -9,7 +9,7 @@
   >
     <template #footer>
       <!-- Inline Bottom Navigation -->
-      <div class="flex items-center justify-center space-x-8 pt-8 border-t border-white/10 px-safe-side">
+      <div class="flex items-center justify-center space-x-8 pt-8 px-safe-side">
         <RoundedButton
             @click="handlePrev"
             icon-only

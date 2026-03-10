@@ -1,9 +1,9 @@
 <template>
-  <div class="relative w-full aspect-video md:aspect-[21/9] overflow-hidden bg-black flex items-center justify-center">
+  <div class="relative w-full h-[50vh] md:h-[70vh] overflow-hidden flex items-center justify-center">
     <!-- Vidstack Player -->
     <media-player
         ref="player"
-        class="w-full h-full group/player"
+        class="w-full h-full group/player border-none outline-none ring-0"
         :src="url"
         :poster="poster"
         cross-origin
@@ -16,7 +16,7 @@
         @vds-playing="onPlaying"
         @vds-waiting="onWaiting"
     >
-      <media-provider>
+      <media-provider class="w-full h-full">
         <media-poster
             v-if="poster"
             class="vds-poster transition-opacity duration-1000 ease-out z-20"
@@ -89,8 +89,17 @@ const handlePlayClick = (e: Event) => {
 <style scoped>
 media-player {
   --video-brand: #ffffff;
-  --video-bg: #000000;
+  --video-bg: transparent; /* Changed from black to transparent */
   --video-controls-bg: rgba(0, 0, 0, 0.4);
+}
+
+/* Ensure no borders or outlines on the player component itself */
+media-player,
+media-player :deep(.vds-media),
+media-player :deep(.vds-video) {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* Hide Poster when started */
@@ -106,7 +115,9 @@ media-player[data-started] .custom-overlay {
 }
 
 media-player :deep(.vds-video) {
-  object-fit: cover;
+  object-fit: cover; /* This makes the video fill its area perfectly without black bars */
+  width: 100%;
+  height: 100%;
 }
 
 /* Hide default controls until started */
