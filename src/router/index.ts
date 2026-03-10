@@ -64,9 +64,6 @@ const routes = [
     name: 'CuratedDetail',
     component: DetailView
   },
-  // Legacy Redirects
-  { path: '/select', redirect: '/navigation/capabilities' },
-  { path: '/timeline/:type/:id', redirect: (to: any) => `/navigation/${to.params.type.toLowerCase() === 'capability' ? 'capabilities' : to.params.type.toLowerCase() === 'market' ? 'markets' : 'regions'}/${to.params.id}` },
 ];
 
 const router = createRouter({

@@ -12,16 +12,26 @@ export interface ImageBlock extends BaseBlock {
   alt?: string;
 }
 
+export type RichTextContent = {
+  html: string;
+};
+
 export interface TextBlock extends BaseBlock {
   type: 'text';
   title?: string;
-  content: string;
+  leftContent?: string | RichTextContent;
+  rightContent?: string | RichTextContent;
 }
 
 export interface VideoBlock extends BaseBlock {
   type: 'video';
   url: string;
   poster?: string;
+}
+
+export interface PageMetadata {
+  left?: string[];
+  right?: string[];
 }
 
 export type ContentBlock = ImageBlock | TextBlock | VideoBlock;

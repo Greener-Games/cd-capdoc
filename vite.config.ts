@@ -4,6 +4,7 @@ import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
 import { templateCompilerOptions } from '@tresjs/core'
 import svgLoader from 'vite-svg-loader';
+import { vite as vidstack } from 'vidstack/plugins';
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
@@ -14,7 +15,13 @@ export default defineConfig(({ mode }) => {
       },
       plugins: [
         vue({
-          ...templateCompilerOptions
+          ...templateCompilerOptions,
+          template: {
+            compilerOptions: {
+              ...templateCompilerOptions.template?.compilerOptions,
+              isCustomElement: (tag) => tag.startsWith('media-') || templateCompilerOptions.template?.compilerOptions?.isCustomElement?.(tag)
+            }
+          }
         }),
         tailwindcss(),
         svgLoader({
@@ -32,7 +39,8 @@ export default defineConfig(({ mode }) => {
               'removeDimensions'
             ]
           }
-        })
+        }),
+        vidstack()
       ],
       resolve: {
         alias: {

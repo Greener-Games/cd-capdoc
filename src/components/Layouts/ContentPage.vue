@@ -28,12 +28,21 @@
         <div class="animate-in fade-in slide-in-from-bottom-10 duration-800 fill-mode-both">
           <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div class="md:col-span-6">
-              <p class="text-base text-white/80 font-light leading-relaxed">
+              <p class="text-base text-white font-normal">
                 {{ description }}
               </p>
             </div>
             <div class="md:col-span-6 flex justify-end">
-              <slot name="metadata"></slot>
+              <!-- Reusable Metadata component -->
+              <div v-if="metadata" class="grid grid-cols-2 gap-x-16 gap-y-4 text-sm uppercase text-white/70 font-normal">
+                <div v-if="metadata.left && metadata.left.length" class="flex flex-col space-y-0.5">
+                  <span v-for="item in metadata.left" :key="item">{{ item }}</span>
+                </div>
+                <div v-if="metadata.right && metadata.right.length" class="flex flex-col space-y-0.5">
+                  <span v-for="item in metadata.right" :key="item">{{ item }}</span>
+                </div>
+              </div>
+              <slot v-else name="metadata"></slot>
             </div>
           </div>
         </div>
@@ -51,7 +60,7 @@
         </div>
 
         <!-- Dynamic Content Blocks -->
-        <div v-if="blocks && blocks.length > 0" class="mb-32">
+        <div v-if="blocks && blocks.length > 0" class="mb-8">
           <BlockRenderer :blocks="blocks" />
         </div>
 
@@ -76,13 +85,14 @@ import Arrow from "@/assets/icons/Arrow.svg";
 import RoundedButton from "@/components/Common/RoundedButton.vue";
 import Icon from "@/components/Common/Icon.vue";
 import BlockRenderer from "@/components/Blocks/BlockRenderer.vue";
-import { ContentBlock } from '../../types';
+import { ContentBlock, PageMetadata } from '../../types';
 
 withDefaults(defineProps<{
   title: string;
   description: string;
   blocks?: ContentBlock[];
   showProgress?: boolean;
+  metadata?: PageMetadata;
 }>(), {
   blocks: () => [],
   showProgress: true

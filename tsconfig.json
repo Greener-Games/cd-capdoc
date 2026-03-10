@@ -12,7 +12,8 @@
     "skipLibCheck": true,
     "types": [
       "node",
-      "@tresjs/core"
+      "@tresjs/core",
+      "vidstack/vue"
     ],
     "moduleResolution": "bundler",
     "isolatedModules": true,

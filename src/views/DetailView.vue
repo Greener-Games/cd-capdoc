@@ -4,24 +4,9 @@
       :title="project.title"
       :description="project.description"
       :blocks="project.contentBlocks"
+      :metadata="projectMetadata"
       ref="contentPageRef"
   >
-    <template #metadata>
-      <div class="grid grid-cols-2 gap-x-16 gap-y-4 text-[10px] uppercase text-white/70">
-        <template v-if="project.services && project.services.length">
-          <div class="flex flex-col space-y-0.5">
-            <span v-for="service in project.services" :key="service">{{ service }}</span>
-          </div>
-        </template>
-        <template v-if="project.client">
-          <div class="flex flex-col space-y-0.5 text-white/70">
-            <span>{{ project.client }}</span>
-            <span v-if="project.year">{{ project.year }}</span>
-          </div>
-        </template>
-      </div>
-    </template>
-
     <template #footer>
       <!-- Inline Bottom Navigation -->
       <div class="flex items-center justify-center space-x-8 pt-8 border-t border-white/10 px-safe-side">
@@ -68,6 +53,7 @@ import ContentPage from "@/components/Layouts/ContentPage.vue";
 import Arrow from "@/assets/icons/Arrow.svg";
 import RoundedButton from "@/components/Common/RoundedButton.vue";
 import Icon from "@/components/Common/Icon.vue";
+import { PageMetadata } from '../types';
 
 const dataStore = useDataStore();
 const route = useRoute();
@@ -77,6 +63,19 @@ const { currentProjects } = useProjectData();
 const contentPageRef = ref<any>(null);
 
 const project = computed(() => dataStore.selectedProject);
+
+const projectMetadata = computed<PageMetadata | undefined>(() => {
+  if (!project.value) return undefined;
+  
+  const right: string[] = [];
+  if (project.value.client) right.push(project.value.client);
+  if (project.value.year) right.push(project.value.year);
+
+  return {
+    left: project.value.services || [],
+    right: right
+  };
+});
 
 const currentIndex = computed(() => {
   if (!project.value) return -1;

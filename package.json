@@ -18,6 +18,7 @@
     "tailwindcss": "^4.2.1",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.182.0",
+    "vidstack": "^1.12.13",
     "vue": "^3.5.29",
     "vue-router": "^5.0.3"
   },

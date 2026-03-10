@@ -44,8 +44,11 @@ export const fetchHygraphData = async () => {
           ... on TextBlock {
             id
             title
-            content {
-              raw
+            leftContent {
+              html
+            }
+            rightContent {
+              html
             }
           }
           ... on VideoBlock {
@@ -148,12 +151,13 @@ export const fetchHygraphData = async () => {
             url: resolveAssetUrl(block.asset, 1600)
           };
         }
-        // Handle TextBlock (now uses 'content.raw')
-        if (block.content?.raw) {
+        // Handle TextBlock
+        if (type === 'text') {
           return {
             ...block,
             type,
-            content: extractPlainText(block.content.raw)
+            leftContent: block.leftContent || null,
+            rightContent: block.rightContent || null
           };
         }
         // Handle VideoBlock (now uses 'videoUrl')

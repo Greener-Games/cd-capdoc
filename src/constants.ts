@@ -105,7 +105,12 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
           id: 'b2',
           type: 'text',
           title: 'AT A GLANCE',
-          content: 'Rixos Hotels, established in 2000, stands as a beacon of luxury with a global presence spanning 27 hotels. Their distinctive "All Inclusive – All Exclusive" philosophy distinguishes them from the rest. However, a significant hurdle lies in effectively communicating the interior grandeur of their properties. How can they convey the opulence and scale to guests and stakeholders?'
+          leftContent: {
+            html: '<p>Rixos Hotels, established in 2000, stands as a beacon of luxury with a global presence spanning 27 hotels. Their distinctive <strong>"All Inclusive – All Exclusive"</strong> philosophy distinguishes them from the rest.</p><p>However, a significant hurdle lies in effectively communicating the interior grandeur of their properties. How can they convey the opulence and scale to guests and stakeholders?</p>'
+          },
+          rightContent: {
+            html: '<p>Our approach focused on high-fidelity 3D storytelling, allowing stakeholders to experience the architectural vision before ground was even broken.</p>'
+          }
         },
         {
           id: 'b3',
@@ -120,8 +125,13 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
         {
           id: 'b5',
           type: 'text',
-          title: 'KEY BEHAVIOURAL INSIGHT DISCOVERED THAT SHIFTED THE CREATIVE DIRECTION',
-          content: 'Rixos Hotels, established in 2000, stands as a beacon of luxury with a global presence spanning 27 hotels. Their distinctive "All Inclusive – All Exclusive" philosophy distinguishes them from the rest. However, a significant hurdle lies in effectively communicating the interior grandeur of their properties. How can they convey the opulence and scale to guests and stakeholders?'
+          title: 'KEY BEHAVIOURAL INSIGHT DISCOVERED',
+          leftContent: {
+            html: '<p>During our deep-dive research, we identified several key factors:</p><ul><li><strong>Sensory Immersion:</strong> Guests value the "feel" of a space over static images.</li><li><strong>Digital Continuity:</strong> The transition from web to physical must be seamless.</li><li><em>Tactile Luxury:</em> Visuals must evoke the high-end materials used on-site.</li></ul>'
+          },
+          rightContent: {
+            html: '<p>These insights led to a creative pivot, prioritizing real-time interactive walkthroughs over pre-rendered videos.</p>'
+          }
         }
       ]
     },

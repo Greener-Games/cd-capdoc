@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-32">
+  <div class="space-y-5">
     <div v-for="block in blocks" :key="block.id" class="w-full">
       <component
           :is="getBlockComponent(block.type)"

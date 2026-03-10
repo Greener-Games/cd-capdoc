@@ -2855,9 +2855,10 @@ type ScheduledReleaseEdge {
 }
 
 type TextBlock implements Entity {
-    content: RichText
     "The unique identifier"
     id: ID!
+    leftContent: RichText
+    rightContent: RichText
     "System stage field"
     stage: Stage!
     title: String
@@ -6985,7 +6986,8 @@ input TextBlockConnectInput {
 }
 
 input TextBlockCreateInput {
-    content: RichTextAST
+    leftContent: RichTextAST
+    rightContent: RichTextAST
     title: String
     updatedAt: DateTime
 }
@@ -7151,7 +7153,8 @@ input TextBlockParentWhereUniqueInput {
 }
 
 input TextBlockUpdateInput {
-    content: RichTextAST
+    leftContent: RichTextAST
+    rightContent: RichTextAST
     title: String
 }
 
@@ -7167,7 +7170,8 @@ input TextBlockUpdateManyInlineInput {
 }
 
 input TextBlockUpdateManyInput {
-    content: RichTextAST
+    leftContent: RichTextAST
+    rightContent: RichTextAST
     title: String
 }
 
