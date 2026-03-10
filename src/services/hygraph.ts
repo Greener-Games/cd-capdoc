@@ -109,11 +109,16 @@ export const fetchHygraphData = async () => {
   try {
     const data = await client.request<any>(query);
 
-    // Helper to resolve the correct URL from an Asset object
-    const resolveAssetUrl = (asset: any) => {
+    // Helper to resolve the correct URL from an Asset object with optional optimization
+    const resolveAssetUrl = (asset: any, width?: number) => {
       if (!asset) return '';
-      // Matching 'overrideUrl' from your new query
-      return asset.overrideUrl || asset.url || '';
+      if (asset.overrideUrl) return asset.overrideUrl;
+      if (!asset.url) return '';
+      
+      if (width) {
+        return `${asset.url}?width=${width}&quality=80&format=webp`;
+      }
+      return asset.url;
     };
 
     const extractPlainText = (raw: any): string => {
@@ -130,7 +135,7 @@ export const fetchHygraphData = async () => {
     // Map projects back to the categories based on IDs and resolve asset URLs/nested objects
     const projects = data.projects.map((p: any) => ({
       ...p,
-      imageUrl: resolveAssetUrl(p.imageUrl),
+      image: resolveAssetUrl(p.imageUrl, 1200),
       accentColor: p.accentColor?.hex || null, // Extract hex from color object
       contentBlocks: p.contentBlocks?.map((block: any) => {
         const type = block.__typename?.replace('Block', '').toLowerCase();
@@ -140,7 +145,7 @@ export const fetchHygraphData = async () => {
           return {
             ...block,
             type,
-            url: resolveAssetUrl(block.asset)
+            url: resolveAssetUrl(block.asset, 1600)
           };
         }
         // Handle TextBlock (now uses 'content.raw')
@@ -157,7 +162,7 @@ export const fetchHygraphData = async () => {
             ...block,
             url: block.videoUrl, // Map videoUrl back to 'url' for UI consistency if needed
             type,
-            poster: resolveAssetUrl(block.poster)
+            poster: resolveAssetUrl(block.poster, 1600)
           };
         }
         return block;
@@ -171,7 +176,7 @@ export const fetchHygraphData = async () => {
         id: item.id,
         title: item.title,
         subtitle: item.subtitle,
-        image: resolveAssetUrl(item.image),
+        image: resolveAssetUrl(item.image, 800),
         color: item.color?.hex || null, // Extract hex from color object
         accentColor: item.color?.hex || null,
         projectIds: item.projects.map((p: any) => p.id)

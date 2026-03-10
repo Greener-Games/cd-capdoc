@@ -11,7 +11,7 @@ export function useAppView() {
     switch (route.name) {
       case 'Home': return ViewState.LANDING;
       case 'CategorySelect': return ViewState.SELECTOR;
-      case 'Timeline': return ViewState.TIMELINE;
+      case 'ProjectList': return ViewState.PROJECT_LIST;
       case 'Curated': return ViewState.CURATED;
       case 'Detail':
       case 'CuratedDetail':

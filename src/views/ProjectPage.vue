@@ -14,7 +14,7 @@
         {{ curatedStore.curatedTitle || 'Curated' }}
       </template>
       <template v-else>
-        {{ dataStore.currentCategoryData?.title || 'Timeline' }}
+        {{ currentCategoryData?.title || 'Projects' }}
       </template>
     </template>
 
@@ -32,7 +32,7 @@
           :id="project.id"
           :title="project.title"
           :subtitle="project.description"
-          :image="project.imageUrl"
+          :image="project.image"
           :color="project.accentColor"
           :index="index"
           :is-dragging="isDragging"
@@ -45,31 +45,25 @@
 </template>
 
 <script setup lang="ts">
-import {computed} from 'vue';
-import {useDataStore, useCuratedStore} from '../store';
+import {useCuratedStore} from '../store';
 import {Project, ViewState} from '../types';
 import { useAppView } from '../composables/useAppView';
-import { useScrollState } from '../composables/useScrollState';
+import { useScroll } from '../composables/useScroll';
 import { useAppNavigation } from '../composables/useAppNavigation';
+import { useProjectData } from '../composables/useProjectData';
 import DragScroll from '../components/Common/DragScroll.vue';
 import ProjectCard from '../components/Cards/ProjectCard.vue';
-import BaseLayout from "@/Layouts/BaseLayout.vue";
+import BaseLayout from "@/components/Layouts/BaseLayout.vue";
 import RoundedButton from "@/components/Common/RoundedButton.vue";
 import Icon from '../components/Common/Icon.vue';
 import Arrow from '@/assets/icons/Arrow.svg';
 
-const dataStore = useDataStore();
 const curatedStore = useCuratedStore();
 
 const { view } = useAppView();
-const { setScrollProgress } = useScrollState();
+const { handleScroll } = useScroll();
 const { goBack, goToProject } = useAppNavigation();
-
-const currentProjects = computed(() => dataStore.currentProjects);
-
-const handleScroll = (payload: { progress: number }) => {
-  setScrollProgress(payload.progress);
-};
+const { currentProjects, currentCategoryData } = useProjectData();
 
 const handleProjectSelect = (project: Project) => {
   goToProject(project.id);

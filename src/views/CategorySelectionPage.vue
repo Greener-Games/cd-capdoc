@@ -50,7 +50,7 @@ import {useDataStore} from '../store';
 import {CategoryType} from '../types';
 import DragScroll from '../components/Common/DragScroll.vue';
 import SelectionCard from '../components/Cards/SelectionCard.vue';
-import BaseLayout from "@/Layouts/BaseLayout.vue";
+import BaseLayout from "@/components/Layouts/BaseLayout.vue";
 import RoundedButton from "@/components/Common/RoundedButton.vue";
 import { useCategoryFilter } from '../composables/useCategoryFilter';
 import { useOrbState } from '../composables/useOrbState';
@@ -60,7 +60,7 @@ const dataStore = useDataStore();
 const route = useRoute();
 const { filterType } = useCategoryFilter();
 const { setHoveredColor } = useOrbState();
-const { goToCategorySelect, goToTimeline } = useAppNavigation();
+const { goToCategorySelect, goToProjectList } = useAppNavigation();
 
 const dragScrollRef = ref<InstanceType<typeof DragScroll> | null>(null);
 
@@ -93,6 +93,6 @@ const currentData = computed(() => {
 
 const handleSelect = (id: string) => {
   const typeParam = route.params.type as string;
-  goToTimeline(typeParam, id);
+  goToProjectList(typeParam, id);
 };
 </script>

@@ -1,47 +1,52 @@
 <template>
   <BaseLayout v-if="project" :disable-padding-bottom="true">
-    <template #header-controls>
-      <RoundedButton @click="goBack" icon-only>
-        <template #icon>
-          <Icon :icon="Arrow" size="md" class="scale-x-[-1] text-white" />
-        </template>
-      </RoundedButton>
-    </template>
+    <!-- Main Scrollable Content Area -->
+    <div class="w-full h-full overflow-y-auto scrollbar-none pointer-events-auto pb-32" @scroll="handleScroll">
+      <!-- Replicated Header Logic inside scrollable area -->
+      <div class="flex flex-col space-y-8 mb-16">
+        <!-- Back Button -->
+        <div class="flex items-center">
+          <RoundedButton @click="goBack" icon-only>
+            <template #icon>
+              <Icon :icon="Arrow" size="md" class="scale-x-[-1] text-white" />
+            </template>
+          </RoundedButton>
+        </div>
 
-    <template #title>
-      <span class="max-w-4xl block">{{ project.title }}</span>
-    </template>
+        <!-- Title -->
+        <div class="w-full animate-in fade-in slide-in-from-bottom-2 duration-400 fill-mode-both">
+          <h2 class="font-gamechanger text-6xl uppercase text-white leading-none">
+            <span class="max-w-4xl block">{{ project.title }}</span>
+          </h2>
+        </div>
 
-    <!-- Use the new slot for the highlights -->
-    <template #header-bottom>
-      <div class="animate-in fade-in slide-in-from-bottom-10 duration-[800ms] fill-mode-both mb-8">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-          <div class="md:col-span-6">
-            <p class="text-base text-white/80 font-light">
-              {{ project.description }}
-            </p>
-          </div>
-          <div class="md:col-span-6 flex justify-end">
-            <div class="grid grid-cols-2 gap-x-16 gap-y-4 text-[10px] uppercase text-white/50">
-              <template v-if="project.services && project.services.length">
-                <div class="flex flex-col space-y-2">
-                  <span v-for="service in project.services" :key="service">{{ service }}</span>
-                </div>
-              </template>
-              <template v-if="project.client">
-                <div class="flex flex-col space-y-2">
-                  <span>{{ project.client }}</span>
-                  <span v-if="project.year">{{ project.year }}</span>
-                </div>
-              </template>
+        <!-- Project Info / Highlights -->
+        <div class="animate-in fade-in slide-in-from-bottom-10 duration-[800ms] fill-mode-both">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div class="md:col-span-6">
+              <p class="text-base text-white/80 font-light">
+                {{ project.description }}
+              </p>
+            </div>
+            <div class="md:col-span-6 flex justify-end">
+              <div class="grid grid-cols-2 gap-x-16 gap-y-4 text-[10px] uppercase text-white/50">
+                <template v-if="project.services && project.services.length">
+                  <div class="flex flex-col space-y-2">
+                    <span v-for="service in project.services" :key="service">{{ service }}</span>
+                  </div>
+                </template>
+                <template v-if="project.client">
+                  <div class="flex flex-col space-y-2">
+                    <span>{{ project.client }}</span>
+                    <span v-if="project.year">{{ project.year }}</span>
+                  </div>
+                </template>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </template>
 
-    <!-- Main Scrollable Content Area -->
-    <div class="w-full h-full overflow-y-auto scrollbar-none pointer-events-auto pb-32" @scroll="handleScroll">
       <div class="relative">
         <!-- Fixed Progress indicator -->
         <div class="fixed right-8 top-1/2 -translate-y-1/2 flex flex-col items-center space-y-4 z-50 mix-blend-difference">
@@ -54,46 +59,9 @@
         </div>
 
         <!-- Dynamic Content Blocks -->
-        <template v-if="project.contentBlocks && project.contentBlocks.length > 0">
-          <div class="space-y-32 mb-32">
-            <div v-for="block in project.contentBlocks" :key="block.id" class="w-full">
-              <!-- Image Block -->
-              <div v-if="block.type === 'image'" class="relative w-[100vw] h-[70vh] left-1/2 -translate-x-1/2 overflow-hidden">
-                <div
-                    class="absolute inset-0 bg-cover bg-center"
-                    :style="{ backgroundImage: `url(${(block as any).url})` }"
-                ></div>
-              </div>
-
-              <!-- Text Block -->
-              <div v-else-if="block.type === 'text'">
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
-                  <div class="md:col-span-4">
-                    <h3 v-if="(block as any).title" class="text-[10px] uppercase text-white/50 mb-6 font-medium">
-                      {{ (block as any).title }}
-                    </h3>
-                  </div>
-                  <div class="md:col-span-8">
-                    <p class="text-sm md:text-base text-white/80 font-light whitespace-pre-line">
-                      {{ (block as any).content }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Video Block -->
-              <div v-else-if="block.type === 'video'" class="relative w-[100vw] h-[70vh] left-1/2 -translate-x-1/2 overflow-hidden bg-black flex items-center justify-center">
-                <video
-                    class="w-full h-full object-cover"
-                    autoplay loop muted playsinline
-                    :poster="(block as any).poster"
-                >
-                  <source :src="(block as any).url" type="video/mp4" />
-                </video>
-              </div>
-            </div>
-          </div>
-        </template>
+        <div v-if="project.contentBlocks && project.contentBlocks.length > 0" class="mb-32">
+          <BlockRenderer :blocks="project.contentBlocks" />
+        </div>
 
         <!-- Fallback Legacy View -->
         <template v-else>
@@ -102,7 +70,7 @@
             <div
                 class="absolute inset-[-10%] bg-cover bg-center transition-transform duration-1000 ease-out will-change-transform group-hover:scale-105"
                 :style="{
-                backgroundImage: `url(${project.imageUrl})`,
+                backgroundImage: `url(${project.image})`,
                 transform: `translateY(${(scrollProgress - 0.5) * -50}px)`
               }"
             ></div>
@@ -155,20 +123,22 @@
 import { computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useDataStore } from '../store';
-import { useScrollState } from '../composables/useScrollState';
+import { useScroll } from '../composables/useScroll';
 import { useAppNavigation } from '../composables/useAppNavigation';
-import BaseLayout from "@/Layouts/BaseLayout.vue";
+import { useProjectData } from '../composables/useProjectData';
+import BaseLayout from "@/components/Layouts/BaseLayout.vue";
 import Arrow from "@/assets/icons/Arrow.svg";
 import RoundedButton from "@/components/Common/RoundedButton.vue";
 import Icon from "@/components/Common/Icon.vue";
+import BlockRenderer from "@/components/Blocks/BlockRenderer.vue";
 
 const dataStore = useDataStore();
 const route = useRoute();
 const { goBack, goToProject } = useAppNavigation();
-const { scrollProgress, setScrollProgress } = useScrollState();
+const { scrollProgress, handleScroll } = useScroll();
+const { currentProjects } = useProjectData();
 
 const project = computed(() => dataStore.selectedProject);
-const currentProjects = computed(() => dataStore.currentProjects);
 
 const currentIndex = computed(() => {
   if (!project.value) return -1;
@@ -177,16 +147,6 @@ const currentIndex = computed(() => {
 
 const hasNext = computed(() => currentIndex.value !== -1 && currentIndex.value < currentProjects.value.length - 1);
 const hasPrev = computed(() => currentIndex.value > 0);
-
-const handleScroll = (e: Event) => {
-  const target = e.target as HTMLElement;
-  const maxScroll = target.scrollHeight - target.clientHeight;
-  if (maxScroll <= 0) {
-    setScrollProgress(0);
-  } else {
-    setScrollProgress(target.scrollTop / maxScroll);
-  }
-};
 
 const handleNext = () => {
   if (hasNext.value) {

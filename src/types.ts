@@ -31,7 +31,7 @@ export interface Project {
   title: string;
   description: string;
   longDescription: string;
-  imageUrl: string;
+  image: string;
   accentColor: string;
   client?: string;
   year?: string;
@@ -42,12 +42,10 @@ export interface Project {
 export enum ViewState {
   LANDING = 'LANDING',
   SELECTOR = 'SELECTOR',
-  TIMELINE = 'TIMELINE',
-  PROJECT_TIMELINE = 'PROJECT_TIMELINE',
+  PROJECT_LIST = 'PROJECT_LIST',
   DETAIL = 'DETAIL',
   CURATOR = 'CURATOR',
   CURATED = 'CURATED',
-  SEARCH = 'SEARCH'
 }
 
 export interface CategoryItem {

@@ -3,15 +3,15 @@ import { ViewState } from '../types';
 import { useAppView } from './useAppView';
 import { useDataStore } from '../store/data';
 import { useOrbState } from './useOrbState';
-import { useScrollState } from './useScrollState';
+import { useScroll } from './useScroll';
 
 export function useAppNavigation() {
   const router = useRouter();
   const route = useRoute();
-  const { view, prevView, setView } = useAppView();
+  const { view } = useAppView();
   const dataStore = useDataStore();
   const { setHoveredColor, DEFAULT_ACCENT } = useOrbState();
-  const { setScrollProgress } = useScrollState();
+  const { setScrollProgress } = useScroll();
 
   const isCuratedContext = () => {
     return route.name === 'CuratedDetail' || route.name === 'Curated';
@@ -21,7 +21,7 @@ export function useAppNavigation() {
     router.push(`/navigation/${type}`);
   };
 
-  const goToTimeline = (type: string, catId: string) => {
+  const goToProjectList = (type: string, catId: string) => {
     router.push(`/navigation/${type}/${catId}`);
   };
 
@@ -55,7 +55,7 @@ export function useAppNavigation() {
       } else {
         router.push('/navigation/capabilities');
       }
-    } else if (view.value === ViewState.TIMELINE) {
+    } else if (view.value === ViewState.PROJECT_LIST) {
       const type = route.params.type as string;
       router.push(`/navigation/${type}`);
     } else if (view.value === ViewState.SELECTOR) {
@@ -85,7 +85,7 @@ export function useAppNavigation() {
   return {
     isCuratedContext,
     goToCategorySelect,
-    goToTimeline,
+    goToProjectList,
     goToProject,
     goBack,
     goHome,

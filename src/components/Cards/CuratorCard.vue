@@ -3,7 +3,7 @@
       class="h-85"
       :id="project.id"
       :title="project.title"
-      :image="project.imageUrl"
+      :image="project.image"
       :color="project.accentColor"
       :index="index"
       animation-class="slide-in-from-bottom-4 duration-500"

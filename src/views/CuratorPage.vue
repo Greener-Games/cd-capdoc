@@ -31,7 +31,7 @@
         />
 
         <div v-if="searchQuery" class="flex items-center ml-2">
-          <button @click="searchQuery = ''" class="text-white hover:opacity-70 transition-opacity">
+          <button @click="clearSearch" class="text-white hover:opacity-70 transition-opacity">
             <X class="w-4 h-4 text-white"/>
           </button>
         </div>
@@ -104,27 +104,29 @@ import {useDataStore, useCuratedStore} from '../store';
 import {Edit3, Search, X} from 'lucide-vue-next';
 import CuratorCard from '../components/Cards/CuratorCard.vue';
 import RoundedButton from '../components/Common/RoundedButton.vue';
-import BaseLayout from "@/Layouts/BaseLayout.vue";
+import BaseLayout from "@/components/Layouts/BaseLayout.vue";
 import {Project} from '../types';
 import Magnifying from "@/assets/icons/Magnifying.svg";
 import Icon from "@/components/Common/Icon.vue";
 import { useAppNavigation } from '../composables/useAppNavigation';
+import { useProjectData } from '../composables/useProjectData';
 
 const dataStore = useDataStore();
 const curatedStore = useCuratedStore();
 const { goToProject, launchCuratedPresentation } = useAppNavigation();
 
 const activeMode = ref<'explore' | 'build'>('explore');
-const searchQuery = ref('');
+
+const { searchQuery, filteredProjects, clearSearch } = useProjectData();
 
 onMounted(() => {
   curatedStore.resetCurator();
-  searchQuery.value = '';
+  clearSearch();
 });
 
 watch(activeMode, () => {
   curatedStore.resetCurator();
-  searchQuery.value = '';
+  clearSearch();
 });
 
 const pills = [
@@ -138,18 +140,6 @@ const curatedTitle = computed({
 });
 
 const curatedIds = computed(() => curatedStore.curatedIds);
-
-const filteredProjects = computed(() => {
-  if (!searchQuery.value.trim()) {
-    return dataStore.loadedProjects;
-  }
-  const query = searchQuery.value.toLowerCase();
-  return dataStore.loadedProjects.filter(p =>
-      p.title.toLowerCase().includes(query) ||
-      p.description.toLowerCase().includes(query) ||
-      p.id.toLowerCase().includes(query)
-  );
-});
 
 const handleLaunchCurated = () => {
   launchCuratedPresentation();

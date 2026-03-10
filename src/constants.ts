@@ -8,7 +8,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'Discovery & DNA',
       description: 'Uncovering the core essence and strategic positioning of the brand.',
       longDescription: 'A deep dive into market positioning, competitor landscapes, and the unique value proposition that defines the future brand trajectory.',
-      imageUrl: 'https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800&h=1200',
+      image: 'https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800&h=1200',
       accentColor: '#3b82f6',
       services: ['Strategy', 'Research', 'Auditing']
     },
@@ -17,7 +17,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'Visual Architecture',
       description: 'Defining the logo systems, typography, and color theory.',
       longDescription: 'Crafting a cohesive visual language that scales across every touchpoint, from digital interfaces to physical environments.',
-      imageUrl: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=800&h=1200',
+      image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=800&h=1200',
       accentColor: '#3b82f6',
       services: ['Identity', 'Typography']
     },
@@ -26,7 +26,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'Brand Ecosystem',
       description: 'Developing guidelines for consistency and long-term equity.',
       longDescription: 'Creating robust design systems and documentation that empower internal teams to maintain brand integrity over time.',
-      imageUrl: 'https://images.unsplash.com/photo-1434626881859-194d67b2b86f?auto=format&fit=crop&q=80&w=800&h=1200',
+      image: 'https://images.unsplash.com/photo-1434626881859-194d67b2b86f?auto=format&fit=crop&q=80&w=800&h=1200',
       accentColor: '#3b82f6'
     }
   ],
@@ -36,7 +36,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'UX Strategy & Flow',
       description: 'Mapping the user journey through intuitive information architecture.',
       longDescription: 'Prioritizing usability and conversion through data-driven wireframing and user-centric experience design.',
-      imageUrl: 'https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&q=80&w=800&h=1200',
+      image: 'https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&q=80&w=800&h=1200',
       accentColor: '#10b981',
       services: ['UX Design', 'Wireframing']
     },
@@ -45,7 +45,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'Interactive Prototyping',
       description: 'Validating high-fidelity micro-interactions and component logic.',
       longDescription: 'Building functional prototypes to test edge cases and refine the tactile feel of the digital interface before production.',
-      imageUrl: 'https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&q=80&w=800&h=1200',
+      image: 'https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&q=80&w=800&h=1200',
       accentColor: '#10b981'
     },
     {
@@ -53,7 +53,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'Modern Stack Deployment',
       description: 'Engineering scalable frontend and backend infrastructures.',
       longDescription: 'Utilizing cutting-edge frameworks to ensure lightning-fast performance, security, and cross-platform compatibility.',
-      imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800&h=1200',
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800&h=1200',
       accentColor: '#10b981'
     }
   ],
@@ -63,7 +63,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'Temporal Storyboarding',
       description: 'Visualizing the rhythm and narrative arc of the sequence.',
       longDescription: 'Choreographing movement and timing to ensure the key message resonates with cinematic impact.',
-      imageUrl: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=800&h=1200',
+      image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=800&h=1200',
       accentColor: '#f59e0b',
       services: ['Direction', 'Storyboarding']
     },
@@ -72,7 +72,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'Dynamic Animation',
       description: 'Crafting fluid motion and physics-based interactions.',
       longDescription: 'Breathing life into static assets through advanced keyframing, procedural animation, and custom rigging.',
-      imageUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800&h=1200',
+      image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800&h=1200',
       accentColor: '#f59e0b'
     },
     {
@@ -80,7 +80,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'Sonic Synchronisation',
       description: 'Merging sound design with visual cues for full immersion.',
       longDescription: 'Mastering the audio layer to heighten emotional impact and guide the viewer through the temporal experience.',
-      imageUrl: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=800&h=1200',
+      image: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=800&h=1200',
       accentColor: '#f59e0b'
     }
   ],
@@ -90,7 +90,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'Rixos Premium Qetaifan Island North Resort',
       description: 'Rixos Hotels, established in 2000, stands as a beacon of luxury with a global presence spanning 27 hotels. Their distinctive "All Inclusive – All Exclusive" philosophy distinguishes them from the rest.',
       longDescription: 'Defining the future of luxury hospitality through hyper-realistic 3D environmental design and complex lighting studies for the Qetaifan Island North project.',
-      imageUrl: 'https://images.unsplash.com/photo-1582719478237-af1e73990ec9?auto=format&fit=crop&q=80&w=1200&h=800',
+      image: 'https://images.unsplash.com/photo-1582719478237-af1e73990ec9?auto=format&fit=crop&q=80&w=1200&h=800',
       accentColor: '#8b5cf6',
       client: 'AtkinsRéalis',
       year: '2023',
@@ -130,7 +130,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'Photoreal Lookdev',
       description: 'Applying advanced material shaders and global illumination.',
       longDescription: 'Simulating real-world light physics and material properties to achieve stunning, believable visual results.',
-      imageUrl: 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=800&h=1200',
+      image: 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=800&h=1200',
       accentColor: '#8b5cf6'
     },
     {
@@ -138,7 +138,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'Environment Scenography',
       description: 'Designing immersive digital worlds and atmospheres.',
       longDescription: 'Creating complete virtual ecosystems that tell a story through lighting, composition, and spatial depth.',
-      imageUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800&h=1200',
+      image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800&h=1200',
       accentColor: '#8b5cf6'
     }
   ],
@@ -148,7 +148,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'Experiential Concept',
       description: 'Merging physical space with digital interaction.',
       longDescription: 'Imagining multi-sensory experiences that blur the lines between reality and the virtual world.',
-      imageUrl: 'https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&q=80&w=800&h=1200',
+      image: 'https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&q=80&w=800&h=1200',
       accentColor: '#ef4444',
       services: ['Spatial Design', 'Concepting']
     },
@@ -157,7 +157,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'Hardware Orchestration',
       description: 'Integrating sensors, projectors, and spatial audio systems.',
       longDescription: 'Seamlessly connecting complex hardware arrays to drive responsive and real-time interactive installations.',
-      imageUrl: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&q=80&w=800&h=1200',
+      image: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&q=80&w=800&h=1200',
       accentColor: '#ef4444'
     },
     {
@@ -165,7 +165,7 @@ export const ALL_PROJECTS: Record<string, Project[]> = {
       title: 'On-Site Calibration',
       description: 'Fine-tuning interaction logic in the physical environment.',
       longDescription: 'Optimizing the installation for site-specific conditions, ensuring perfect alignment and maximum audience impact.',
-      imageUrl: 'https://images.unsplash.com/photo-1510070112810-d4e9a46d9e91?auto=format&fit=crop&q=80&w=800&h=1200',
+      image: 'https://images.unsplash.com/photo-1510070112810-d4e9a46d9e91?auto=format&fit=crop&q=80&w=800&h=1200',
       accentColor: '#ef4444'
     }
   ]

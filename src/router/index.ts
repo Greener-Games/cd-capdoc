@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useDataStore } from '../store';
 
-import HomeView from '../views/HomeView.vue';
-import CategorySelectionPage from '../views/CategorySelectionPage.vue';
-import ProjectPage from '../views/ProjectPage.vue';
-import DetailView from '../views/DetailView.vue';
-import CuratorPage from '../views/CuratorPage.vue';
+// Lazy load views for better bundle splitting
+const HomeView = () => import('../views/HomeView.vue');
+const CategorySelectionPage = () => import('../views/CategorySelectionPage.vue');
+const ProjectPage = () => import('../views/ProjectPage.vue');
+const DetailView = () => import('../views/DetailView.vue');
+const CuratorPage = () => import('../views/CuratorPage.vue');
 
 const routes = [
   {
@@ -24,7 +25,7 @@ const routes = [
   },
   {
     path: '/navigation/:type/:id',
-    name: 'Timeline',
+    name: 'ProjectList',
     component: ProjectPage
   },
   {
@@ -67,9 +68,7 @@ router.beforeEach(async (to) => {
   const dataStore = useDataStore();
 
   // Ensure data is loaded
-  if (dataStore.loadedProjects.length === 0) {
-    await dataStore.init();
-  }
+  await dataStore.init();
 
   // Handle Project Selection from route params
   const projectId = to.params.projectId as string;
