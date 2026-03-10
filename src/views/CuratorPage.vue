@@ -150,7 +150,7 @@ const handleSelectProject = (project: Project) => {
     curatedStore.toggleCurated(project.id);
   } else {
     curatedStore.resetCurator();
-    goToProject(project.id, { type: 'capabilities', catId: 'brand' });
+    goToProject(project.id, { isExplore: true });
   }
 };
 

@@ -15,6 +15,7 @@ export function useAppView() {
       case 'Curated': return ViewState.CURATED;
       case 'Detail':
       case 'CuratedDetail':
+      case 'CuratorExplore':
       case 'ProjectDirect': return ViewState.DETAIL;
       case 'Curator': return ViewState.CURATOR;
       default: return ViewState.LANDING;

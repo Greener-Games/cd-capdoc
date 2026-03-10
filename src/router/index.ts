@@ -44,12 +44,17 @@ const routes = [
     component: CuratorPage
   },
   {
-    path: '/curator/present',
+    path: '/curator/project/:projectId',
+    name: 'CuratorExplore',
+    component: DetailView
+  },
+  {
+    path: '/curator/selection',
     name: 'Curated',
     component: ProjectPage
   },
   {
-    path: '/curator/present/:projectId',
+    path: '/curator/selection/:projectId',
     name: 'CuratedDetail',
     component: DetailView
   },

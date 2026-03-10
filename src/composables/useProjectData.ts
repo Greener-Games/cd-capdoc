@@ -41,6 +41,11 @@ export function useProjectData() {
       return dataStore.loadedProjects.filter(p => curatedStore.curatedIds.includes(p.id));
     }
 
+    // Explore Mode (Curator context)
+    if (route.name === 'CuratorExplore') {
+      return dataStore.loadedProjects;
+    }
+
     // Category Mode (Project List or Detail under navigation)
     const currentCat = currentCategoryData.value;
     if (currentCat) {
@@ -69,10 +74,9 @@ export function useProjectData() {
 
   // Filtering (Search) logic
   const filteredProjects = computed(() => {
-    // If we are looking for all loaded projects (like in CuratorPage)
-    // We might need to pass a different source, but usually search is on current context.
-    // Let's make it flexible: search the current context by default.
-    const projectsToSearch = currentProjects.value.length > 0 ? currentProjects.value : dataStore.loadedProjects;
+    // For search, we usually want all projects if in library, otherwise current context
+    const isLibrary = route?.name === 'Curator';
+    const projectsToSearch = isLibrary ? dataStore.loadedProjects : currentProjects.value;
     
     if (!searchQuery.value.trim()) {
       return projectsToSearch;

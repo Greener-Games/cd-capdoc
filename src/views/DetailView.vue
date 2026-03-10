@@ -1,7 +1,7 @@
 <template>
   <BaseLayout v-if="project" :disable-padding-bottom="true">
     <!-- Main Scrollable Content Area -->
-    <div class="w-full h-full overflow-y-auto scrollbar-none pointer-events-auto pb-32" @scroll="handleScroll">
+    <div class="w-full h-full overflow-y-auto scrollbar-none pointer-events-auto pb-safe-bottom-footer" @scroll="handleScroll">
       <!-- Replicated Header Logic inside scrollable area -->
       <div class="flex flex-col space-y-8 mb-16">
         <!-- Back Button -->
@@ -59,33 +59,12 @@
         </div>
 
         <!-- Dynamic Content Blocks -->
-        <div v-if="project.contentBlocks && project.contentBlocks.length > 0" class="mb-32">
+        <div v-if="project.contentBlocks && project.contentBlocks.length > 0" class="mb-8">
           <BlockRenderer :blocks="project.contentBlocks" />
         </div>
 
-        <!-- Fallback Legacy View -->
-        <template v-else>
-          <!-- Parallax Image Area -->
-          <div class="relative w-full h-[60vh] rounded-2xl overflow-hidden mb-24 group">
-            <div
-                class="absolute inset-[-10%] bg-cover bg-center transition-transform duration-1000 ease-out will-change-transform group-hover:scale-105"
-                :style="{
-                backgroundImage: `url(${project.image})`,
-                transform: `translateY(${(scrollProgress - 0.5) * -50}px)`
-              }"
-            ></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
-          </div>
-
-          <div class="max-w-4xl mx-auto">
-            <p class="text-xl text-white/80 font-light mb-12">
-              {{ project.longDescription }}
-            </p>
-          </div>
-        </template>
-
         <!-- Inline Bottom Navigation -->
-        <div class="flex items-center justify-center space-x-8 py-32 border-t border-white/10 mt-32">
+        <div class="flex items-center justify-center space-x-8 pt-8 border-t border-white/10">
           <RoundedButton
               @click="handlePrev"
               icon-only

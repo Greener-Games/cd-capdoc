@@ -7,7 +7,7 @@
   >
     <template #default="{ formattedTitle }">
       <!-- Added shrink-0 here so the text container never collapses -->
-      <div class="flex flex-row justify-between items-start text-left pointer-events-none px-2 h-24 w-full shrink-0">
+      <div class="flex flex-row justify-between items-start text-left pointer-events-none px-2 h-25 w-full shrink-0">
         <div class="flex flex-col max-w-[70%]">
           <h2 class="font-bienvenue font-white text-3xl uppercase transition-opacity duration-700 opacity-50 group-hover:opacity-100 leading-none">
             {{ formattedTitle }}

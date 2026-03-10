@@ -17,6 +17,10 @@ export function useAppNavigation() {
     return route.name === 'CuratedDetail' || route.name === 'Curated';
   };
 
+  const isExploreContext = () => {
+    return route.name === 'CuratorExplore';
+  };
+
   const goToCategorySelect = (type: string = 'capabilities') => {
     router.push(`/navigation/${type}`);
   };
@@ -25,12 +29,14 @@ export function useAppNavigation() {
     router.push(`/navigation/${type}/${catId}`);
   };
 
-  const goToProject = (projectId: string, context?: { type?: string, catId?: string }) => {
+  const goToProject = (projectId: string, options?: { type?: string, catId?: string, isExplore?: boolean }) => {
     if (isCuratedContext()) {
-      router.push(`/curator/present/${projectId}`);
+      router.push(`/curator/selection/${projectId}`);
+    } else if (options?.isExplore || route.name === 'CuratorExplore') {
+      router.push(`/curator/project/${projectId}`);
     } else {
-      const type = context?.type || (route.params.type as string);
-      const catId = context?.catId || (route.params.id as string);
+      const type = options?.type || (route.params.type as string);
+      const catId = options?.catId || (route.params.id as string);
 
       if (type && catId) {
         router.push(`/navigation/${type}/${catId}/${projectId}`);
@@ -43,10 +49,12 @@ export function useAppNavigation() {
   const goBack = () => {
     if (isCuratedContext()) {
       if (route.name === 'CuratedDetail') {
-        router.push('/curator/present');
+        router.push('/curator/selection');
       } else {
         router.push('/curator');
       }
+    } else if (route.name === 'CuratorExplore') {
+      router.push('/curator');
     } else if (view.value === ViewState.DETAIL) {
       const type = route.params.type as string;
       const catId = route.params.id as string;
@@ -79,11 +87,12 @@ export function useAppNavigation() {
   };
 
   const launchCuratedPresentation = () => {
-    router.push('/curator/present');
+    router.push('/curator/selection');
   };
 
   return {
     isCuratedContext,
+    isExploreContext,
     goToCategorySelect,
     goToProjectList,
     goToProject,
