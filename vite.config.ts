@@ -5,13 +5,19 @@ import tailwindcss from '@tailwindcss/vite';
 import { templateCompilerOptions } from '@tresjs/core'
 import svgLoader from 'vite-svg-loader';
 import { vite as vidstack } from 'vidstack/plugins';
+import { getCSPString } from './csp-config';
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
+    const csp = getCSPString();
+
     return {
       server: {
         port: 3000,
         host: '0.0.0.0',
+        headers: {
+          'Content-Security-Policy': csp
+        }
       },
       plugins: [
         vue({
@@ -40,7 +46,17 @@ export default defineConfig(({ mode }) => {
             ]
           }
         }),
-        vidstack()
+        vidstack(),
+        // Simple plugin to inject CSP meta tag into index.html
+        {
+          name: 'inject-csp-meta',
+          transformIndexHtml(html) {
+            return html.replace(
+              '<head>',
+              `<head>\n    <meta http-equiv="Content-Security-Policy" content="${csp}">`
+            );
+          }
+        }
       ],
       resolve: {
         alias: {
