@@ -7,8 +7,22 @@ export function useScroll() {
     scrollProgress.value = progress;
   };
 
-  const handleScroll = (e: Event) => {
-    const target = e.target as HTMLElement;
+  /**
+   * Handles scroll events. Supports:
+   * 1. Standard DOM Events (e.target.scrollHeight, etc)
+   * 2. Custom scroll payloads with a 'progress' property
+   */
+  const handleScroll = (e: any) => {
+    // 1. Check if it's a custom payload with progress (from components like DragScroll)
+    if (e && typeof e === 'object' && 'progress' in e) {
+      setScrollProgress(e.progress);
+      return;
+    }
+
+    // 2. Fallback to standard DOM event handling
+    const target = e?.target as HTMLElement;
+    if (!target) return;
+
     const maxScroll = target.scrollHeight - target.clientHeight;
     if (maxScroll <= 0) {
       setScrollProgress(0);

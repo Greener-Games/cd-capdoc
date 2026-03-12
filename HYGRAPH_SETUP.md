@@ -12,7 +12,6 @@ You need to create the following models in your Hygraph project:
     *   `id` (Single line text, **Required**, **Unique**)
     *   `title` (Single line text, **Required**)
     *   `description` (Multi line text)
-    *   `longDescription` (Multi line text)
     *   `imageUrl` (Asset) - *Note: Our app will look for an `overrideURL` field on this asset first, and fall back to the Hygraph `url` if not provided.*
     *   `accentColor` (Color or Single line text for hex code e.g. `#3b82f6`)
     *   `client` (Single line text - optional)
@@ -44,7 +43,6 @@ To support the dynamic detail view layout (alternating full-bleed images, multi-
 *   **Fields:**
     *   `id` (Single line text, **Required**, **Unique**)
     *   `title` (Single line text, **Required**)
-    *   `subtitle` (Single line text)
     *   `image` (Asset) - *Note: Our app will look for an `overrideURL` field on this asset first, and fall back to the Hygraph `url` if not provided.*
     *   `color` (Color or Single line text for hex code)
 *   **Relations:**
@@ -55,7 +53,6 @@ To support the dynamic detail view layout (alternating full-bleed images, multi-
 *   **Fields:**
     *   `id` (Single line text, **Required**, **Unique**)
     *   `title` (Single line text, **Required**)
-    *   `subtitle` (Single line text)
     *   `image` (Asset) - *Note: Our app will look for an `overrideURL` field on this asset first, and fall back to the Hygraph `url` if not provided.*
     *   `color` (Color or Single line text for hex code)
 *   **Relations:**
@@ -66,7 +63,6 @@ To support the dynamic detail view layout (alternating full-bleed images, multi-
 *   **Fields:**
     *   `id` (Single line text, **Required**, **Unique**)
     *   `title` (Single line text, **Required**)
-    *   `subtitle` (Single line text)
     *   `image` (Asset) - *Note: Our app will look for an `overrideURL` field on this asset first, and fall back to the Hygraph `url` if not provided.*
     *   `color` (Color or Single line text for hex code)
 *   **Relations:**

@@ -7,7 +7,7 @@
  * - Production: Imported in vite.config.ts and injected as a <meta> tag into index.html
  */
 
-const policy = {
+const cspPolicy = {
   'default-src': ["'self'"],
   'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'"], // 'unsafe-eval' often needed for Vue in dev, 'unsafe-inline' for Vite
   'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
@@ -24,13 +24,8 @@ const policy = {
 /**
  * Converts the policy object into a CSP string
  */
-export const getCSPString = () => {
-  return Object.entries(policy)
-    .map(([directive, sources]) => {
-      if (sources.length === 0) return directive;
-      return `${directive} ${sources.join(' ')}`;
-    })
-    .join('; ');
-};
+export const cspString = Object.entries(cspPolicy)
+    .map(([key, values]) => `${key} ${values.join(" ")}`)
+    .join("; ");
 
-export default policy;
+export default cspPolicy;

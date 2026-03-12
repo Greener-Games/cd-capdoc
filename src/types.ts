@@ -40,7 +40,6 @@ export interface Project {
   id: string;
   title: string;
   description: string;
-  longDescription: string;
   image: string;
   accentColor: string;
   client?: string;
@@ -62,7 +61,6 @@ export enum ViewState {
 export interface CategoryItem {
   id: string;
   title: string;
-  subtitle: string;
   image: string;
   color: string;
   accentColor: string;

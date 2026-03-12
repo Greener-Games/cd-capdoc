@@ -42,7 +42,6 @@ import { useOrbState } from '../../composables/useOrbState';
 const props = withDefaults(defineProps<{
   id: string;
   title: string;
-  subtitle?: string;
   image?: string;
   color?: string;
   index: number;
@@ -54,7 +53,6 @@ const props = withDefaults(defineProps<{
   showHoverOverlay?: boolean;
   showBottomLine?: boolean;
 }>(), {
-  subtitle: '',
   image: '',
   color: '',
   isDragging: false,

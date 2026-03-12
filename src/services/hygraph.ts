@@ -21,7 +21,6 @@ export const fetchHygraphData = async () => {
         id
         title
         description
-        longDescription
         imageUrl {
           url
           overrideUrl
@@ -64,7 +63,6 @@ export const fetchHygraphData = async () => {
       markets {
         id
         title
-        subtitle
         image {
           url
           overrideUrl
@@ -79,7 +77,6 @@ export const fetchHygraphData = async () => {
       regions {
         id
         title
-        subtitle
         image {
           url
           overrideUrl
@@ -94,7 +91,6 @@ export const fetchHygraphData = async () => {
       capabilities {
         id
         title
-        subtitle
         image {
           url
           overrideUrl
@@ -179,7 +175,6 @@ export const fetchHygraphData = async () => {
       return items.map(item => ({
         id: item.id,
         title: item.title,
-        subtitle: item.subtitle,
         image: resolveAssetUrl(item.image, 800),
         color: item.color?.hex || null, // Extract hex from color object
         accentColor: item.color?.hex || null,

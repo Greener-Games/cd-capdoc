@@ -1,61 +1,36 @@
-# Project Audit & Areas for Improvement
+# Project Audit & Improvements
 
-This document outlines architectural, stylistic, and technical improvements identified during the project audit on March 9, 2026.
+This document tracks identified areas for improvement and technical debt. Use the checkboxes to track progress.
 
-## 1. Clean Code & Refactoring
+## 🏗️ Architecture & Patterns
+- [ ] **Idiomatic Stores:** Refactor Pinia stores (e.g., `src/store/data.ts`) from Options API to **Setup API** for better composition and consistency with the rest of the project.
+- [ ] **Dependency Injection:** Refactor `ProjectRepository` from a singleton export to an injectable pattern or move its logic into Pinia actions to improve testability.
+- [ ] **View Management:** Centralize view-state transition logic. Currently, `App.vue` handles a lot of conditional logic that could be abstracted into a dedicated layout orchestrator.
 
-### 1.1 Logic in Getters [DONE]
-- **Current State:** `useDataStore` getters (like `currentProjects`) contained complex logic involving route parsing and fallbacks.
-- **Improvement:** Moved logic into `useProjectContext.ts` composable. Getters in the store are now simpler.
+## 🧹 Code Quality & Type Safety
+- [ ] **Eliminate `any` types:** Replace `any` in `src/services/hygraph.ts` and mapping functions with strict TypeScript interfaces representing the Hygraph schema.
+- [ ] **Runtime Validation:** Implement **Zod** or a similar library to validate CMS data at the edge (data fetching layer) to prevent runtime crashes from unexpected schema changes.
+- [ ] **Strict Block Mapping:** Refine the `ContentBlock` mapping logic to be more exhaustive and type-safe, ensuring all modular components from Hygraph are handled correctly.
+- [ ] **Naming Conventions:** Ensure consistent naming between Hygraph fields and frontend types (e.g., `imageUrl` vs `image`, `accentColor` vs `color`).
 
-### 1.2 Component Logic Extraction [DONE]
-- **DetailView.vue:** Moved scrolling logic and progress calculation into `useScrollProgress.ts`.
-- **CuratorPage.vue:** Search/filtering logic moved into `useProjectSearch.ts`.
+## ⚡ Performance Optimization
+- [ ] **3D Background Throttling:** Automatically pause or reduce the clock speed of the TresJS loop in `Canvas3D.vue` when the background is hidden (e.g., in `DetailView`).
+- [ ] **Dynamic Geometry Detail:** Adjust the `TresPlaneGeometry` segments in `SceneContent.vue` based on the user's device tier or screen resolution to save GPU cycles on mobile.
+- [ ] **Asset Lazy Loading:** Add `loading="lazy"` and `decoding="async"` to images in `ImageBlock.vue` and `ProjectCard.vue`.
+- [ ] **Bundle Analysis:** Audit the build size. Chunks over 500kB were detected; investigate splitting `three` or `vidstack` into separate chunks.
 
-### 1.3 TypeScript Strictness
-- **Any Types:** There are still several `(block as any)` and `any[]` usages, especially in `hygraph.ts`.
-- **Improvement:** Define strict interfaces for all `ContentBlock` types and use discriminated unions to avoid type casting.
+## 🔒 Security
+- [ ] **Tighten CSP:** Investigate removing `'unsafe-inline'` and `'unsafe-eval'` from `csp-config.ts`. 
+    - Check if Vite's CSS injection can be handled via hashes or nonces.
+    - Confirm if `@tresjs/core` or `vidstack` actually require `unsafe-eval`.
+- [ ] **Environment Variable Audit:** Ensure no sensitive keys are prefixed with `VITE_` unless absolutely necessary for the client-side.
 
-## 2. Consistency
+## 🎨 User Experience & Accessibility
+- [ ] **A11y Audit:** Add proper ARIA labels and roles to `ProjectCard`, `SelectionCard`, and `RoundedButton`. Ensure the 3D navigation is keyboard accessible.
+- [ ] **Smooth State Transitions:** Enhance the `fade` transitions in `App.vue` with specialized layout transitions (e.g., hero image persistence using View Transitions API).
+- [ ] **Error UI:** Implement a user-friendly error state/fallback if Hygraph data fails to fetch or the `VITE_HYGRAPH_ENDPOINT` is missing.
 
-### 2.1 Component Naming & Structure [DONE]
-- **Improvement:** Moved `BaseLayout.vue` to `src/components/Layouts/BaseLayout.vue`. Standardized folder structure.
-
-### 2.2 Prop naming [DONE]
-- **Improvement:** Renamed `imageUrl` to `image` across `Project` interface, constants, components, and services.
-
-## 3. Future Proofing
-
-### 3.1 Data Origin Abstraction [DONE]
-- **Improvement:** Created `projectRepository.ts` to handle the data fetching strategy (cache -> remote -> local fallback) internally. The store now just calls the repository.
-
-### 3.2 Content Block Extensibility [DONE]
-- **Improvement:** Created a dynamic `BlockRenderer.vue` and individual block components (`ImageBlock`, `TextBlock`, `VideoBlock`).
-
-## 4. Performance
-
-### 4.1 3D / TresJS Optimization
-- **Shader Complexity:** Simplex noise in the vertex shader is calculated per frame.
-- **Improvement:** Consider pre-calculating noise into a texture or reducing shader complexity for mobile.
-
-### 4.2 Asset Loading [DONE]
-- **Improvement:** Enhanced `resolveAssetUrl` in `hygraph.ts` to support width/quality parameters for responsive images.
-
-### 4.3 Bundle Splitting [DONE]
-- **Improvement:** Updated `router/index.ts` to use lazy loading for all main view components.
-
-## 5. Security
-
-### 5.1 Environment Variables
-- **Improvement:** Add validation for environment variables on app startup.
-
-### 5.2 Content Security Policy (CSP)
-- Ensure the app has a robust CSP.
-
-## 6. User Experience (UX)
-
-### 6.1 Loading States
-- Add skeleton screens or a high-quality global loader when `isFetchingData` is true.
-
-### 6.2 Error Boundaries
-- Implement Vue Error Boundaries.
+## 🛠️ Tooling & DX
+- [ ] **Linting & Formatting:** Add **ESLint** and **Prettier** with Vue 3 / TypeScript configurations to enforce code style.
+- [ ] **Unit Testing:** Set up **Vitest** and add unit tests for critical path logic (e.g., repository mapping, scroll math, store actions).
+- [ ] **Component Documentation:** Add a storybook or similar tool to document and test UI components (`Cards`, `Common`, `Blocks`) in isolation.

@@ -21,7 +21,6 @@ import BaseCard from './BaseCard.vue'; // Adjust path if needed
 const props = withDefaults(defineProps<{
   id: string;
   title: string;
-  subtitle: string;
   image: string;
   color: string;
   index: number;

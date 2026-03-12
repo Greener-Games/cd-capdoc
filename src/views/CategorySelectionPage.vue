@@ -32,7 +32,6 @@
           :key="`${filterType}-${item.id}`"
           :id="item.id"
           :title="item.title"
-          :subtitle="item.subtitle"
           :image="item.image"
           :color="item.color || item.accentColor"
           :index="index"
