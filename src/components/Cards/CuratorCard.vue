@@ -41,9 +41,13 @@
         <!-- Column 2: Toggle Button -->
         <div class="w-11 aspect-square shrink-0">
           <button
-              v-if="mode === 'build'"
               @click.stop="curatedStore.toggleCurated(project.id)"
-              class="w-full h-full rounded-xl flex items-center justify-center transition-all duration-300 pointer-events-auto bg-white"
+              class="w-full h-full rounded-xl flex items-center justify-center transition-all duration-300 bg-white"
+              :class="[
+                    mode === 'build'
+                      ? 'opacity-100 scale-100 pointer-events-auto'
+                      : 'opacity-0 scale-90 pointer-events-none'
+                  ]"
           >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
