@@ -1,12 +1,12 @@
 <template>
   <button
       @click="$emit('click', $event)"
-      class=" flex items-center justify-center space-x-2 rounded-full transition-all duration-500 cursor-pointer pointer-events-auto border h-10"
+      class=" flex items-center justify-center space-x-2 rounded-full transition-all duration-500 cursor-pointer pointer-events-auto border h-5 lg:h-10"
       :class="[
-        computedClasses,
-        iconOnly ? 'w-13 p-0' : 'px-6',
-        textClass
-      ]"
+          computedClasses,
+          iconOnly ? 'w-7.5 lg:w-13 p-0' : 'px-3 lg:px-6',
+          textClass
+        ]"
   >
     <slot name="icon"></slot>
     <slot>
@@ -46,6 +46,6 @@ const computedClasses = computed(() => {
 });
 
 const textClass = computed(() => {
-  return props.iconOnly ? '' : 'font-bienvenue text-sm  uppercase font-black font-normal';
+  return props.iconOnly ? '' : 'font-bienvenue text-xs lg:text-sm  uppercase font-black font-normal';
 });
 </script>

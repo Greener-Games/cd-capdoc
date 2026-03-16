@@ -22,13 +22,13 @@
 }
 
 :root {
-  --border-width-side: 20px;
-  --border-width-bottom: 20px;
-  --border-width-top: 90px;
+  --border-width-side: 1vw;
+  --border-width-bottom: 2vh;
+  --border-width-top: 8.5vh;
   --border-inner-radius: 1.5rem;
-  --footer-height: 40px;
-  --safe-padding: 20px;
-  --safe-padding-large: 40px;
+  --footer-height: 4vh;
+  --safe-padding: 2vh;
+  --safe-padding-large: 2vw;
 }
 
 @layer utilities

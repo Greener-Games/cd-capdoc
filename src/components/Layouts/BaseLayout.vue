@@ -7,7 +7,7 @@
       ]"
   >
     <!-- Top area for buttons or pills -->
-    <div v-if="$slots['header-controls']" class="flex items-center mb-8" :class="[disablePaddingSide ? 'px-safe-side' : '']">
+    <div v-if="$slots['header-controls']" class="flex items-center mb-4 lg:mb-8" :class="[disablePaddingSide ? 'px-safe-side' : '']">
       <slot name="header-controls"></slot>
     </div>
 
@@ -15,10 +15,10 @@
     <div 
         v-if="$slots['title'] || $slots['title-right']"
         :key="titleKey" 
-        class="w-full flex items-center justify-between gap-8 mb-8 animate-in fade-in slide-in-from-bottom-2 duration-400 fill-mode-both"
+        class="w-full flex items-center justify-between gap-8 mb-4 lg:mb-8 animate-in fade-in slide-in-from-bottom-2 duration-400 fill-mode-both"
         :class="[disablePaddingSide ? 'px-safe-side' : '']"
     >
-      <h2 v-if="$slots['title']" class="font-gamechanger text-6xl uppercase text-white leading-none shrink-0">
+      <h2 v-if="$slots['title']" class="font-gamechanger text-4xl lg:text-6xl uppercase text-white leading-none shrink-0">
         <slot name="title"></slot>
       </h2>
 
