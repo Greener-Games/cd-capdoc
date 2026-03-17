@@ -5,7 +5,7 @@
       @mouseenter="setHoveredColor(color)"
       @mouseleave="setHoveredColor(null)"
       :class="[
-            'group relative shrink-0 transition-all duration-700 animate-in fade-in fill-mode-both flex flex-col cursor-pointer',
+            'group relative shrink-0 transition-all duration-700 animate-in fade-in fill-mode-both grid grid-rows-[minmax(0,1fr)_auto] cursor-pointer',
             cardClass,
             animationClass
           ]"
@@ -62,7 +62,7 @@ const props = withDefaults(defineProps<{
   prefix: '',
   cardClass: 'w-max h-full', // Default for scrollable containers
   aspectRatioClass: 'aspect-[4/5]',
-  imageContainerClass: 'rounded-3xl mb-4', // Removed grow!
+  imageContainerClass: 'rounded-3xl h-full', // Pure h-full, grid handles the rest!
   animationClass: 'zoom-in-90 slide-in-from-right-12 duration-600',
   imageClass: 'group-hover:scale-110',
   showHoverOverlay: true,
