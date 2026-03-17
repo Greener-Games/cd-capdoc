@@ -16,6 +16,12 @@ export const useCuratedStore = defineStore('curated', {
     resetCurator() {
       this.curatedIds = [];
       this.curatedTitle = 'Curated Collection';
+    },
+    setCuratedState(ids: string[], title?: string) {
+      this.curatedIds = ids;
+      if (title) {
+        this.curatedTitle = title;
+      }
     }
   }
 });

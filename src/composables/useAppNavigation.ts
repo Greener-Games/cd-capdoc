@@ -31,7 +31,10 @@ export function useAppNavigation() {
 
   const goToProject = (projectId: string, options?: { type?: string, catId?: string, isExplore?: boolean }) => {
     if (isCuratedContext()) {
-      router.push(`/curator/selection/${projectId}`);
+      router.push({
+        path: `/curator/selection/${projectId}`,
+        query: route.query
+      });
     } else if (options?.isExplore || route.name === 'CuratorExplore') {
       router.push(`/curator/project/${projectId}`);
     } else {
@@ -49,9 +52,18 @@ export function useAppNavigation() {
   const goBack = () => {
     if (isCuratedContext()) {
       if (route.name === 'CuratedDetail') {
-        router.push('/curator/selection');
+        router.push({
+          path: '/curator/selection',
+          query: route.query
+        });
       } else {
-        router.push('/curator');
+        router.push({
+          path: '/curator',
+          query: {
+            ...route.query,
+            mode: 'build'
+          }
+        });
       }
     } else if (route.name === 'CuratorExplore') {
       router.push('/curator');
@@ -86,8 +98,15 @@ export function useAppNavigation() {
     router.push(`/navigation/${type}`);
   };
 
-  const launchCuratedPresentation = () => {
-    router.push('/curator/selection');
+  const launchCuratedPresentation = (ids?: string[], title?: string) => {
+    const query: any = {};
+    if (ids && ids.length > 0) query.ids = ids.join(',');
+    if (title) query.title = title;
+
+    router.push({
+      path: '/curator/selection',
+      query
+    });
   };
 
   return {

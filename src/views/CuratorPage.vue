@@ -111,23 +111,29 @@ import Magnifying from "@/assets/icons/Magnifying.svg";
 import Icon from "@/components/Common/Icon.vue";
 import { useAppNavigation } from '../composables/useAppNavigation';
 import { useProjectData } from '../composables/useProjectData';
+import { useRoute } from 'vue-router';
 
 const dataStore = useDataStore();
 const curatedStore = useCuratedStore();
+const route = useRoute();
 const { goToProject, launchCuratedPresentation } = useAppNavigation();
 
-const activeMode = ref<'explore' | 'build'>('explore');
+const activeMode = ref<'explore' | 'build'>((route.query.mode as 'explore' | 'build') || 'explore');
 
 const { searchQuery, filteredProjects, clearSearch } = useProjectData();
 
 onMounted(() => {
-  curatedStore.resetCurator();
+  if (!route.query.ids) {
+    curatedStore.resetCurator();
+  }
   clearSearch();
 });
 
-watch(activeMode, () => {
-  curatedStore.resetCurator();
-  clearSearch();
+watch(activeMode, (newMode, oldMode) => {
+  if (newMode !== oldMode) {
+    curatedStore.resetCurator();
+    clearSearch();
+  }
 });
 
 const pills = [
@@ -143,7 +149,7 @@ const curatedTitle = computed({
 const curatedIds = computed(() => curatedStore.curatedIds);
 
 const handleLaunchCurated = () => {
-  launchCuratedPresentation();
+  launchCuratedPresentation(curatedIds.value, curatedTitle.value);
 };
 
 const handleSelectProject = (project: Project) => {
