@@ -3,6 +3,7 @@ import { createPinia } from 'pinia';
 import Tres from '@tresjs/core';
 import router from './router';
 import App from './App.vue';
+import revealDirective from './directives/reveal';
 
 // Vidstack Imports
 import 'vidstack/bundle';
@@ -15,5 +16,6 @@ const pinia = createPinia();
 app.use(pinia);
 app.use(router);
 app.use(Tres);
+app.directive('reveal', revealDirective);
 
 app.mount('#root');

@@ -9,14 +9,14 @@
 
     <!-- Always Two Column Grid Mode (50/50) -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-24">
-      <div>
+      <div v-reveal class="transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-8 reveal:opacity-100 reveal:translate-y-0">
         <div
             v-if="leftContent"
             class="rich-text-content"
             v-html="renderContent(leftContent)"
         ></div>
       </div>
-      <div>
+      <div v-reveal class="transition-all duration-1000 delay-200 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-8 reveal:opacity-100 reveal:translate-y-0">
         <div
             v-if="rightContent"
             class="rich-text-content text-white"

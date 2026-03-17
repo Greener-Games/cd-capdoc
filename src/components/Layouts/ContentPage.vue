@@ -18,14 +18,14 @@
         </div>
 
         <!-- Title -->
-        <div class="w-full animate-in fade-in slide-in-from-bottom-2 duration-400 fill-mode-both">
+        <div v-reveal class="w-full transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-4 reveal:opacity-100 reveal:translate-y-0">
           <h2 class="text-display">
             <span class="max-w-4xl block">{{ title }}</span>
           </h2>
         </div>
 
         <!-- Info / Highlights -->
-        <div class="animate-in fade-in slide-in-from-bottom-10 duration-800 fill-mode-both">
+        <div v-reveal class="transition-all duration-1000 delay-200 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-4 reveal:opacity-100 reveal:translate-y-0">
           <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div class="md:col-span-6">
               <p class="text-body text-base text-white">
