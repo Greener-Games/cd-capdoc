@@ -40,7 +40,7 @@
 
     <!-- Scrollable Content Area -->
     <div class="absolute inset-0 overflow-y-auto overflow-x-hidden scrollbar-none pb-8 scroll-smooth">
-      <div v-if="filteredProjects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full isolate">
+      <div v-if="filteredProjects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full isolate">
         <CuratorCard
             v-for="(project, index) in filteredProjects"
             :key="project.id"

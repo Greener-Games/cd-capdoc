@@ -11,6 +11,7 @@ export const useDataStore = defineStore('data', {
     loadedMarkets: [] as CategoryItem[],
     loadedRegions: [] as CategoryItem[],
     loadedCapabilities: [] as CategoryItem[],
+    aboutPage: null as AboutPage | null,
 
     selectedProjectId: null as string | null,
     isFetchingData: false,
@@ -44,6 +45,7 @@ export const useDataStore = defineStore('data', {
           this.loadedMarkets = data.markets;
           this.loadedRegions = data.regions;
           this.loadedCapabilities = data.capabilities;
+          this.aboutPage = data.aboutPage;
           return data;
         } finally {
           this.isFetchingData = false;

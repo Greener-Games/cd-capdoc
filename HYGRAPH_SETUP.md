@@ -68,6 +68,16 @@ To support the dynamic detail view layout (alternating full-bleed images, multi-
 *   **Relations:**
     *   `projects` (Reference to `Project` model, Multiple references allowed)
 
+### 5. AboutPage
+*   **API ID:** `AboutPage`
+*   **Fields:**
+    *   `title` (Single line text, **Required**)
+    *   `description` (Multi line text)
+    *   `services` (List of single line text - will appear in the left metadata column)
+    *   `client` (Single line text - will appear in the right metadata column)
+    *   `year` (Single line text - will appear in the right metadata column)
+    *   `contentBlocks` (Modular Components - allowed components: ImageBlock, TextBlock, VideoBlock)
+
 ---
 
 ## Environment Variables

@@ -54,6 +54,15 @@ export interface Project extends BaseCardProps {
   contentBlocks?: ContentBlock[];
 }
 
+export interface AboutPage {
+  title: string;
+  description: string;
+  services?: string[];
+  client?: string;
+  year?: string;
+  contentBlocks?: ContentBlock[];
+}
+
 export enum ViewState {
   LANDING = 'LANDING',
   SELECTOR = 'SELECTOR',

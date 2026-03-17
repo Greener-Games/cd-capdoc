@@ -1,5 +1,5 @@
 import { GraphQLClient, gql } from 'graphql-request';
-import { Project, CategoryItem } from '../types';
+import { Project, CategoryItem, AboutPage } from '../types';
 
 const endpoint = import.meta.env.VITE_HYGRAPH_ENDPOINT;
 
@@ -17,6 +17,41 @@ export const fetchHygraphData = async () => {
 
   const query = gql`
     query GetAllData {
+      aboutPages(first: 1) {
+        title
+        description
+        services
+        client
+        year
+        contentBlocks {
+          __typename
+          ... on ImageBlock {
+            id
+            asset {
+              url
+              overrideUrl
+            }
+          }
+          ... on TextBlock {
+            id
+            title
+            leftContent {
+              html
+            }
+            rightContent {
+              html
+            }
+          }
+          ... on VideoBlock {
+            id
+            videoUrl
+            poster {
+              url
+              overrideUrl
+            }
+          }
+        }
+      }
       projects {
         id
         title
@@ -120,23 +155,8 @@ export const fetchHygraphData = async () => {
       return asset.url;
     };
 
-    const extractPlainText = (raw: any): string => {
-      if (!raw || !raw.children) return '';
-      return raw.children
-          .map((node: any) => {
-            if (node.text) return node.text;
-            if (node.children) return extractPlainText(node);
-            return '';
-          })
-          .join('\n');
-    };
-
-    // Map projects back to the categories based on IDs and resolve asset URLs/nested objects
-    const projects = data.projects.map((p: any) => ({
-      ...p,
-      image: resolveAssetUrl(p.imageUrl, 1200),
-      accentColor: p.accentColor?.hex || null, // Extract hex from color object
-      contentBlocks: p.contentBlocks?.map((block: any) => {
+    const mapContentBlocks = (blocks: any[]) => {
+      return blocks?.map((block: any) => {
         const type = block.__typename?.replace('Block', '').toLowerCase();
 
         // Handle ImageBlock (now uses 'asset' field)
@@ -166,10 +186,21 @@ export const fetchHygraphData = async () => {
           };
         }
         return block;
-      })
+      });
+    };
+
+    // Map projects back to the categories based on IDs and resolve asset URLs/nested objects
+    const projects = data.projects.map((p: any) => ({
+      ...p,
+      image: resolveAssetUrl(p.imageUrl, 1200),
+      accentColor: p.accentColor?.hex || null, // Extract hex from color object
+      contentBlocks: mapContentBlocks(p.contentBlocks)
     }));
 
-    const projectMap = new Map(projects.map((p: any) => [p.id, p]));
+    const aboutPage = data.aboutPages?.[0] ? {
+      ...data.aboutPages[0],
+      contentBlocks: mapContentBlocks(data.aboutPages[0].contentBlocks)
+    } : null;
 
     const mapCategoryItems = (items: any[]) => {
       return items.map(item => ({
@@ -183,6 +214,7 @@ export const fetchHygraphData = async () => {
     };
 
     return {
+      aboutPage: aboutPage as AboutPage | null,
       projects: projects as Project[],
       markets: mapCategoryItems(data.markets),
       regions: mapCategoryItems(data.regions),
