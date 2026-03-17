@@ -19,7 +19,7 @@
 
         <!-- Title -->
         <div class="w-full animate-in fade-in slide-in-from-bottom-2 duration-400 fill-mode-both">
-          <h2 class="font-gamechanger text-6xl uppercase text-white leading-none">
+          <h2 class="text-display">
             <span class="max-w-4xl block">{{ title }}</span>
           </h2>
         </div>
@@ -28,13 +28,13 @@
         <div class="animate-in fade-in slide-in-from-bottom-10 duration-800 fill-mode-both">
           <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div class="md:col-span-6">
-              <p class="text-base text-white font-normal">
+              <p class="text-body text-base text-white">
                 {{ description }}
               </p>
             </div>
             <div class="md:col-span-6 flex justify-end">
               <!-- Reusable Metadata component -->
-              <div v-if="metadata" class="grid grid-cols-2 gap-x-16 gap-y-4 text-sm uppercase text-white/70 font-normal">
+              <div v-if="metadata" class="grid grid-cols-2 gap-x-16 gap-y-4 text-label">
                 <div v-if="metadata.left && metadata.left.length" class="flex flex-col space-y-0.5">
                   <span v-for="item in metadata.left" :key="item">{{ item }}</span>
                 </div>

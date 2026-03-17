@@ -1,13 +1,14 @@
 <template>
   <BaseCard
-      class="h-85"
       :id="project.id"
       :title="project.title"
       :image="project.image"
       :color="project.accentColor"
       :index="index"
+      card-class="w-full"
+      aspect-ratio-class="aspect-square"
+      image-container-class="rounded-[1.5rem] w-full h-full"
       animation-class="slide-in-from-bottom-4 duration-500"
-      image-container-class="rounded-[1.5rem]"
       image-class="group-hover:scale-105 will-change-transform"
       :show-bottom-line="false"
       :show-hover-overlay="false"
@@ -23,7 +24,7 @@
         <div class="flex flex-col h-full flex-1 min-w-0">
           <!-- Services -->
           <p
-              class="text-xs uppercase font-normal mt-1 transition-colors duration-300 line-clamp-2"
+              class="text-label mt-1 transition-colors duration-300 line-clamp-2"
               :class="isCurated ? 'text-black' : 'text-muted'"
           >
             {{ project.services?.join(', ') || project.id }}
@@ -31,7 +32,7 @@
 
           <!-- Title -->
           <h2
-              class="font-normal text-lg line-clamp-2 uppercase transition-colors duration-300 mt-auto leading-none"
+              class="text-heading text-lg line-clamp-2 transition-colors duration-300 mt-auto"
               :class="isCurated ? 'text-black' : 'text-white'"
           >
             {{ project.title }}

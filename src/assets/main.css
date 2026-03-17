@@ -105,6 +105,52 @@
   .glass-panel {
     @apply bg-white/5 border border-white/10 rounded-full backdrop-blur-md;
   }
+
+  /* Large display titles (Home, Page Headers) */
+  .text-display {
+    @apply font-gamechanger uppercase leading-none text-white text-xl lg:text-6xl;
+  }
+
+  /* Standard uppercase headings (Section Headers, Card Titles) */
+  .text-heading {
+    @apply font-bienvenue uppercase leading-none text-white text-xl lg:text-3xl;
+  }
+
+  /* Small metadata and labels */
+  .text-label {
+    @apply font-bienvenue text-[9px] md:text-[10px] uppercase font-medium text-white/70 tracking-wider;
+  }
+
+  /* Standard body content */
+  .text-body {
+    @apply font-bienvenue font-normal text-white/70 text-sm md:text-base;
+  }
+
+  /* Button and small action text */
+  .text-button {
+    @apply font-bienvenue text-xs lg:text-sm uppercase font-normal;
+  }
+
+  /* Footer text styles */
+  .text-footer {
+    @apply font-bienvenue text-[6px] md:text-[8px] xl:text-[10px] uppercase font-normal text-white tracking-widest opacity-60;
+  }
+
+  /* Global Rich Text styles for CMS content */
+  .rich-text-content {
+    @apply font-bienvenue font-normal text-sm md:text-base leading-relaxed text-white/70;
+
+    & p { @apply mb-4 last:mb-0; }
+    & strong { @apply font-bold text-white; }
+    & em { @apply italic; }
+    & ul { @apply list-disc ml-6 my-4 space-y-2; }
+    & ol { @apply list-decimal ml-6 my-4 space-y-2; }
+    & a { @apply text-white underline decoration-white/70 hover:decoration-white transition-all; }
+    & h1 { @apply text-3xl font-bold mb-6 text-white; }
+    & h2 { @apply text-2xl font-bold mb-4 text-white; }
+    & h3 { @apply text-xl font-bold mb-3 text-white; }
+    & code { @apply bg-white/20 rounded px-1.5 py-0.5 font-mono text-sm text-white; }
+  }
 }
 
 /* Base styles */

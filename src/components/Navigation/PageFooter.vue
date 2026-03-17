@@ -1,8 +1,8 @@
 <template>
-  <div class="absolute layout-footer px-safe-side h-(--footer-height) items-center flex justify-between z-10 pointer-events-none text-[10px] font-bold uppercase text-white">
+  <div class="absolute layout-footer px-safe-side h-(--footer-height) items-center flex justify-between z-10 pointer-events-none text-footer">
     <!-- Dynamic part -->
     <div
-        class="flex-1 text-left font-bienvenue animate-in fade-in slide-in-from-bottom-5 duration-1000 fill-mode-both"
+        class="flex-1 text-left animate-in fade-in slide-in-from-bottom-5 duration-1000 fill-mode-both"
         :class="[!hasFooterAnimated ? 'delay-800' : 'delay-0']"
         :key="`${footerProps.count}-${footerProps.label}`"
     >
@@ -11,14 +11,14 @@
 
     <!-- Static parts -->
     <div
-        class="shrink-0 font-bienvenue text-center text-white"
+        class="shrink-0 text-center"
         :class="[!hasFooterAnimated ? 'animate-in fade-in slide-in-from-bottom-5 duration-1000 delay-800 fill-mode-both' : '']"
     >
       COMPLEX → CLARITY
     </div>
 
     <div
-        class="flex-1 text-right font-bienvenue normal-case font-normal text-white"
+        class="flex-1 text-right normal-case"
         :class="[!hasFooterAnimated ? 'animate-in fade-in slide-in-from-bottom-5 duration-1000 delay-800 fill-mode-both' : '']"
     >
       © 2026 Creative Design. Proud to be part of AtkinsRéalis Group Inc

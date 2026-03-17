@@ -21,11 +21,11 @@ const props = withDefaults(defineProps<{
 const sizeClass = computed(() => {
   switch (props.size) {
     case 'sm':
-      return 'w-2 h-2 lg:w-4 lg:h-4'; // 8px -> 16px
+      return 'w-2.5 h-2.5 lg:w-4 lg:h-4'; // 8px -> 16px
     case 'md':
-      return 'w-2.5 h-2.5 lg:w-5 lg:h-5'; // 10px -> 20px
+      return 'w-3 h-3 lg:w-5 lg:h-5'; // 10px -> 20px
     case 'lg':
-      return 'w-3 h-3 lg:w-6 lg:h-6'; // 12px -> 24px
+      return 'w-4 h-4 lg:w-6 lg:h-6'; // 12px -> 24px
     case 'xl':
       return 'w-4 h-4 lg:w-8 lg:h-8'; // 16px -> 32px
     case 'custom':

@@ -5,7 +5,7 @@
     <div class="relative w-full h-full">
       <!-- Main Content -->
       <div class="z-10 pointer-events-none mt-8 md:mt-16">
-        <h1 class="font-gamechanger text-[80px] md:text-[120px] font-normal text-white leading-none animate-in fade-in slide-in-from-left-10 duration-1000 fill-mode-both">
+        <h1 class="text-display text-[70px] xl:text-[120px] animate-in fade-in slide-in-from-left-10 duration-1000 fill-mode-both">
           Complex<br />
           to Clarity
         </h1>
@@ -15,8 +15,8 @@
       <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
         <button
             @click.stop="handleEnter"
-            class="font-bienvenue text-xl w-32 h-32 rounded-full border border-white flex items-center justify-center font-bold cursor-pointer pointer-events-auto
-            uppercase transition-all duration-500  animate-in fade-in zoom-in-50 duration-1000 delay-400 fill-mode-both"
+            class="text-heading w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full border border-white flex items-center justify-center font-bold cursor-pointer pointer-events-auto
+            transition-all duration-500 animate-in fade-in zoom-in-50 duration-1000 delay-400 fill-mode-both hover:bg-white hover:text-black"
         >
           Enter
         </button>

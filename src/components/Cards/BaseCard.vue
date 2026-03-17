@@ -5,13 +5,14 @@
       @mouseenter="setHoveredColor(color)"
       @mouseleave="setHoveredColor(null)"
       :class="[
-        'group relative shrink-0 transition-all duration-700 animate-in fade-in fill-mode-both flex flex-col cursor-pointer',
-        animationClass
-      ]"
+            'group relative shrink-0 transition-all duration-700 animate-in fade-in fill-mode-both flex flex-col cursor-pointer',
+            cardClass,
+            animationClass
+          ]"
   >
 
     <!-- We apply a dynamic class here to handle different border radius and margins -->
-    <div :class="['relative w-full grow overflow-hidden border-none  bg-zinc-950/40 isolate backface-hidden transform-gpu [clip-path:inset(0_round_1.5rem)]', imageContainerClass]">
+    <div :class="['relative overflow-hidden border-none bg-zinc-950/40 isolate backface-hidden transform-gpu [clip-path:inset(0_round_1.5rem)] shrink-0', aspectRatioClass, imageContainerClass]">
       <img
           v-if="image"
           :src="image"
@@ -47,7 +48,9 @@ const props = withDefaults(defineProps<{
   index: number;
   isDragging?: boolean;
   prefix?: string;
-  imageContainerClass?: string; // Prop to customize the image wrapper
+  cardClass?: string; // New prop for outer layout sizing
+  aspectRatioClass?: string;
+  imageContainerClass?: string;
   animationClass?: string;
   imageClass?: string;
   showHoverOverlay?: boolean;
@@ -57,8 +60,10 @@ const props = withDefaults(defineProps<{
   color: '',
   isDragging: false,
   prefix: '',
-  imageContainerClass: 'rounded-3xl mb-4', // Default to SelectionCard styles
-  animationClass: 'zoom-in-90 slide-in-from-right-12 duration-600 h-full',
+  cardClass: 'w-max h-full', // Default for scrollable containers
+  aspectRatioClass: 'aspect-[4/5]',
+  imageContainerClass: 'rounded-3xl mb-4', // Removed grow!
+  animationClass: 'zoom-in-90 slide-in-from-right-12 duration-600',
   imageClass: 'group-hover:scale-110',
   showHoverOverlay: true,
   showBottomLine: true,

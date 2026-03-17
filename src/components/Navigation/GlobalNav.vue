@@ -1,27 +1,31 @@
 <template>
   <div class="fixed layout-nav px-safe-side flex justify-between items-center z-[70] pointer-events-none">
     <div class="flex items-center space-x-12 pointer-events-auto">
-      <div class="transition-colors duration-500" :class="view === ViewState.LANDING ? 'text-black' : 'text-white'">
-        <span class="font-gamechanger text-2xl font-normal">Creative Design</span>
-      </div>
+      <button
+          @click="handleGoHome"
+          class="transition-all duration-500 cursor-pointer hover:opacity-70 active:scale-95 text-left"
+          :class="view === ViewState.LANDING ? 'text-black' : 'text-white'"
+      >
+        <span class="text-display text-lg md:text-xl lg:text-2xl">Creative Design</span>
+      </button>
     </div>
 
-    <div class="flex items-center pointer-events-auto gap-8">
+    <div class="flex items-center pointer-events-auto gap-4 md:gap-8">
       <!-- AR Logo Button - Sliding via transform instead of margin -->
       <button
           @click="handleGoHome"
           class="transition-all duration-500 cursor-pointer animate-in fade-in slide-in-from-top-4 hover:opacity-80 flex items-center justify-center relative z-10"
           :class="[
             view === ViewState.LANDING ? 'text-black' : 'text-white',
-            !showSearch ? 'translate-x-[84px]' : 'translate-x-0'
+            !showSearch ? 'translate-x-[62px] lg:translate-x-[84px]' : 'translate-x-0'
           ]"
       >
-        <Icon :icon="ARLogo" size="custom" class="w-[174px] h-full" />
+        <Icon :icon="ARLogo" size="custom" class="w-[110px] md:w-[140px] lg:w-[174px] h-auto" />
       </button>
 
       <!-- Fixed-width Search Button - Fades only, width never changes -->
       <div
-          class="w-13 transition-opacity duration-500 ease-in-out"
+          class="w-7.5 lg:w-13 transition-opacity duration-500 ease-in-out"
           :class="[
             showSearch ? 'opacity-100' : 'opacity-0 pointer-events-none'
           ]"

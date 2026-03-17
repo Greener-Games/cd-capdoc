@@ -87,7 +87,7 @@
 
         <button
             @click="handleLaunchCurated"
-            class="bg-accent hover:bg-accent-hover text-black px-6 py-3 rounded-full text-[11px] font-bold uppercase transition-colors shrink-0"
+            class="bg-accent hover:bg-accent-hover text-black px-6 py-3 rounded-full text-button font-bold shrink-0"
         >
           Present Projects
         </button>

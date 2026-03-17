@@ -1,15 +1,14 @@
 <template>
   <BaseCard
       v-bind="props"
-      class="w-[85vw] sm:w-[70vw] md:w-[45vw] overflow-hidden"
-      image-container-class="rounded-3xl mb-6"
+      aspect-ratio-class="aspect-[16/9]"
+      image-container-class="rounded-3xl mb-4 h-[calc(100%-6rem)] md:h-[calc(100%-8rem)]"
       @select="$emit('select', $event)"
   >
     <template #default="{ formattedTitle }">
-      <!-- Added shrink-0 here so the text container never collapses -->
-      <div class="flex flex-row justify-between items-start text-left pointer-events-none px-2 h-25 w-full shrink-0">
-        <div class="flex flex-col max-w-[70%]">
-          <h2 class="font-bienvenue font-white text-3xl uppercase transition-opacity duration-700 opacity-50 group-hover:opacity-100 leading-none">
+      <div class="flex flex-row justify-between items-start text-left pointer-events-none px-2 h-20 md:h-28 shrink-0 min-w-0" style="width: 0; min-width: 100%;">
+        <div class="flex flex-col min-w-0 shrink max-w-[70%]">
+          <h2 class="text-heading text-3xl transition-opacity duration-700 opacity-50 group-hover:opacity-100 line-clamp-2 md:line-clamp-3 whitespace-normal">
             {{ formattedTitle }}
           </h2>
         </div>
@@ -18,7 +17,7 @@
           <span
               v-for="service in services"
               :key="service"
-              class="text-[9px] font-bienvenue font-white uppercase transition-opacity duration-700 opacity-50 group-hover:opacity-100 leading-none"
+              class="text-label text-[9px] transition-opacity duration-700 opacity-50 group-hover:opacity-100"
           >
             {{ service }}
           </span>

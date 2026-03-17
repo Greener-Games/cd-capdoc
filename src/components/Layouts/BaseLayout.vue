@@ -18,7 +18,7 @@
         class="w-full flex items-center justify-between gap-8 mb-4 lg:mb-8 animate-in fade-in slide-in-from-bottom-2 duration-400 fill-mode-both"
         :class="[disablePaddingSide ? 'px-safe-side' : '']"
     >
-      <h2 v-if="$slots['title']" class="font-gamechanger text-4xl lg:text-6xl uppercase text-white leading-none shrink-0">
+      <h2 v-if="$slots['title']" class="text-display shrink-0">
         <slot name="title"></slot>
       </h2>
 
