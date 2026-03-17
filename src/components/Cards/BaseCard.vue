@@ -1,17 +1,15 @@
 <template>
   <div
-      :style="{ animationDelay: `${index * 50}ms` }"
+      :style="{ '--index': index }"
       @click="handleClick"
       @mouseenter="setHoveredColor(color)"
       @mouseleave="setHoveredColor(null)"
       :class="[
-            'group relative shrink-0 transition-all duration-700 animate-in fade-in fill-mode-both grid grid-rows-[minmax(0,1fr)_auto] cursor-pointer',
-            cardClass,
-            animationClass
-          ]"
+        'group relative shrink-0 transition-all duration-700 grid grid-rows-[minmax(0,1fr)_auto] cursor-pointer',
+        cardClass
+      ]"
   >
-
-    <!-- We apply a dynamic class here to handle different border radius and margins -->
+    <!-- Image/Media Container -->
     <div :class="['relative overflow-hidden border-none bg-zinc-950/40 isolate backface-hidden transform-gpu [clip-path:inset(0_round_1.5rem)] shrink-0', aspectRatioClass, imageContainerClass]">
       <img
           v-if="image"
@@ -39,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed} from 'vue';
+import { computed } from 'vue';
 import { useOrbState } from '@/composables/useOrbState.ts';
 
 const props = withDefaults(defineProps<{
@@ -49,10 +47,9 @@ const props = withDefaults(defineProps<{
   color?: string;
   index: number;
   isDragging?: boolean;
-  cardClass?: string; // New prop for outer layout sizing
+  cardClass?: string;
   aspectRatioClass?: string;
   imageContainerClass?: string;
-  animationClass?: string;
   imageClass?: string;
   showHoverOverlay?: boolean;
   showBottomLine?: boolean;
@@ -60,21 +57,23 @@ const props = withDefaults(defineProps<{
   image: '',
   color: '',
   isDragging: false,
-  cardClass: 'w-max h-full', // Default for scrollable containers
+  cardClass: 'w-max h-full',
   aspectRatioClass: 'aspect-[4/5]',
-  imageContainerClass: 'rounded-3xl h-full', // Pure h-full, grid handles the rest!
-  animationClass: 'zoom-in-90 slide-in-from-right-12 duration-600',
+  imageContainerClass: 'rounded-3xl h-full',
   imageClass: 'group-hover:scale-110',
   showHoverOverlay: true,
   showBottomLine: true,
 });
 
-const emit = defineEmits(['select']);
+const emit = defineEmits<{
+  (e: 'select', id: string): void
+}>();
+
 const { setHoveredColor } = useOrbState();
 
-const formattedTitle = computed(() => {
-  return props.title.toUpperCase().replace('&', 'AND');
-});
+const formattedTitle = computed(() => 
+  props.title.toUpperCase().replace('&', 'AND')
+);
 
 const handleClick = () => {
   if (!props.isDragging) {

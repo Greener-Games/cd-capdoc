@@ -23,15 +23,15 @@
         </div>
 
         <input
-            v-model="searchQuery"
+            v-model="localSearchQuery"
             type="text"
             placeholder="Search Library"
             class="flex-1 bg-transparent text-sm text-white placeholder-white focus:outline-none font-light"
             autofocus
         />
 
-        <div v-if="searchQuery" class="flex items-center ml-2">
-          <button @click="clearSearch" class="text-white hover:opacity-70 transition-opacity">
+        <div v-if="localSearchQuery" class="flex items-center ml-2">
+          <button @click="handleClearSearch" class="text-white hover:opacity-70 transition-opacity">
             <X class="w-4 h-4 text-white"/>
           </button>
         </div>
@@ -40,9 +40,14 @@
 
     <!-- Scrollable Content Area -->
     <div class="absolute inset-0 overflow-y-auto overflow-x-hidden scrollbar-none pb-8 scroll-smooth">
-      <div v-if="filteredProjects.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full isolate">
+      <TransitionGroup 
+        name="card-list" 
+        tag="div" 
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full isolate px-safe-side"
+        appear
+      >
         <CuratorCard
-            v-for="(project, index) in filteredProjects"
+            v-for="(project, index) in displayedProjects"
             :key="project.id"
             :project="project"
             :index="index"
@@ -51,17 +56,17 @@
             card-class="w-full"
             @select="handleSelectProject"
         />
-      </div>
 
-      <div v-else class="text-center py-32 w-full">
-        <div class="w-24 h-24 rounded-full border border-white/10 flex items-center justify-center mx-auto mb-6 text-white/20">
-          <Search class="w-8 h-8" />
+        <div v-if="filteredProjects.length === 0" key="no-results" class="col-span-full text-center py-32 w-full">
+          <div class="w-24 h-24 rounded-full border border-white/10 flex items-center justify-center mx-auto mb-6 text-white/20">
+            <Search class="w-8 h-8" />
+          </div>
+          <h3 class="text-xl font-light text-white mb-2">No projects found</h3>
+          <p class="text-white/40 font-light">
+            Try adjusting your search terms or browse the library
+          </p>
         </div>
-        <h3 class="text-xl font-light text-white mb-2">No projects found</h3>
-        <p class="text-white/40 font-light">
-          Try adjusting your search terms or browse the library
-        </p>
-      </div>
+      </TransitionGroup>
     </div>
 
     <!-- FIXED SECTION START -->
@@ -122,19 +127,50 @@ const activeMode = ref<'explore' | 'build'>((route.query.mode as 'explore' | 'bu
 
 const { searchQuery, filteredProjects, clearSearch } = useProjectData();
 
+// Debounced search
+const localSearchQuery = ref('');
+let searchDebounce: ReturnType<typeof setTimeout> | null = null;
+
+watch(localSearchQuery, (newVal) => {
+  if (searchDebounce) clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(() => {
+    searchQuery.value = newVal;
+  }, 300);
+});
+
+// Staged data for smooth out-in staggering
+const displayedProjects = ref([...filteredProjects.value]);
+
+watch(filteredProjects, (newData) => {
+  const exitDelay = (displayedProjects.value.length * 20) + 700;
+  
+  displayedProjects.value = [];
+  
+  setTimeout(() => {
+    displayedProjects.value = newData;
+  }, exitDelay);
+}, { deep: true });
+
 onMounted(() => {
   if (!route.query.ids) {
     curatedStore.resetCurator();
   }
   clearSearch();
+  localSearchQuery.value = '';
 });
 
 watch(activeMode, (newMode, oldMode) => {
   if (newMode !== oldMode) {
     curatedStore.resetCurator();
     clearSearch();
+    localSearchQuery.value = '';
   }
 });
+
+const handleClearSearch = () => {
+  localSearchQuery.value = '';
+  searchQuery.value = '';
+};
 
 const pills = [
   {label: 'Explore', mode: 'explore'},

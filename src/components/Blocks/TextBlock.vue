@@ -9,14 +9,14 @@
 
     <!-- Always Two Column Grid Mode (50/50) -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-24">
-      <div class="animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div>
         <div
             v-if="leftContent"
             class="rich-text-content"
             v-html="renderContent(leftContent)"
         ></div>
       </div>
-      <div class="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100">
+      <div>
         <div
             v-if="rightContent"
             class="rich-text-content text-white"

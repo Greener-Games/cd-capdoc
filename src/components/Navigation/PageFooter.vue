@@ -1,12 +1,22 @@
 <template>
   <div class="absolute layout-footer px-safe-side h-(--footer-height) items-center flex justify-between z-10 pointer-events-none text-footer">
     <!-- Dynamic part -->
-    <div
-        class="flex-1 text-left animate-in fade-in slide-in-from-bottom-5 duration-1000 fill-mode-both"
-        :class="[!hasFooterAnimated ? 'delay-800' : 'delay-0']"
-        :key="`${footerProps.count}-${footerProps.label}`"
-    >
-      {{ footerProps.count }} {{ footerProps.label }}
+    <div class="flex-1 text-left">
+      <Transition name="fade-delayed" mode="out-in">
+        <div
+            v-if="hasFooterAnimated"
+            class="fill-mode-both"
+            :key="`${footerProps.count}-${footerProps.label}`"
+        >
+          {{ footerProps.count }} {{ footerProps.label }}
+        </div>
+        <div
+            v-else
+            class="animate-in fade-in slide-in-from-bottom-5 duration-1000 delay-800 fill-mode-both"
+        >
+          {{ footerProps.count }} {{ footerProps.label }}
+        </div>
+      </Transition>
     </div>
 
     <!-- Static parts -->

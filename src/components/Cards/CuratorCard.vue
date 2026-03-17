@@ -9,7 +9,6 @@
       card-class="w-full"
       aspect-ratio-class="aspect-square"
       image-container-class="rounded-[1.5rem] w-full h-full"
-      animation-class="slide-in-from-bottom-4 duration-500"
       image-class="group-hover:scale-110 will-change-transform"
       :show-bottom-line="false"
       :show-hover-overlay="false"

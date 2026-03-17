@@ -21,24 +21,32 @@
     <!-- Draggable/Scrollable Container -->
     <DragScroll
         class="w-full grow min-h-0"
-        content-class="items-stretch space-x-6 h-full"
+        content-class="items-stretch h-full"
         @scroll="handleScroll"
         :enable-wheel-scroll="true"
         v-slot="{ isDragging }"
     >
-      <ProjectCard
-          v-for="(project, index) in currentProjects"
-          :key="project.id"
-          :project="project"
-          :index="index"
-          :is-dragging="isDragging"
-          @select="handleProjectSelect"
-      />
+      <TransitionGroup 
+        name="card-list" 
+        tag="div" 
+        class="flex flex-row space-x-6 h-full"
+        appear
+      >
+        <ProjectCard
+            v-for="(project, index) in displayedProjects"
+            :key="project.id"
+            :project="project"
+            :index="index"
+            :is-dragging="isDragging"
+            @select="handleProjectSelect"
+        />
+      </TransitionGroup>
     </DragScroll>
   </BaseLayout>
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue';
 import {useCuratedStore} from '../store';
 import {Project, ViewState} from '../types';
 import { useAppView } from '../composables/useAppView';
@@ -58,6 +66,19 @@ const { view } = useAppView();
 const { handleScroll } = useScroll();
 const { goBack, goToProject } = useAppNavigation();
 const { currentProjects, currentCategoryData } = useProjectData();
+
+// Staged data for smooth out-in staggering
+const displayedProjects = ref([...currentProjects.value]);
+
+watch(currentProjects, (newData) => {
+  const exitDelay = (displayedProjects.value.length * 20) + 700;
+  
+  displayedProjects.value = [];
+  
+  setTimeout(() => {
+    displayedProjects.value = newData;
+  }, exitDelay);
+}, { deep: true });
 
 const handleProjectSelect = (project: Project) => {
   goToProject(project.id);

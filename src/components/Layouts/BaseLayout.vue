@@ -12,19 +12,22 @@
     </div>
 
     <!-- Title area -->
-    <div 
-        v-if="$slots['title'] || $slots['title-right']"
-        :key="titleKey" 
-        class="w-full flex items-center justify-between gap-8 mb-4 lg:mb-8 animate-in fade-in slide-in-from-bottom-2 duration-400 fill-mode-both"
-        :class="[disablePaddingSide ? 'px-safe-side' : '']"
-    >
-      <h2 v-if="$slots['title']" class="text-display shrink-0">
-        <slot name="title"></slot>
-      </h2>
+    <div class="w-full h-12 lg:h-16 mb-4 lg:mb-8 relative shrink-0" v-if="$slots['title'] || $slots['title-right']">
+      <Transition name="fade-delayed" mode="out-in">
+        <div 
+            :key="titleKey" 
+            class="w-full flex items-center justify-between gap-8 absolute inset-0"
+            :class="[disablePaddingSide ? 'px-safe-side' : '']"
+        >
+          <h2 v-if="$slots['title']" class="text-display shrink-0">
+            <slot name="title"></slot>
+          </h2>
 
-      <div class="grow flex justify-end">
-        <slot name="title-right"></slot>
-      </div>
+          <div class="grow flex justify-end">
+            <slot name="title-right"></slot>
+          </div>
+        </div>
+      </Transition>
     </div>
 
     <div v-if="$slots['header-bottom']" class="w-full mb-8" :class="[disablePaddingSide ? 'px-safe-side' : '']">

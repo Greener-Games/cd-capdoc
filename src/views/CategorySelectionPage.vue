@@ -24,17 +24,24 @@
     <DragScroll
         ref="dragScrollRef"
         class="w-full grow min-h-0"
-        content-class="items-stretch space-x-6 h-full"
+        content-class="items-stretch h-full"
         v-slot="{ isDragging }"
     >
-      <SelectionCard
-          v-for="(item, index) in currentData"
-          :key="`${filterType}-${item.id}`"
-          :item="item"
-          :index="index"
-          :is-dragging="isDragging"
-          @select="handleSelect"
-      />
+      <TransitionGroup 
+        name="card-list" 
+        tag="div" 
+        class="flex flex-row lg:space-x-6 h-full"
+        appear
+      >
+        <SelectionCard
+            v-for="(item, index) in displayedData"
+            :key="`${filterType}-${item.id}`"
+            :item="item"
+            :index="index"
+            :is-dragging="isDragging"
+            @select="handleSelect"
+        />
+      </TransitionGroup>
     </DragScroll>
   </BaseLayout>
 </template>
@@ -86,6 +93,21 @@ const currentData = computed(() => {
   return filterType.value === CategoryType.CAPABILITY ? dataStore.loadedCapabilities :
       filterType.value === CategoryType.MARKET ? dataStore.loadedMarkets : dataStore.loadedRegions;
 });
+
+// Staged data for smooth out-in staggering
+const displayedData = ref([...currentData.value]);
+
+watch(currentData, (newData) => {
+  // Calculate delay based on current count to ensure they all finish leaving
+  // 20ms stagger per item + 600ms base transition + 100ms safety buffer
+  const exitDelay = (displayedData.value.length * 20) + 600 + 200;
+  
+  displayedData.value = [];
+  
+  setTimeout(() => {
+    displayedData.value = newData;
+  }, exitDelay);
+}, { deep: true });
 
 const handleSelect = (id: string) => {
   const typeParam = route.params.type as string;
