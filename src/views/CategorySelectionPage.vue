@@ -30,7 +30,7 @@
       <TransitionGroup 
         name="card-list" 
         tag="div" 
-        class="flex flex-row lg:space-x-6 h-full"
+        class="flex flex-row space-x-grid h-full"
         appear
       >
         <SelectionCard

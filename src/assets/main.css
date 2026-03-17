@@ -19,6 +19,9 @@
 
   --font-bienvenue: 'Bienvenue', 'ui-sans-serif', 'system-ui', 'sans-serif';
   --font-gamechanger: 'Gamechanger', 'ui-serif', 'serif';
+
+  --spacing-grid: 1.5rem;
+  --spacing-grid-mobile: 1rem;
 }
 
 :root {
@@ -33,6 +36,15 @@
 
 @layer utilities
 {
+  /* Unified Grid/Flex Gaps driven by theme variables */
+  .gap-grid {
+    @apply gap-grid-mobile md:gap-grid;
+  }
+
+  .space-x-grid {
+    @apply space-x-grid-mobile md:space-x-grid;
+  }
+
   /* Clean positioning classes for Nav and Footer */
   .layout-nav {
     top: 0;

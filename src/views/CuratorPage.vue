@@ -43,7 +43,7 @@
       <TransitionGroup 
         name="card-list" 
         tag="div" 
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-full isolate px-safe-side"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-grid w-full isolate px-safe-side"
         appear
       >
         <CuratorCard
