@@ -30,10 +30,7 @@
       <SelectionCard
           v-for="(item, index) in currentData"
           :key="`${filterType}-${item.id}`"
-          :id="item.id"
-          :title="item.title"
-          :image="item.image"
-          :color="item.color || item.accentColor"
+          :item="item"
           :index="index"
           :is-dragging="isDragging"
           @select="handleSelect"

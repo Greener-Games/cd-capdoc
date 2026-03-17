@@ -48,6 +48,7 @@
             :index="index"
             :mode="activeMode"
             :is-selected="isCurated(project.id)"
+            card-class="w-full"
             @select="handleSelectProject"
         />
       </div>

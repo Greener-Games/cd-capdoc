@@ -29,16 +29,10 @@
       <ProjectCard
           v-for="(project, index) in currentProjects"
           :key="project.id"
-          :id="project.id"
-          :title="project.title"
-          :subtitle="project.description"
-          :image="project.image"
-          :color="project.accentColor"
+          :project="project"
           :index="index"
           :is-dragging="isDragging"
-          prefix="Phase "
-          :services="project.services"
-          @select="() => handleProjectSelect(project)"
+          @select="handleProjectSelect"
       />
     </DragScroll>
   </BaseLayout>

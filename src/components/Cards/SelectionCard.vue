@@ -1,6 +1,11 @@
 <template>
   <BaseCard
-      v-bind="props"
+      :id="item.id"
+      :title="item.title"
+      :image="item.image"
+      :color="item.accentColor"
+      :index="index"
+      :is-dragging="isDragging"
       aspect-ratio-class="aspect-[4/5]"
       @select="$emit('select', $event)"
   >
@@ -15,20 +20,18 @@
 </template>
 
 <script setup lang="ts">
-import { withDefaults } from 'vue';
-import BaseCard from './BaseCard.vue'; // Adjust path if needed
+import BaseCard from './BaseCard.vue';
+import { CategoryItem } from '../../types';
 
-const props = withDefaults(defineProps<{
-  id: string;
-  title: string;
-  image: string;
-  color: string;
+withDefaults(defineProps<{
+  item: CategoryItem;
   index: number;
-  isDragging: boolean;
-  prefix?: string;
+  isDragging?: boolean;
 }>(), {
-  prefix: ''
+  isDragging: false
 });
 
-defineEmits(['select']);
+defineEmits<{
+  (e: 'select', id: string): void
+}>();
 </script>

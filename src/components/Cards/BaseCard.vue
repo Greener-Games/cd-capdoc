@@ -17,6 +17,8 @@
           v-if="image"
           :src="image"
           :alt="title"
+          loading="lazy"
+          decoding="async"
           :class="['w-full h-full object-cover transition-all duration-1000 ease-out pointer-events-none', imageClass]"
       />
       <div v-if="showHoverOverlay" class="absolute inset-0 pointer-events-none transition-opacity duration-700 opacity-0 group-hover:opacity-100 bg-black/20"/>
@@ -38,7 +40,7 @@
 
 <script setup lang="ts">
 import {computed} from 'vue';
-import { useOrbState } from '../../composables/useOrbState';
+import { useOrbState } from '@/composables/useOrbState.ts';
 
 const props = withDefaults(defineProps<{
   id: string;
@@ -47,7 +49,6 @@ const props = withDefaults(defineProps<{
   color?: string;
   index: number;
   isDragging?: boolean;
-  prefix?: string;
   cardClass?: string; // New prop for outer layout sizing
   aspectRatioClass?: string;
   imageContainerClass?: string;
@@ -59,7 +60,6 @@ const props = withDefaults(defineProps<{
   image: '',
   color: '',
   isDragging: false,
-  prefix: '',
   cardClass: 'w-max h-full', // Default for scrollable containers
   aspectRatioClass: 'aspect-[4/5]',
   imageContainerClass: 'rounded-3xl h-full', // Pure h-full, grid handles the rest!

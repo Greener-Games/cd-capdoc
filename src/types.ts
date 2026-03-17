@@ -36,12 +36,18 @@ export interface PageMetadata {
 
 export type ContentBlock = ImageBlock | TextBlock | VideoBlock;
 
-export interface Project {
+export interface BaseCardProps {
   id: string;
   title: string;
-  description: string;
   image: string;
-  accentColor: string;
+  color: string;
+  index: number;
+  isDragging: boolean;
+}
+
+export interface Project extends BaseCardProps {
+  description: string;
+  accentColor: string; // Mapping color to accentColor for Projects
   client?: string;
   year?: string;
   services?: string[];
