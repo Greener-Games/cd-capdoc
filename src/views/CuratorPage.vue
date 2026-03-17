@@ -116,12 +116,14 @@ import Magnifying from "@/assets/icons/Magnifying.svg";
 import Icon from "@/components/Common/Icon.vue";
 import { useAppNavigation } from '../composables/useAppNavigation';
 import { useProjectData } from '../composables/useProjectData';
+import { useImagePreloader } from '../composables/useImagePreloader';
 import { useRoute } from 'vue-router';
 
 const dataStore = useDataStore();
 const curatedStore = useCuratedStore();
 const route = useRoute();
 const { goToProject, launchCuratedPresentation } = useAppNavigation();
+const { preloadImages } = useImagePreloader();
 
 const activeMode = ref<'explore' | 'build'>((route.query.mode as 'explore' | 'build') || 'explore');
 
@@ -141,15 +143,19 @@ watch(localSearchQuery, (newVal) => {
 // Staged data for smooth out-in staggering
 const displayedProjects = ref([...filteredProjects.value]);
 
-watch(filteredProjects, (newData) => {
-  const exitDelay = (displayedProjects.value.length * 20) + 700;
-  
+watch(filteredProjects, async (newData) => {
+  const currentCount = displayedProjects.value.length;
   displayedProjects.value = [];
+
+  const images = newData.map(p => p.image);
+  preloadImages(images);
+
+  const exitDelay = (currentCount * 20) + 700;
   
   setTimeout(() => {
     displayedProjects.value = newData;
   }, exitDelay);
-}, { deep: true });
+}, { deep: true, immediate: true });
 
 onMounted(() => {
   if (!route.query.ids) {

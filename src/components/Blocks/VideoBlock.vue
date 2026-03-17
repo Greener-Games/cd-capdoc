@@ -1,12 +1,18 @@
 <template>
   <div 
     v-reveal 
-    class="relative w-full h-[50vh] md:h-[70vh] overflow-hidden flex items-center justify-center transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-10 reveal:opacity-100 reveal:translate-y-0"
+    class="relative w-full h-[640px] overflow-hidden flex items-center justify-center transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-10 reveal:opacity-100 reveal:translate-y-0"
   >
+    <!-- Skeleton State -->
+    <div v-if="isActuallyLoading" class="absolute inset-0 z-30 skeleton-shimmer flex items-center justify-center">
+      <div class="w-12 h-12 rounded-full border-2 border-white/10 border-t-white/40 animate-spin"></div>
+    </div>
+
     <!-- Vidstack Player -->
     <media-player
         ref="player"
-        class="w-full h-full group/player border-none outline-none ring-0"
+        class="w-full h-full group/player border-none outline-none ring-0 transition-opacity duration-700"
+        :class="isActuallyLoading ? 'opacity-0' : 'opacity-100'"
         :src="url"
         :poster="poster"
         cross-origin
@@ -50,8 +56,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Play } from 'lucide-vue-next';
+import { useDataStore } from '../../store/data';
+
+const dataStore = useDataStore();
 
 const props = withDefaults(defineProps<{
   url: string;
@@ -59,11 +68,15 @@ const props = withDefaults(defineProps<{
   autoplay?: boolean;
   loop?: boolean;
   muted?: boolean;
+  loading?: boolean;
 }>(), {
   autoplay: false,
   loop: true,
-  muted: true
+  muted: true,
+  loading: false
 });
+
+const isActuallyLoading = computed(() => props.loading || dataStore.isPageLoading);
 
 const player = ref<any>(null);
 const isLoading = ref(false);

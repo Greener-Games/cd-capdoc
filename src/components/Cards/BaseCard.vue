@@ -5,19 +5,24 @@
       @mouseenter="setHoveredColor(color)"
       @mouseleave="setHoveredColor(null)"
       :class="[
-        'group relative shrink-0 transition-all duration-700 grid grid-rows-[minmax(0,1fr)_auto] cursor-pointer',
+          'group relative shrink-0 transition-all duration-700 grid grid-rows-[minmax(0,1fr)_auto] cursor-pointer',
         cardClass
       ]"
   >
     <!-- Image/Media Container -->
     <div :class="['relative overflow-hidden border-none bg-zinc-950/40 isolate backface-hidden transform-gpu [clip-path:inset(0_round_1.5rem)] shrink-0', aspectRatioClass, imageContainerClass]">
+      <!-- Image Skeleton State -->
+      <div v-if="isActuallyLoading" class="absolute inset-0 z-30 skeleton-shimmer flex items-center justify-center h-full">
+        <div class="w-10 h-10 rounded-full border-2 border-white/10 border-t-white/40 animate-spin"></div>
+      </div>
+
       <img
-          v-if="image"
-          :src="image"
+          v-if="displayImage || image"
+          :src="displayImage || image"
           :alt="title"
           loading="lazy"
           decoding="async"
-          :class="['w-full h-full object-cover transition-all duration-1000 ease-out pointer-events-none', imageClass]"
+          :class="['w-full h-full object-cover transition-all duration-1000 ease-out pointer-events-none', imageClass, isActuallyLoading ? 'opacity-0' : 'opacity-100']"
       />
       <div v-if="showHoverOverlay" class="absolute inset-0 pointer-events-none transition-opacity duration-700 opacity-0 group-hover:opacity-100 bg-black/20"/>
 
@@ -31,14 +36,29 @@
       <slot name="image-overlay"></slot>
     </div>
 
-    <!-- The slot allows children to put their specific text/layout here -->
-    <slot :formatted-title="formattedTitle"></slot>
+    <!-- Info Section Area -->
+    <div class="mt-4 px-2 min-h-16 flex flex-col justify-start">
+      <!-- Text Skeleton State -->
+      <div v-if="isActuallyLoading" class="space-y-2 py-2">
+        <div class="w-3/4 h-4 skeleton-shimmer rounded"></div>
+        <div class="w-1/2 h-3 skeleton-shimmer rounded opacity-50"></div>
+      </div>
+      
+      <!-- Actual Content -->
+      <div :class="[isActuallyLoading ? 'opacity-0' : 'opacity-100', 'transition-opacity duration-500']">
+        <slot :formatted-title="formattedTitle"></slot>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useOrbState } from '@/composables/useOrbState.ts';
+import { ImageCacheService } from '@/services/imageCache';
+import { useDataStore } from '@/store/data';
+
+const dataStore = useDataStore();
 
 const props = withDefaults(defineProps<{
   id: string;
@@ -47,6 +67,7 @@ const props = withDefaults(defineProps<{
   color?: string;
   index: number;
   isDragging?: boolean;
+  loading?: boolean; // Manual loading override
   cardClass?: string;
   aspectRatioClass?: string;
   imageContainerClass?: string;
@@ -57,6 +78,7 @@ const props = withDefaults(defineProps<{
   image: '',
   color: '',
   isDragging: false,
+  loading: false,
   cardClass: 'w-max h-full',
   aspectRatioClass: 'aspect-[4/5]',
   imageContainerClass: 'rounded-3xl h-full',
@@ -70,6 +92,21 @@ const emit = defineEmits<{
 }>();
 
 const { setHoveredColor } = useOrbState();
+
+// Determine if we should show skeleton
+const isActuallyLoading = computed(() => props.loading || dataStore.isPageLoading);
+
+// Reactive reference for the local cached URL
+const displayImage = ref('');
+
+// Watch the prop image and resolve the cached/blob version
+watch(() => props.image, async (newImage) => {
+  if (newImage) {
+    displayImage.value = await ImageCacheService.getImageUrl(newImage);
+  } else {
+    displayImage.value = '';
+  }
+}, { immediate: true });
 
 const formattedTitle = computed(() => 
   props.title.toUpperCase().replace('&', 'AND')

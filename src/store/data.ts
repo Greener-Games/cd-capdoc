@@ -15,6 +15,7 @@ export const useDataStore = defineStore('data', {
 
     selectedProjectId: null as string | null,
     isFetchingData: false,
+    isPageLoading: false,
     fetchingPromise: null as Promise<any> | null,
   }),
   getters: {

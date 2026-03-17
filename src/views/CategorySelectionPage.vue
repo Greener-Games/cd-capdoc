@@ -58,6 +58,7 @@ import RoundedButton from "@/components/Common/RoundedButton.vue";
 import { useCategoryFilter } from '../composables/useCategoryFilter';
 import { useOrbState } from '../composables/useOrbState';
 import { useAppNavigation } from '../composables/useAppNavigation';
+import { useImagePreloader } from '../composables/useImagePreloader';
 
 const dataStore = useDataStore();
 const route = useRoute();
@@ -65,6 +66,7 @@ const router = useRouter();
 const { filterType } = useCategoryFilter();
 const { setHoveredColor } = useOrbState();
 const { goToCategorySelect, goToProjectList } = useAppNavigation();
+const { preloadImages } = useImagePreloader();
 
 const dragScrollRef = ref<InstanceType<typeof DragScroll> | null>(null);
 
@@ -97,17 +99,26 @@ const currentData = computed(() => {
 // Staged data for smooth out-in staggering
 const displayedData = ref([...currentData.value]);
 
-watch(currentData, (newData) => {
-  // Calculate delay based on current count to ensure they all finish leaving
-  // 20ms stagger per item + 600ms base transition + 100ms safety buffer
-  const exitDelay = (displayedData.value.length * 20) + 600 + 200;
+watch(currentData, async (newData) => {
+  // Capture current length for exit delay
+  const currentCount = displayedData.value.length;
   
+  // Clear first to trigger staggered leave
   displayedData.value = [];
   
+  // Preload new images in background (don't await yet)
+  const images = newData.map(item => item.image);
+  preloadImages(images); // This sets dataStore.isPageLoading = true
+
+  // Wait for exit animation (20ms stagger + 600ms base + 100ms safety)
+  const exitDelay = (currentCount * 20) + 700;
+  
   setTimeout(() => {
+    // Bring in new data. If preloading is still happening, 
+    // cards will show their skeleton state.
     displayedData.value = newData;
   }, exitDelay);
-}, { deep: true });
+}, { deep: true, immediate: true });
 
 const handleSelect = (id: string) => {
   const typeParam = route.params.type as string;

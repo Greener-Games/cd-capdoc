@@ -52,12 +52,13 @@ import {Project, ViewState} from '../types';
 import { useAppView } from '../composables/useAppView';
 import { useScroll } from '../composables/useScroll';
 import { useAppNavigation } from '../composables/useAppNavigation';
-import { useProjectData } from '../composables/useProjectData';
 import DragScroll from '../components/Common/DragScroll.vue';
 import ProjectCard from '../components/Cards/ProjectCard.vue';
 import BaseLayout from "@/components/Layouts/BaseLayout.vue";
 import RoundedButton from "@/components/Common/RoundedButton.vue";
 import Icon from '../components/Common/Icon.vue';
+import { useProjectData } from '../composables/useProjectData';
+import { useImagePreloader } from '../composables/useImagePreloader';
 import Arrow from '@/assets/icons/Arrow.svg';
 
 const curatedStore = useCuratedStore();
@@ -66,20 +67,24 @@ const { view } = useAppView();
 const { handleScroll } = useScroll();
 const { goBack, goToProject } = useAppNavigation();
 const { currentProjects, currentCategoryData } = useProjectData();
+const { preloadImages } = useImagePreloader();
 
 // Staged data for smooth out-in staggering
 const displayedProjects = ref([...currentProjects.value]);
 
-watch(currentProjects, (newData) => {
-  const exitDelay = (displayedProjects.value.length * 20) + 700;
-  
+watch(currentProjects, async (newData) => {
+  const currentCount = displayedProjects.value.length;
   displayedProjects.value = [];
-  
+
+  const images = newData.map(p => p.image);
+  preloadImages(images);
+
+  const exitDelay = (currentCount * 20) + 700;
+
   setTimeout(() => {
     displayedProjects.value = newData;
   }, exitDelay);
-}, { deep: true });
-
+}, { deep: true, immediate: true });
 const handleProjectSelect = (project: Project) => {
   goToProject(project.id);
 };
