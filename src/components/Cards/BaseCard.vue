@@ -22,6 +22,7 @@
           :alt="title"
           loading="lazy"
           decoding="async"
+          @load="handleImageLoad"
           :class="['w-full h-full object-cover transition-all duration-1000 ease-out pointer-events-none', imageClass, isActuallyLoading ? 'opacity-0' : 'opacity-100']"
       />
       <div v-if="showHoverOverlay" class="absolute inset-0 pointer-events-none transition-opacity duration-700 opacity-0 group-hover:opacity-100 bg-black/20"/>
@@ -94,13 +95,23 @@ const emit = defineEmits<{
 const { setHoveredColor } = useOrbState();
 
 // Determine if we should show skeleton
-const isActuallyLoading = computed(() => props.loading || dataStore.isPageLoading);
+const imageLoaded = ref(false);
+const isActuallyLoading = computed(() => 
+  props.loading || 
+  dataStore.isPageLoading || 
+  (props.image && !imageLoaded.value)
+);
+
+const handleImageLoad = () => {
+  imageLoaded.value = true;
+};
 
 // Reactive reference for the local cached URL
 const displayImage = ref('');
 
 // Watch the prop image and resolve the cached/blob version
 watch(() => props.image, async (newImage) => {
+  imageLoaded.value = false; // Reset loading state for new image
   if (newImage) {
     displayImage.value = await ImageCacheService.getImageUrl(newImage);
   } else {
