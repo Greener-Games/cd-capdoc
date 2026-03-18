@@ -11,7 +11,7 @@
       @select="handleClick"
   >
     <template #default="{ formattedTitle }">
-      <div class="flex flex-row justify-between items-start text-left pointer-events-none h-10 md:h-16 xl:h-28 shrink-0 min-w-0 mt-2 lg:mt-3" style="width: 0; min-width: 100%;">
+      <div class="flex flex-row justify-between items-start text-left pointer-events-none h-10 md:h-16 xl:h-20 shrink-0 min-w-0 mt-2 lg:mt-3" style="width: 0; min-width: 100%;">
         <div class="flex flex-col min-w-0 shrink max-w-[70%]">
           <h2 class="text-heading transition-opacity duration-700 opacity-50 group-hover:opacity-100 line-clamp-2 md:line-clamp-3 whitespace-normal">
             {{ formattedTitle }}

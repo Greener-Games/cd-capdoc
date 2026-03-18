@@ -2,51 +2,53 @@
   <BaseLayout :disable-padding-bottom="true" :disable-padding-side="true">
     <!-- Main Scrollable Content Area -->
     <div
-        class="w-full h-full overflow-y-auto overflow-x-hidden scrollbar-none pointer-events-auto pb-safe-bottom-footer"
+        class="flex flex-col gap-6 md:gap-8 xl:gap-16 w-full h-full overflow-y-auto overflow-x-hidden scrollbar-none pointer-events-auto pb-safe-bottom-footer"
         @scroll="handleScroll"
         ref="scrollContainer"
     >
-      <!-- Replicated Header Logic inside scrollable area -->
-      <div class="flex flex-col gap-4 xl:gap-8 mb-6 md:mb-8 xl:mb-16 px-safe-side">
+      <!-- Replicated Header using unified component -->
+      <PageHeader force-padding>
         <!-- Back Button -->
-        <div class="flex items-center">
+        <template #controls>
           <RoundedButton @click="goBack" icon-only>
             <template #icon>
               <Icon :icon="Arrow" size="md" class="scale-x-[-1] text-white" />
             </template>
           </RoundedButton>
-        </div>
+        </template>
 
         <!-- Title -->
-        <div v-reveal class="w-full transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-4 reveal:opacity-100 reveal:translate-y-0">
-          <h2 class="text-display">
+        <template #title>
+          <div v-reveal class="w-full transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-4 reveal:opacity-100 reveal:translate-y-0">
             <span class="max-w-4xl block">{{ title }}</span>
-          </h2>
-        </div>
+          </div>
+        </template>
 
         <!-- Info / Highlights -->
-        <div v-reveal class="transition-all duration-1000 delay-200 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-4 reveal:opacity-100 reveal:translate-y-0">
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-12 items-start">
-            <div class="md:col-span-6">
-              <p class="text-body ">
-                {{ description }}
-              </p>
-            </div>
-            <div class="md:col-span-6 flex justify-start md:justify-end">
-              <!-- Reusable Metadata component -->
-              <div v-if="metadata" class="grid grid-cols-2 gap-x-8 gap-y-4 text-label">
-                <div v-if="metadata.left && metadata.left.length" class="flex flex-col space-y-0.5 text-left md:text-right">
-                  <span v-for="item in metadata.left" :key="item">{{ item }}</span>
-                </div>
-                <div v-if="metadata.right && metadata.right.length" class="flex flex-col space-y-0.5">
-                  <span v-for="item in metadata.right" :key="item">{{ item }}</span>
-                </div>
+        <template #bottom>
+          <div v-reveal class="transition-all duration-1000 delay-200 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-4 reveal:opacity-100 reveal:translate-y-0">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-12 items-start">
+              <div class="md:col-span-6">
+                <p class="text-body ">
+                  {{ description }}
+                </p>
               </div>
-              <slot v-else name="metadata"></slot>
+              <div class="md:col-span-6 flex justify-start md:justify-end">
+                <!-- Reusable Metadata component -->
+                <div v-if="metadata" class="grid grid-cols-2 gap-x-8 gap-y-4 text-label">
+                  <div v-if="metadata.left && metadata.left.length" class="flex flex-col space-y-0.5 text-left md:text-right">
+                    <span v-for="item in metadata.left" :key="item">{{ item }}</span>
+                  </div>
+                  <div v-if="metadata.right && metadata.right.length" class="flex flex-col space-y-0.5">
+                    <span v-for="item in metadata.right" :key="item">{{ item }}</span>
+                  </div>
+                </div>
+                <slot v-else name="metadata"></slot>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </template>
+      </PageHeader>
 
       <div class="relative">
         <!-- Fixed Progress indicator -->
@@ -86,6 +88,7 @@ import RoundedButton from "@/components/Common/RoundedButton.vue";
 import Icon from "@/components/Common/Icon.vue";
 import BlockRenderer from "@/components/Blocks/BlockRenderer.vue";
 import { ContentBlock, PageMetadata } from '../../types';
+import PageHeader from "@/components/Common/PageHeader.vue";
 
 withDefaults(defineProps<{
   title: string;

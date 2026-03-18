@@ -6,33 +6,28 @@
           disablePaddingSide ? 'px-0' : 'px-safe-side'
       ]"
   >
-    <!-- Top area for buttons or pills -->
-    <div v-if="$slots['header-controls']" class="flex items-center" :class="[disablePaddingSide ? 'px-safe-side' : '']">
-      <slot name="header-controls"></slot>
-    </div>
+    <!-- Use our unified PageHeader -->
+    <PageHeader
+        v-if="$slots['header-controls'] || $slots['title'] || $slots['title-right'] || $slots['header-bottom']"
+        :title-key="titleKey"
+        :force-padding="disablePaddingSide"
+    >
+      <template v-if="$slots['header-controls']" #controls>
+        <slot name="header-controls"></slot>
+      </template>
 
-    <!-- Title area -->
-    <div class="w-full relative shrink-0" v-if="$slots['title'] || $slots['title-right']">
-      <Transition name="fade-delayed" mode="out-in">
-        <div
-            :key="titleKey"
-            class="w-full flex items-center justify-between gap-8"
-            :class="[disablePaddingSide ? 'px-safe-side' : '']"
-        >
-          <h2 v-if="$slots['title']" class="text-display shrink-0">
-            <slot name="title"></slot>
-          </h2>
+      <template v-if="$slots['title']" #title>
+        <slot name="title"></slot>
+      </template>
 
-          <div class="grow flex justify-end">
-            <slot name="title-right"></slot>
-          </div>
-        </div>
-      </Transition>
-    </div>
+      <template v-if="$slots['title-right']" #title-right>
+        <slot name="title-right"></slot>
+      </template>
 
-    <div v-if="$slots['header-bottom']" class="w-full" :class="[disablePaddingSide ? 'px-safe-side' : '']">
-      <slot name="header-bottom"></slot>
-    </div>
+      <template v-if="$slots['header-bottom']" #bottom>
+        <slot name="header-bottom"></slot>
+      </template>
+    </PageHeader>
 
     <!-- Main content area -->
     <div class="relative flex-1 w-full min-h-0">
@@ -43,6 +38,7 @@
 
 <script setup lang="ts">
 import { useSlots } from 'vue';
+import PageHeader from "@/components/Common/PageHeader.vue";
 
 defineProps<{
   titleKey?: string | number;
