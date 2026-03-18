@@ -1,16 +1,12 @@
 <template>
-  <TransitionGroup 
-    name="card-list" 
-    tag="div" 
-    class="space-y-5"
-  >
+  <div class="space-y-5">
     <div v-for="block in blocks" :key="block.id" class="w-full">
       <component
           :is="getBlockComponent(block.type)"
           v-bind="block"
       />
     </div>
-  </TransitionGroup>
+  </div>
 </template>
 
 <script setup lang="ts">

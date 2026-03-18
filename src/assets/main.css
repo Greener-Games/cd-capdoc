@@ -184,6 +184,23 @@
     @apply transition-opacity duration-700 opacity-50 group-hover:opacity-100;
   }
 
+  /* Centralized reveal animation */
+  .reveal-fx {
+    @apply transition-all duration-500 ease-out-expo opacity-0 translate-y-4;
+
+    &.reveal {
+      @apply opacity-100 translate-y-0;
+    }
+  }
+
+  .reveal-fx-slow {
+    @apply transition-all duration-1000 ease-out-expo opacity-0 translate-y-4;
+
+    &.reveal {
+      @apply opacity-100 translate-y-0;
+    }
+  }
+
   /* Global Rich Text styles for CMS content */
   .rich-text-content {
     @apply font-bienvenue font-normal text-sm md:text-base leading-relaxed text-white/70;

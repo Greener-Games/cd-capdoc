@@ -10,7 +10,7 @@
 
     <!-- Always Two Column Grid Mode (50/50) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-24">
-      <div v-reveal class="transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-8 reveal:opacity-100 reveal:translate-y-0">
+      <div v-reveal class="reveal-fx">
         <div v-if="isActuallyLoading" class="space-y-3">
           <div class="w-full h-4 skeleton-shimmer rounded"></div>
           <div class="w-full h-4 skeleton-shimmer rounded"></div>
@@ -22,7 +22,7 @@
             v-html="renderContent(leftContent)"
         ></div>
       </div>
-      <div v-reveal class="transition-all duration-1000 delay-200 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-8 reveal:opacity-100 reveal:translate-y-0">
+      <div v-reveal class="reveal-fx delay-100">
         <div v-if="isActuallyLoading" class="space-y-3">
           <div class="w-full h-4 skeleton-shimmer rounded"></div>
           <div class="w-full h-4 skeleton-shimmer rounded"></div>

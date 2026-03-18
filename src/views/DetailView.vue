@@ -103,7 +103,7 @@ const handlePrev = () => {
 watch(() => route.params.projectId, () => {
   const container = contentPageRef.value?.scrollContainer;
   if (container) {
-    container.scrollTo({ top: 0, behavior: 'auto' });
+    container.scrollTo({ top: 0, behavior: 'smooth' });
   }
 });
 </script>

@@ -19,14 +19,14 @@
 
         <!-- Title -->
         <template #title>
-          <div v-reveal class="w-full transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-4 reveal:opacity-100 reveal:translate-y-0">
+          <div v-reveal class="reveal-fx-slow w-full">
             <span class="max-w-4xl block">{{ title }}</span>
           </div>
         </template>
 
         <!-- Info / Highlights -->
         <template #bottom>
-          <div v-reveal class="transition-all duration-1000 delay-200 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-4 reveal:opacity-100 reveal:translate-y-0">
+          <div v-reveal class="reveal-fx-slow delay-200">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-12 items-start">
               <div class="md:col-span-6">
                 <p class="text-body ">

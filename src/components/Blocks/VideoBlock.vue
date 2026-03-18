@@ -1,7 +1,7 @@
 <template>
   <div
         v-reveal
-        class="relative w-full h-[50vh] md:h-[70vh] overflow-hidden transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-10 reveal:opacity-100 reveal:translate-y-0"
+        class="reveal-fx relative w-full h-[50vh] md:h-[70vh] overflow-hidden"
     >
     <!-- 1. Skeleton State (Z-50) -->
     <div v-if="isActuallyLoading" class="absolute inset-0 z-50 skeleton-shimmer flex items-center justify-center h-full">
