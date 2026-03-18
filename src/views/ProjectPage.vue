@@ -67,7 +67,7 @@ const { view } = useAppView();
 const { handleScroll } = useScroll();
 const { goBack, goToProject } = useAppNavigation();
 const { currentProjects, currentCategoryData } = useProjectData();
-const { preloadImages } = useImagePreloader();
+const { prefetchImages } = useImagePreloader();
 
 // Staged data for smooth out-in staggering
 const displayedProjects = ref([...currentProjects.value]);
@@ -77,7 +77,7 @@ watch(currentProjects, async (newData) => {
   displayedProjects.value = [];
 
   const images = newData.map(p => p.image);
-  preloadImages(images);
+  prefetchImages(images);
 
   const exitDelay = (currentCount * 20) + 700;
 

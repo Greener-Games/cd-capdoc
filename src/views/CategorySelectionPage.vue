@@ -66,7 +66,7 @@ const router = useRouter();
 const { filterType } = useCategoryFilter();
 const { setHoveredColor } = useOrbState();
 const { goToCategorySelect, goToProjectList } = useAppNavigation();
-const { preloadImages } = useImagePreloader();
+const { prefetchImages } = useImagePreloader();
 
 const dragScrollRef = ref<InstanceType<typeof DragScroll> | null>(null);
 
@@ -108,7 +108,7 @@ watch(currentData, async (newData) => {
   
   // Preload new images in background (don't await yet)
   const images = newData.map(item => item.image);
-  preloadImages(images); // This sets dataStore.isPageLoading = true
+  prefetchImages(images);
 
   // Wait for exit animation (20ms stagger + 600ms base + 100ms safety)
   const exitDelay = (currentCount * 20) + 700;

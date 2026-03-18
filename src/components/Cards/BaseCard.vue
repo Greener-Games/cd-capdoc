@@ -38,13 +38,13 @@
     </div>
 
     <!-- Info Section Area -->
-    <div class="mt-4 px-2 min-h-16 flex flex-col justify-start">
+    <div v-if="$slots.default" class="mt-4 px-2 min-h-16 flex flex-col justify-start">
       <!-- Text Skeleton State -->
       <div v-if="isActuallyLoading" class="space-y-2 py-2">
         <div class="w-3/4 h-4 skeleton-shimmer rounded"></div>
         <div class="w-1/2 h-3 skeleton-shimmer rounded opacity-50"></div>
       </div>
-      
+
       <!-- Actual Content -->
       <div :class="[isActuallyLoading ? 'opacity-0' : 'opacity-100', 'transition-opacity duration-500']">
         <slot :formatted-title="formattedTitle"></slot>

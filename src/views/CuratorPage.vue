@@ -123,7 +123,7 @@ const dataStore = useDataStore();
 const curatedStore = useCuratedStore();
 const route = useRoute();
 const { goToProject, launchCuratedPresentation } = useAppNavigation();
-const { preloadImages } = useImagePreloader();
+const { prefetchImages } = useImagePreloader();
 
 const activeMode = ref<'explore' | 'build'>((route.query.mode as 'explore' | 'build') || 'explore');
 
@@ -148,7 +148,7 @@ watch(filteredProjects, async (newData) => {
   displayedProjects.value = [];
 
   const images = newData.map(p => p.image);
-  preloadImages(images);
+  prefetchImages(images);
 
   const exitDelay = (currentCount * 20) + 700;
   

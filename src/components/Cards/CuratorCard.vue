@@ -14,6 +14,7 @@
       :show-hover-overlay="false"
       @select="handleClick"
   >
+
     <template #image-overlay>
       <div
           class="absolute bottom-2 left-2 right-2 h-30 z-20 p-3 backdrop-blur-md rounded-2xl flex flex-row gap-4 items-start pointer-events-auto shadow-lg transition-colors duration-300"
@@ -65,6 +66,7 @@
         </div>
       </div>
     </template>
+
   </BaseCard>
 </template>
 
