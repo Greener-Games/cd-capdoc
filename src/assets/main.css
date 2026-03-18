@@ -156,7 +156,7 @@
 
   /* Standard uppercase headings (Section Headers, Card Titles) */
   .text-heading {
-    @apply font-bienvenue uppercase leading-none text-white text-base xl:text-3xl;
+    @apply font-bienvenue uppercase leading-none text-white text-base xl:text-xl 2xl:text-3xl;
   }
 
   /* Small metadata and labels */

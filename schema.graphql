@@ -21,15 +21,192 @@ interface Node {
     stage: Stage!
 }
 
-union ImageBlockParent = Project
+union AboutPagecontentBlocksUnion = ImageBlock | TextBlock | VideoBlock
+
+union ImageBlockParent = AboutPage | Project
 
 union ProjectcontentBlocksUnion = ImageBlock | TextBlock | VideoBlock
 
-union ScheduledOperationAffectedDocument = Asset | Capability | Market | Project | Region
+union ScheduledOperationAffectedDocument = AboutPage | Asset | Capability | Market | Project | Region
 
-union TextBlockParent = Project
+union TextBlockParent = AboutPage | Project
 
-union VideoBlockParent = Project
+union VideoBlockParent = AboutPage | Project
+
+type AboutPage implements Entity & Node {
+    client: String
+    contentBlocks(
+        after: String,
+        before: String,
+        first: Int,
+        """
+
+        Sets the locale of the resolved parent document as the only locale in the query's subtree.
+
+        Note that `contentBlocks` is a model without localized fields and will not be affected directly by this argument, however the locale will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will affect any existing locale filtering defined in the query's tree for the subtree.
+        """
+        forceParentLocale: Boolean,
+        last: Int,
+        """
+
+        Allows to optionally override locale filtering behaviour in the query's subtree.
+
+        Note that `contentBlocks` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will overwrite any existing locale filtering defined in the query's tree for the subtree.
+        """
+        locales: [Locale!],
+        skip: Int
+    ): [AboutPagecontentBlocksUnion!]!
+    "The time the document was created"
+    createdAt: DateTime!
+    "User that created this document"
+    createdBy(
+        """
+
+        Sets the locale of the resolved parent document as the only locale in the query's subtree.
+
+        Note that `createdBy` is a model without localized fields and will not be affected directly by this argument, however the locale will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will affect any existing locale filtering defined in the query's tree for the subtree.
+        """
+        forceParentLocale: Boolean,
+        """
+
+        Allows to optionally override locale filtering behaviour in the query's subtree.
+
+        Note that `createdBy` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will overwrite any existing locale filtering defined in the query's tree for the subtree.
+        """
+        locales: [Locale!]
+    ): User
+    description: String
+    "Get the document in other stages"
+    documentInStages(
+        "Decides if the current stage should be included or not"
+        includeCurrent: Boolean!,
+        "Decides if the documents should match the parent documents locale or should use the fallback order defined in the tree"
+        inheritLocale: Boolean!,
+        "Potential stages that should be returned"
+        stages: [Stage!]!
+    ): [AboutPage!]!
+    "List of AboutPage versions"
+    history(
+        limit: Int!,
+        skip: Int!,
+        "This is optional and can be used to fetch the document version history for a specific stage instead of the current one"
+        stageOverride: Stage
+    ): [Version!]!
+    "The unique identifier"
+    id: ID!
+    "The time the document was published. Null on documents in draft stage."
+    publishedAt: DateTime
+    "User that last published this document"
+    publishedBy(
+        """
+
+        Sets the locale of the resolved parent document as the only locale in the query's subtree.
+
+        Note that `publishedBy` is a model without localized fields and will not be affected directly by this argument, however the locale will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will affect any existing locale filtering defined in the query's tree for the subtree.
+        """
+        forceParentLocale: Boolean,
+        """
+
+        Allows to optionally override locale filtering behaviour in the query's subtree.
+
+        Note that `publishedBy` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will overwrite any existing locale filtering defined in the query's tree for the subtree.
+        """
+        locales: [Locale!]
+    ): User
+    scheduledIn(
+        after: String,
+        before: String,
+        first: Int,
+        """
+
+        Sets the locale of the resolved parent document as the only locale in the query's subtree.
+
+        Note that `scheduledIn` is a model without localized fields and will not be affected directly by this argument, however the locale will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will affect any existing locale filtering defined in the query's tree for the subtree.
+        """
+        forceParentLocale: Boolean,
+        last: Int,
+        """
+
+        Allows to optionally override locale filtering behaviour in the query's subtree.
+
+        Note that `scheduledIn` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will overwrite any existing locale filtering defined in the query's tree for the subtree.
+        """
+        locales: [Locale!],
+        skip: Int,
+        where: ScheduledOperationWhereInput
+    ): [ScheduledOperation!]!
+    services: [String!]!
+    "System stage field"
+    stage: Stage!
+    title: String
+    "The time the document was updated"
+    updatedAt: DateTime!
+    "User that last updated this document"
+    updatedBy(
+        """
+
+        Sets the locale of the resolved parent document as the only locale in the query's subtree.
+
+        Note that `updatedBy` is a model without localized fields and will not be affected directly by this argument, however the locale will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will affect any existing locale filtering defined in the query's tree for the subtree.
+        """
+        forceParentLocale: Boolean,
+        """
+
+        Allows to optionally override locale filtering behaviour in the query's subtree.
+
+        Note that `updatedBy` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will overwrite any existing locale filtering defined in the query's tree for the subtree.
+        """
+        locales: [Locale!]
+    ): User
+    year: String
+}
+
+"A connection to a list of items."
+type AboutPageConnection {
+    aggregate: Aggregate!
+    "A list of edges."
+    edges: [AboutPageEdge!]!
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type AboutPageEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: AboutPage!
+}
 
 type Aggregate {
     count: Int!
@@ -536,7 +713,6 @@ type Capability implements Entity & Node {
     ): [ScheduledOperation!]!
     "System stage field"
     stage: Stage!
-    subtitle: String
     title: String
     "The time the document was updated"
     updatedAt: DateTime!
@@ -805,7 +981,6 @@ type Market implements Entity & Node {
     ): [ScheduledOperation!]!
     "System stage field"
     stage: Stage!
-    subtitle: String
     title: String
     "The time the document was updated"
     updatedAt: DateTime!
@@ -852,6 +1027,8 @@ type MarketEdge {
 }
 
 type Mutation {
+    "Create one aboutPage"
+    createAboutPage(data: AboutPageCreateInput!): AboutPage
     "Create an asset. Use the returned info to finish the creation process by uploading the asset."
     createAsset(data: AssetCreateInput!): Asset
     "Create one capability"
@@ -864,6 +1041,11 @@ type Mutation {
     createRegion(data: RegionCreateInput!): Region
     "Create one scheduledRelease"
     createScheduledRelease(data: ScheduledReleaseCreateInput!): ScheduledRelease
+    "Delete one aboutPage from _all_ existing stages. Returns deleted document."
+    deleteAboutPage(
+        "Document to delete"
+        where: AboutPageWhereUniqueInput!
+    ): AboutPage
     "Delete one asset from _all_ existing stages. Returns deleted document."
     deleteAsset(
         "Document to delete"
@@ -874,6 +1056,21 @@ type Mutation {
         "Document to delete"
         where: CapabilityWhereUniqueInput!
     ): Capability
+    "Delete many AboutPage documents"
+    deleteManyAboutPages(
+        "Documents to delete"
+        where: AboutPageManyWhereInput
+    ): BatchPayload! @deprecated(reason: "Please use the new paginated many mutation (deleteManyAboutPagesConnection)")
+    "Delete many AboutPage documents, return deleted documents"
+    deleteManyAboutPagesConnection(
+        after: ID,
+        before: ID,
+        first: Int,
+        last: Int,
+        skip: Int,
+        "Documents to delete"
+        where: AboutPageManyWhereInput
+    ): AboutPageConnection!
     "Delete many Asset documents"
     deleteManyAssets(
         "Documents to delete"
@@ -974,6 +1171,13 @@ type Mutation {
         "Document to delete"
         where: ScheduledReleaseWhereUniqueInput!
     ): ScheduledRelease
+    "Publish one aboutPage"
+    publishAboutPage(
+        "Publishing target stage"
+        to: [Stage!]!,
+        "Document to publish"
+        where: AboutPageWhereUniqueInput!
+    ): AboutPage
     "Publish one asset"
     publishAsset(
         "Optional localizations to publish"
@@ -994,6 +1198,27 @@ type Mutation {
         "Document to publish"
         where: CapabilityWhereUniqueInput!
     ): Capability
+    "Publish many AboutPage documents"
+    publishManyAboutPages(
+        "Stages to publish documents to"
+        to: [Stage!]!,
+        "Identifies documents in each stage to be published"
+        where: AboutPageManyWhereInput
+    ): BatchPayload! @deprecated(reason: "Please use the new paginated many mutation (publishManyAboutPagesConnection)")
+    "Publish many AboutPage documents"
+    publishManyAboutPagesConnection(
+        after: ID,
+        before: ID,
+        first: Int,
+        "Stage to find matching documents in"
+        from: Stage,
+        last: Int,
+        skip: Int,
+        "Stages to publish documents to"
+        to: [Stage!]!,
+        "Identifies documents in each stage to be published"
+        where: AboutPageManyWhereInput
+    ): AboutPageConnection!
     "Publish many Asset documents"
     publishManyAssets(
         "Document localizations to publish"
@@ -1132,6 +1357,17 @@ type Mutation {
         "Document to publish"
         where: RegionWhereUniqueInput!
     ): Region
+    "Schedule to publish one aboutPage"
+    schedulePublishAboutPage(
+        "Release at point in time, will create new release containing this operation"
+        releaseAt: DateTime,
+        "Optionally attach this scheduled operation to an existing release"
+        releaseId: String,
+        "Publishing target stage"
+        to: [Stage!]!,
+        "Document to publish"
+        where: AboutPageWhereUniqueInput!
+    ): AboutPage
     "Schedule to publish one asset"
     schedulePublishAsset(
         "Optional localizations to publish"
@@ -1193,6 +1429,17 @@ type Mutation {
         "Document to publish"
         where: RegionWhereUniqueInput!
     ): Region
+    "Unpublish one aboutPage from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
+    scheduleUnpublishAboutPage(
+        "Stages to unpublish document from"
+        from: [Stage!]!,
+        "Release at point in time, will create new release containing this operation"
+        releaseAt: DateTime,
+        "Optionally attach this scheduled operation to an existing release"
+        releaseId: String,
+        "Document to unpublish"
+        where: AboutPageWhereUniqueInput!
+    ): AboutPage
     "Unpublish one asset from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
     scheduleUnpublishAsset(
         "Stages to unpublish document from"
@@ -1252,6 +1499,13 @@ type Mutation {
         "Document to unpublish"
         where: RegionWhereUniqueInput!
     ): Region
+    "Unpublish one aboutPage from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
+    unpublishAboutPage(
+        "Stages to unpublish document from"
+        from: [Stage!]!,
+        "Document to unpublish"
+        where: AboutPageWhereUniqueInput!
+    ): AboutPage
     "Unpublish one asset from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
     unpublishAsset(
         "Stages to unpublish document from"
@@ -1270,6 +1524,27 @@ type Mutation {
         "Document to unpublish"
         where: CapabilityWhereUniqueInput!
     ): Capability
+    "Unpublish many AboutPage documents"
+    unpublishManyAboutPages(
+        "Stages to unpublish documents from"
+        from: [Stage!]!,
+        "Identifies documents in each stage"
+        where: AboutPageManyWhereInput
+    ): BatchPayload! @deprecated(reason: "Please use the new paginated many mutation (unpublishManyAboutPagesConnection)")
+    "Find many AboutPage documents that match criteria in specified stage and unpublish from target stages"
+    unpublishManyAboutPagesConnection(
+        after: ID,
+        before: ID,
+        first: Int,
+        "Stages to unpublish documents from"
+        from: [Stage!]!,
+        last: Int,
+        skip: Int,
+        "Stage to find matching documents in"
+        stage: Stage,
+        "Identifies documents in draft stage"
+        where: AboutPageManyWhereInput
+    ): AboutPageConnection!
     "Unpublish many Asset documents"
     unpublishManyAssets(
         "Stages to unpublish documents from"
@@ -1404,10 +1679,31 @@ type Mutation {
         "Document to unpublish"
         where: RegionWhereUniqueInput!
     ): Region
+    "Update one aboutPage"
+    updateAboutPage(data: AboutPageUpdateInput!, where: AboutPageWhereUniqueInput!): AboutPage
     "Update one asset"
     updateAsset(data: AssetUpdateInput!, where: AssetWhereUniqueInput!): Asset
     "Update one capability"
     updateCapability(data: CapabilityUpdateInput!, where: CapabilityWhereUniqueInput!): Capability
+    "Update many aboutPages"
+    updateManyAboutPages(
+        "Updates to document content"
+        data: AboutPageUpdateManyInput!,
+        "Documents to apply update on"
+        where: AboutPageManyWhereInput
+    ): BatchPayload! @deprecated(reason: "Please use the new paginated many mutation (updateManyAboutPagesConnection)")
+    "Update many AboutPage documents"
+    updateManyAboutPagesConnection(
+        after: ID,
+        before: ID,
+        "Updates to document content"
+        data: AboutPageUpdateManyInput!,
+        first: Int,
+        last: Int,
+        skip: Int,
+        "Documents to apply update on"
+        where: AboutPageManyWhereInput
+    ): AboutPageConnection!
     "Update many assets"
     updateManyAssets(
         "Updates to document content"
@@ -1511,6 +1807,8 @@ type Mutation {
     updateRegion(data: RegionUpdateInput!, where: RegionWhereUniqueInput!): Region
     "Update one scheduledRelease"
     updateScheduledRelease(data: ScheduledReleaseUpdateInput!, where: ScheduledReleaseWhereUniqueInput!): ScheduledRelease
+    "Upsert one aboutPage"
+    upsertAboutPage(upsert: AboutPageUpsertInput!, where: AboutPageWhereUniqueInput!): AboutPage
     "Upsert one asset"
     upsertAsset(upsert: AssetUpsertInput!, where: AssetWhereUniqueInput!): Asset
     "Upsert one capability"
@@ -1663,7 +1961,6 @@ type Project implements Entity & Node {
         locales: [Locale!],
         where: AssetSingleRelationWhereInput
     ): Asset
-    longDescription: String
     markets(
         after: String,
         before: String,
@@ -1825,6 +2122,65 @@ type ProjectEdge {
 }
 
 type Query {
+    "Retrieve a single aboutPage"
+    aboutPage(
+        """
+
+        Defines which locales should be returned.
+
+        Note that `AboutPage` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument may be overwritten by another locales definition in a relational child field, this will effectively use the overwritten argument for the affected query's subtree.
+        """
+        locales: [Locale!]!,
+        stage: Stage!,
+        where: AboutPageWhereUniqueInput!
+    ): AboutPage
+    "Retrieve document version"
+    aboutPageVersion(where: VersionWhereInput!): DocumentVersion
+    "Retrieve multiple aboutPages"
+    aboutPages(
+        after: String,
+        before: String,
+        first: Int,
+        last: Int,
+        """
+
+        Defines which locales should be returned.
+
+        Note that `AboutPage` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument may be overwritten by another locales definition in a relational child field, this will effectively use the overwritten argument for the affected query's subtree.
+        """
+        locales: [Locale!]!,
+        orderBy: AboutPageOrderByInput,
+        skip: Int,
+        stage: Stage!,
+        where: AboutPageWhereInput
+    ): [AboutPage!]!
+    "Retrieve multiple aboutPages using the Relay connection interface"
+    aboutPagesConnection(
+        after: String,
+        before: String,
+        first: Int,
+        last: Int,
+        """
+
+        Defines which locales should be returned.
+
+        Note that `AboutPage` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument may be overwritten by another locales definition in a relational child field, this will effectively use the overwritten argument for the affected query's subtree.
+        """
+        locales: [Locale!]!,
+        orderBy: AboutPageOrderByInput,
+        skip: Int,
+        stage: Stage!,
+        where: AboutPageWhereInput
+    ): AboutPageConnection!
     "Retrieve a single asset"
     asset(
         """
@@ -2476,7 +2832,6 @@ type Region implements Entity & Node {
     ): [ScheduledOperation!]!
     "System stage field"
     stage: Stage!
-    subtitle: String
     title: String
     "The time the document was updated"
     updatedAt: DateTime!
@@ -2988,6 +3343,27 @@ type VideoBlockEdge {
     node: VideoBlock!
 }
 
+enum AboutPageOrderByInput {
+    client_ASC
+    client_DESC
+    createdAt_ASC
+    createdAt_DESC
+    description_ASC
+    description_DESC
+    id_ASC
+    id_DESC
+    publishedAt_ASC
+    publishedAt_DESC
+    services_ASC
+    services_DESC
+    title_ASC
+    title_DESC
+    updatedAt_ASC
+    updatedAt_DESC
+    year_ASC
+    year_DESC
+}
+
 enum AssetOrderByInput {
     createdAt_ASC
     createdAt_DESC
@@ -3028,8 +3404,6 @@ enum CapabilityOrderByInput {
     id_DESC
     publishedAt_ASC
     publishedAt_DESC
-    subtitle_ASC
-    subtitle_DESC
     title_ASC
     title_DESC
     updatedAt_ASC
@@ -3052,6 +3426,7 @@ enum DocumentFileTypes {
 
 "This enumeration holds all typenames that implement the Entity interface. Components and models implement the Entity interface."
 enum EntityTypeName {
+    AboutPage
     "Asset system model"
     Asset
     Capability
@@ -3100,8 +3475,6 @@ enum MarketOrderByInput {
     id_DESC
     publishedAt_ASC
     publishedAt_DESC
-    subtitle_ASC
-    subtitle_DESC
     title_ASC
     title_DESC
     updatedAt_ASC
@@ -3117,8 +3490,6 @@ enum ProjectOrderByInput {
     description_DESC
     id_ASC
     id_DESC
-    longDescription_ASC
-    longDescription_DESC
     publishedAt_ASC
     publishedAt_DESC
     services_ASC
@@ -3138,8 +3509,6 @@ enum RegionOrderByInput {
     id_DESC
     publishedAt_ASC
     publishedAt_DESC
-    subtitle_ASC
-    subtitle_DESC
     title_ASC
     title_DESC
     updatedAt_ASC
@@ -3372,6 +3741,588 @@ scalar RGBATransparency
 
 "Slate-compatible RichText AST"
 scalar RichTextAST
+
+input AboutPageConnectInput {
+    "Allow to specify document position in list of connected documents, will default to appending at end of list"
+    position: ConnectPositionInput
+    "Document to connect"
+    where: AboutPageWhereUniqueInput!
+}
+
+input AboutPageCreateInput {
+    client: String
+    contentBlocks: AboutPagecontentBlocksUnionCreateManyInlineInput
+    createdAt: DateTime
+    description: String
+    services: [String!]
+    title: String
+    updatedAt: DateTime
+    year: String
+}
+
+input AboutPageCreateManyInlineInput {
+    "Connect multiple existing AboutPage documents"
+    connect: [AboutPageWhereUniqueInput!]
+    "Create and connect multiple existing AboutPage documents"
+    create: [AboutPageCreateInput!]
+}
+
+input AboutPageCreateOneInlineInput {
+    "Connect one existing AboutPage document"
+    connect: AboutPageWhereUniqueInput
+    "Create and connect one AboutPage document"
+    create: AboutPageCreateInput
+}
+
+"Identifies documents"
+input AboutPageManyWhereInput {
+    "Logical AND on all given filters."
+    AND: [AboutPageWhereInput!]
+    "Logical NOT on all given filters combined by AND."
+    NOT: [AboutPageWhereInput!]
+    "Logical OR on all given filters."
+    OR: [AboutPageWhereInput!]
+    "Contains search across all appropriate fields."
+    _search: String
+    client: String
+    "All values containing the given string."
+    client_contains: String
+    "All values ending with the given string."
+    client_ends_with: String
+    "All values that are contained in given list."
+    client_in: [String]
+    "Any other value that exists and is not equal to the given value."
+    client_not: String
+    "All values not containing the given string."
+    client_not_contains: String
+    "All values not ending with the given string"
+    client_not_ends_with: String
+    "All values that are not contained in given list."
+    client_not_in: [String]
+    "All values not starting with the given string."
+    client_not_starts_with: String
+    "All values starting with the given string."
+    client_starts_with: String
+    "All values in which the union is empty."
+    contentBlocks_empty: Boolean
+    "Matches if the modular component contains at least one connection to the item provided to the filter"
+    contentBlocks_some: AboutPagecontentBlocksUnionWhereInput
+    createdAt: DateTime
+    "All values greater than the given value."
+    createdAt_gt: DateTime
+    "All values greater than or equal the given value."
+    createdAt_gte: DateTime
+    "All values that are contained in given list."
+    createdAt_in: [DateTime]
+    "All values less than the given value."
+    createdAt_lt: DateTime
+    "All values less than or equal the given value."
+    createdAt_lte: DateTime
+    "Any other value that exists and is not equal to the given value."
+    createdAt_not: DateTime
+    "All values that are not contained in given list."
+    createdAt_not_in: [DateTime]
+    createdBy: UserWhereInput
+    description: String
+    "All values containing the given string."
+    description_contains: String
+    "All values ending with the given string."
+    description_ends_with: String
+    "All values that are contained in given list."
+    description_in: [String]
+    "Any other value that exists and is not equal to the given value."
+    description_not: String
+    "All values not containing the given string."
+    description_not_contains: String
+    "All values not ending with the given string"
+    description_not_ends_with: String
+    "All values that are not contained in given list."
+    description_not_in: [String]
+    "All values not starting with the given string."
+    description_not_starts_with: String
+    "All values starting with the given string."
+    description_starts_with: String
+    documentInStages_every: AboutPageWhereStageInput
+    documentInStages_none: AboutPageWhereStageInput
+    documentInStages_some: AboutPageWhereStageInput
+    id: ID
+    "All values containing the given string."
+    id_contains: ID
+    "All values ending with the given string."
+    id_ends_with: ID
+    "All values that are contained in given list."
+    id_in: [ID]
+    "Any other value that exists and is not equal to the given value."
+    id_not: ID
+    "All values not containing the given string."
+    id_not_contains: ID
+    "All values not ending with the given string"
+    id_not_ends_with: ID
+    "All values that are not contained in given list."
+    id_not_in: [ID]
+    "All values not starting with the given string."
+    id_not_starts_with: ID
+    "All values starting with the given string."
+    id_starts_with: ID
+    publishedAt: DateTime
+    "All values greater than the given value."
+    publishedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    publishedAt_gte: DateTime
+    "All values that are contained in given list."
+    publishedAt_in: [DateTime]
+    "All values less than the given value."
+    publishedAt_lt: DateTime
+    "All values less than or equal the given value."
+    publishedAt_lte: DateTime
+    "Any other value that exists and is not equal to the given value."
+    publishedAt_not: DateTime
+    "All values that are not contained in given list."
+    publishedAt_not_in: [DateTime]
+    publishedBy: UserWhereInput
+    scheduledIn_every: ScheduledOperationWhereInput
+    scheduledIn_none: ScheduledOperationWhereInput
+    scheduledIn_some: ScheduledOperationWhereInput
+    "Matches if the field array contains *all* items provided to the filter and order does match"
+    services: [String!]
+    "Matches if the field array contains *all* items provided to the filter"
+    services_contains_all: [String!]
+    "Matches if the field array does not contain any of the items provided to the filter"
+    services_contains_none: [String!]
+    "Matches if the field array contains at least one item provided to the filter"
+    services_contains_some: [String!]
+    "Matches if the field array does not contains *all* items provided to the filter or order does not match"
+    services_not: [String!]
+    title: String
+    "All values containing the given string."
+    title_contains: String
+    "All values ending with the given string."
+    title_ends_with: String
+    "All values that are contained in given list."
+    title_in: [String]
+    "Any other value that exists and is not equal to the given value."
+    title_not: String
+    "All values not containing the given string."
+    title_not_contains: String
+    "All values not ending with the given string"
+    title_not_ends_with: String
+    "All values that are not contained in given list."
+    title_not_in: [String]
+    "All values not starting with the given string."
+    title_not_starts_with: String
+    "All values starting with the given string."
+    title_starts_with: String
+    updatedAt: DateTime
+    "All values greater than the given value."
+    updatedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    updatedAt_gte: DateTime
+    "All values that are contained in given list."
+    updatedAt_in: [DateTime]
+    "All values less than the given value."
+    updatedAt_lt: DateTime
+    "All values less than or equal the given value."
+    updatedAt_lte: DateTime
+    "Any other value that exists and is not equal to the given value."
+    updatedAt_not: DateTime
+    "All values that are not contained in given list."
+    updatedAt_not_in: [DateTime]
+    updatedBy: UserWhereInput
+    year: String
+    "All values containing the given string."
+    year_contains: String
+    "All values ending with the given string."
+    year_ends_with: String
+    "All values that are contained in given list."
+    year_in: [String]
+    "Any other value that exists and is not equal to the given value."
+    year_not: String
+    "All values not containing the given string."
+    year_not_contains: String
+    "All values not ending with the given string"
+    year_not_ends_with: String
+    "All values that are not contained in given list."
+    year_not_in: [String]
+    "All values not starting with the given string."
+    year_not_starts_with: String
+    "All values starting with the given string."
+    year_starts_with: String
+}
+
+input AboutPageUpdateInput {
+    client: String
+    contentBlocks: AboutPagecontentBlocksUnionUpdateManyInlineInput
+    description: String
+    services: [String!]
+    title: String
+    year: String
+}
+
+input AboutPageUpdateManyInlineInput {
+    "Connect multiple existing AboutPage documents"
+    connect: [AboutPageConnectInput!]
+    "Create and connect multiple AboutPage documents"
+    create: [AboutPageCreateInput!]
+    "Delete multiple AboutPage documents"
+    delete: [AboutPageWhereUniqueInput!]
+    "Disconnect multiple AboutPage documents"
+    disconnect: [AboutPageWhereUniqueInput!]
+    "Override currently-connected documents with multiple existing AboutPage documents"
+    set: [AboutPageWhereUniqueInput!]
+    "Update multiple AboutPage documents"
+    update: [AboutPageUpdateWithNestedWhereUniqueInput!]
+    "Upsert multiple AboutPage documents"
+    upsert: [AboutPageUpsertWithNestedWhereUniqueInput!]
+}
+
+input AboutPageUpdateManyInput {
+    client: String
+    description: String
+    services: [String!]
+    title: String
+    year: String
+}
+
+input AboutPageUpdateManyWithNestedWhereInput {
+    "Update many input"
+    data: AboutPageUpdateManyInput!
+    "Document search"
+    where: AboutPageWhereInput!
+}
+
+input AboutPageUpdateOneInlineInput {
+    "Connect existing AboutPage document"
+    connect: AboutPageWhereUniqueInput
+    "Create and connect one AboutPage document"
+    create: AboutPageCreateInput
+    "Delete currently connected AboutPage document"
+    delete: Boolean
+    "Disconnect currently connected AboutPage document"
+    disconnect: Boolean
+    "Update single AboutPage document"
+    update: AboutPageUpdateWithNestedWhereUniqueInput
+    "Upsert single AboutPage document"
+    upsert: AboutPageUpsertWithNestedWhereUniqueInput
+}
+
+input AboutPageUpdateWithNestedWhereUniqueInput {
+    "Document to update"
+    data: AboutPageUpdateInput!
+    "Unique document search"
+    where: AboutPageWhereUniqueInput!
+}
+
+input AboutPageUpsertInput {
+    "Create document if it didn't exist"
+    create: AboutPageCreateInput!
+    "Update document if it exists"
+    update: AboutPageUpdateInput!
+}
+
+input AboutPageUpsertWithNestedWhereUniqueInput {
+    "Upsert data"
+    data: AboutPageUpsertInput!
+    "Unique document search"
+    where: AboutPageWhereUniqueInput!
+}
+
+"This contains a set of filters that can be used to compare values internally"
+input AboutPageWhereComparatorInput {
+    "This field can be used to request to check if the entry is outdated by internal comparison"
+    outdated_to: Boolean
+}
+
+"Identifies documents"
+input AboutPageWhereInput {
+    "Logical AND on all given filters."
+    AND: [AboutPageWhereInput!]
+    "Logical NOT on all given filters combined by AND."
+    NOT: [AboutPageWhereInput!]
+    "Logical OR on all given filters."
+    OR: [AboutPageWhereInput!]
+    "Contains search across all appropriate fields."
+    _search: String
+    client: String
+    "All values containing the given string."
+    client_contains: String
+    "All values ending with the given string."
+    client_ends_with: String
+    "All values that are contained in given list."
+    client_in: [String]
+    "Any other value that exists and is not equal to the given value."
+    client_not: String
+    "All values not containing the given string."
+    client_not_contains: String
+    "All values not ending with the given string"
+    client_not_ends_with: String
+    "All values that are not contained in given list."
+    client_not_in: [String]
+    "All values not starting with the given string."
+    client_not_starts_with: String
+    "All values starting with the given string."
+    client_starts_with: String
+    "All values in which the union is empty."
+    contentBlocks_empty: Boolean
+    "Matches if the modular component contains at least one connection to the item provided to the filter"
+    contentBlocks_some: AboutPagecontentBlocksUnionWhereInput
+    createdAt: DateTime
+    "All values greater than the given value."
+    createdAt_gt: DateTime
+    "All values greater than or equal the given value."
+    createdAt_gte: DateTime
+    "All values that are contained in given list."
+    createdAt_in: [DateTime]
+    "All values less than the given value."
+    createdAt_lt: DateTime
+    "All values less than or equal the given value."
+    createdAt_lte: DateTime
+    "Any other value that exists and is not equal to the given value."
+    createdAt_not: DateTime
+    "All values that are not contained in given list."
+    createdAt_not_in: [DateTime]
+    createdBy: UserWhereInput
+    description: String
+    "All values containing the given string."
+    description_contains: String
+    "All values ending with the given string."
+    description_ends_with: String
+    "All values that are contained in given list."
+    description_in: [String]
+    "Any other value that exists and is not equal to the given value."
+    description_not: String
+    "All values not containing the given string."
+    description_not_contains: String
+    "All values not ending with the given string"
+    description_not_ends_with: String
+    "All values that are not contained in given list."
+    description_not_in: [String]
+    "All values not starting with the given string."
+    description_not_starts_with: String
+    "All values starting with the given string."
+    description_starts_with: String
+    documentInStages_every: AboutPageWhereStageInput
+    documentInStages_none: AboutPageWhereStageInput
+    documentInStages_some: AboutPageWhereStageInput
+    id: ID
+    "All values containing the given string."
+    id_contains: ID
+    "All values ending with the given string."
+    id_ends_with: ID
+    "All values that are contained in given list."
+    id_in: [ID]
+    "Any other value that exists and is not equal to the given value."
+    id_not: ID
+    "All values not containing the given string."
+    id_not_contains: ID
+    "All values not ending with the given string"
+    id_not_ends_with: ID
+    "All values that are not contained in given list."
+    id_not_in: [ID]
+    "All values not starting with the given string."
+    id_not_starts_with: ID
+    "All values starting with the given string."
+    id_starts_with: ID
+    publishedAt: DateTime
+    "All values greater than the given value."
+    publishedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    publishedAt_gte: DateTime
+    "All values that are contained in given list."
+    publishedAt_in: [DateTime]
+    "All values less than the given value."
+    publishedAt_lt: DateTime
+    "All values less than or equal the given value."
+    publishedAt_lte: DateTime
+    "Any other value that exists and is not equal to the given value."
+    publishedAt_not: DateTime
+    "All values that are not contained in given list."
+    publishedAt_not_in: [DateTime]
+    publishedBy: UserWhereInput
+    scheduledIn_every: ScheduledOperationWhereInput
+    scheduledIn_none: ScheduledOperationWhereInput
+    scheduledIn_some: ScheduledOperationWhereInput
+    "Matches if the field array contains *all* items provided to the filter and order does match"
+    services: [String!]
+    "Matches if the field array contains *all* items provided to the filter"
+    services_contains_all: [String!]
+    "Matches if the field array does not contain any of the items provided to the filter"
+    services_contains_none: [String!]
+    "Matches if the field array contains at least one item provided to the filter"
+    services_contains_some: [String!]
+    "Matches if the field array does not contains *all* items provided to the filter or order does not match"
+    services_not: [String!]
+    title: String
+    "All values containing the given string."
+    title_contains: String
+    "All values ending with the given string."
+    title_ends_with: String
+    "All values that are contained in given list."
+    title_in: [String]
+    "Any other value that exists and is not equal to the given value."
+    title_not: String
+    "All values not containing the given string."
+    title_not_contains: String
+    "All values not ending with the given string"
+    title_not_ends_with: String
+    "All values that are not contained in given list."
+    title_not_in: [String]
+    "All values not starting with the given string."
+    title_not_starts_with: String
+    "All values starting with the given string."
+    title_starts_with: String
+    updatedAt: DateTime
+    "All values greater than the given value."
+    updatedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    updatedAt_gte: DateTime
+    "All values that are contained in given list."
+    updatedAt_in: [DateTime]
+    "All values less than the given value."
+    updatedAt_lt: DateTime
+    "All values less than or equal the given value."
+    updatedAt_lte: DateTime
+    "Any other value that exists and is not equal to the given value."
+    updatedAt_not: DateTime
+    "All values that are not contained in given list."
+    updatedAt_not_in: [DateTime]
+    updatedBy: UserWhereInput
+    year: String
+    "All values containing the given string."
+    year_contains: String
+    "All values ending with the given string."
+    year_ends_with: String
+    "All values that are contained in given list."
+    year_in: [String]
+    "Any other value that exists and is not equal to the given value."
+    year_not: String
+    "All values not containing the given string."
+    year_not_contains: String
+    "All values not ending with the given string"
+    year_not_ends_with: String
+    "All values that are not contained in given list."
+    year_not_in: [String]
+    "All values not starting with the given string."
+    year_not_starts_with: String
+    "All values starting with the given string."
+    year_starts_with: String
+}
+
+"The document in stages filter allows specifying a stage entry to cross compare the same document between different stages"
+input AboutPageWhereStageInput {
+    "Logical AND on all given filters."
+    AND: [AboutPageWhereStageInput!]
+    "Logical NOT on all given filters combined by AND."
+    NOT: [AboutPageWhereStageInput!]
+    "Logical OR on all given filters."
+    OR: [AboutPageWhereStageInput!]
+    "This field contains fields which can be set as true or false to specify an internal comparison"
+    compareWithParent: AboutPageWhereComparatorInput
+    "Specify the stage to compare with"
+    stage: Stage
+}
+
+"References AboutPage record uniquely"
+input AboutPageWhereUniqueInput {
+    id: ID
+}
+
+input AboutPagecontentBlocksUnionConnectInput {
+    ImageBlock: ImageBlockConnectInput
+    TextBlock: TextBlockConnectInput
+    VideoBlock: VideoBlockConnectInput
+}
+
+input AboutPagecontentBlocksUnionCreateInput {
+    ImageBlock: ImageBlockCreateInput
+    TextBlock: TextBlockCreateInput
+    VideoBlock: VideoBlockCreateInput
+}
+
+input AboutPagecontentBlocksUnionCreateManyInlineInput {
+    "Create and connect multiple existing AboutPagecontentBlocksUnion documents"
+    create: [AboutPagecontentBlocksUnionCreateInput!]
+}
+
+input AboutPagecontentBlocksUnionCreateOneInlineInput {
+    "Create and connect one AboutPagecontentBlocksUnion document"
+    create: AboutPagecontentBlocksUnionCreateInput
+}
+
+input AboutPagecontentBlocksUnionCreateWithPositionInput {
+    ImageBlock: ImageBlockCreateWithPositionInput
+    TextBlock: TextBlockCreateWithPositionInput
+    VideoBlock: VideoBlockCreateWithPositionInput
+}
+
+input AboutPagecontentBlocksUnionUpdateInput {
+    ImageBlock: ImageBlockUpdateInput
+    TextBlock: TextBlockUpdateInput
+    VideoBlock: VideoBlockUpdateInput
+}
+
+input AboutPagecontentBlocksUnionUpdateManyInlineInput {
+    "Create and connect multiple AboutPagecontentBlocksUnion component instances"
+    create: [AboutPagecontentBlocksUnionCreateWithPositionInput!]
+    "Delete multiple AboutPagecontentBlocksUnion documents"
+    delete: [AboutPagecontentBlocksUnionWhereUniqueInput!]
+    "Update multiple AboutPagecontentBlocksUnion component instances"
+    update: [AboutPagecontentBlocksUnionUpdateWithNestedWhereUniqueAndPositionInput!]
+    "Upsert multiple AboutPagecontentBlocksUnion component instances"
+    upsert: [AboutPagecontentBlocksUnionUpsertWithNestedWhereUniqueAndPositionInput!]
+}
+
+input AboutPagecontentBlocksUnionUpdateManyWithNestedWhereInput {
+    ImageBlock: ImageBlockUpdateManyWithNestedWhereInput
+    TextBlock: TextBlockUpdateManyWithNestedWhereInput
+    VideoBlock: VideoBlockUpdateManyWithNestedWhereInput
+}
+
+input AboutPagecontentBlocksUnionUpdateOneInlineInput {
+    "Create and connect one AboutPagecontentBlocksUnion document"
+    create: AboutPagecontentBlocksUnionCreateInput
+    "Delete currently connected AboutPagecontentBlocksUnion document"
+    delete: Boolean
+    "Update single AboutPagecontentBlocksUnion document"
+    update: AboutPagecontentBlocksUnionUpdateWithNestedWhereUniqueInput
+    "Upsert single AboutPagecontentBlocksUnion document"
+    upsert: AboutPagecontentBlocksUnionUpsertWithNestedWhereUniqueInput
+}
+
+input AboutPagecontentBlocksUnionUpdateWithNestedWhereUniqueAndPositionInput {
+    ImageBlock: ImageBlockUpdateWithNestedWhereUniqueAndPositionInput
+    TextBlock: TextBlockUpdateWithNestedWhereUniqueAndPositionInput
+    VideoBlock: VideoBlockUpdateWithNestedWhereUniqueAndPositionInput
+}
+
+input AboutPagecontentBlocksUnionUpdateWithNestedWhereUniqueInput {
+    ImageBlock: ImageBlockUpdateWithNestedWhereUniqueInput
+    TextBlock: TextBlockUpdateWithNestedWhereUniqueInput
+    VideoBlock: VideoBlockUpdateWithNestedWhereUniqueInput
+}
+
+input AboutPagecontentBlocksUnionUpsertWithNestedWhereUniqueAndPositionInput {
+    ImageBlock: ImageBlockUpsertWithNestedWhereUniqueAndPositionInput
+    TextBlock: TextBlockUpsertWithNestedWhereUniqueAndPositionInput
+    VideoBlock: VideoBlockUpsertWithNestedWhereUniqueAndPositionInput
+}
+
+input AboutPagecontentBlocksUnionUpsertWithNestedWhereUniqueInput {
+    ImageBlock: ImageBlockUpsertWithNestedWhereUniqueInput
+    TextBlock: TextBlockUpsertWithNestedWhereUniqueInput
+    VideoBlock: VideoBlockUpsertWithNestedWhereUniqueInput
+}
+
+input AboutPagecontentBlocksUnionWhereInput {
+    ImageBlock: ImageBlockWhereInput
+    TextBlock: TextBlockWhereInput
+    VideoBlock: VideoBlockWhereInput
+}
+
+input AboutPagecontentBlocksUnionWhereUniqueInput {
+    ImageBlock: ImageBlockWhereUniqueInput
+    TextBlock: TextBlockWhereUniqueInput
+    VideoBlock: VideoBlockWhereUniqueInput
+}
 
 input AssetConnectInput {
     "Allow to specify document position in list of connected documents, will default to appending at end of list"
@@ -3996,7 +4947,6 @@ input CapabilityCreateInput {
     createdAt: DateTime
     image: AssetCreateOneInlineInput
     projects: ProjectCreateManyInlineInput
-    subtitle: String
     title: String
     updatedAt: DateTime
 }
@@ -4086,25 +5036,6 @@ input CapabilityManyWhereInput {
     scheduledIn_every: ScheduledOperationWhereInput
     scheduledIn_none: ScheduledOperationWhereInput
     scheduledIn_some: ScheduledOperationWhereInput
-    subtitle: String
-    "All values containing the given string."
-    subtitle_contains: String
-    "All values ending with the given string."
-    subtitle_ends_with: String
-    "All values that are contained in given list."
-    subtitle_in: [String]
-    "Any other value that exists and is not equal to the given value."
-    subtitle_not: String
-    "All values not containing the given string."
-    subtitle_not_contains: String
-    "All values not ending with the given string"
-    subtitle_not_ends_with: String
-    "All values that are not contained in given list."
-    subtitle_not_in: [String]
-    "All values not starting with the given string."
-    subtitle_not_starts_with: String
-    "All values starting with the given string."
-    subtitle_starts_with: String
     title: String
     "All values containing the given string."
     title_contains: String
@@ -4146,7 +5077,6 @@ input CapabilityUpdateInput {
     color: ColorInput
     image: AssetUpdateOneInlineInput
     projects: ProjectUpdateManyInlineInput
-    subtitle: String
     title: String
 }
 
@@ -4169,7 +5099,6 @@ input CapabilityUpdateManyInlineInput {
 
 input CapabilityUpdateManyInput {
     color: ColorInput
-    subtitle: String
     title: String
 }
 
@@ -4293,25 +5222,6 @@ input CapabilityWhereInput {
     scheduledIn_every: ScheduledOperationWhereInput
     scheduledIn_none: ScheduledOperationWhereInput
     scheduledIn_some: ScheduledOperationWhereInput
-    subtitle: String
-    "All values containing the given string."
-    subtitle_contains: String
-    "All values ending with the given string."
-    subtitle_ends_with: String
-    "All values that are contained in given list."
-    subtitle_in: [String]
-    "Any other value that exists and is not equal to the given value."
-    subtitle_not: String
-    "All values not containing the given string."
-    subtitle_not_contains: String
-    "All values not ending with the given string"
-    subtitle_not_ends_with: String
-    "All values that are not contained in given list."
-    subtitle_not_in: [String]
-    "All values not starting with the given string."
-    subtitle_not_starts_with: String
-    "All values starting with the given string."
-    subtitle_starts_with: String
     title: String
     "All values containing the given string."
     title_contains: String
@@ -4496,10 +5406,12 @@ input ImageBlockManyWhereInput {
 }
 
 input ImageBlockParentConnectInput {
+    AboutPage: AboutPageConnectInput
     Project: ProjectConnectInput
 }
 
 input ImageBlockParentCreateInput {
+    AboutPage: AboutPageCreateInput
     Project: ProjectCreateInput
 }
 
@@ -4518,6 +5430,7 @@ input ImageBlockParentCreateOneInlineInput {
 }
 
 input ImageBlockParentUpdateInput {
+    AboutPage: AboutPageUpdateInput
     Project: ProjectUpdateInput
 }
 
@@ -4539,6 +5452,7 @@ input ImageBlockParentUpdateManyInlineInput {
 }
 
 input ImageBlockParentUpdateManyWithNestedWhereInput {
+    AboutPage: AboutPageUpdateManyWithNestedWhereInput
     Project: ProjectUpdateManyWithNestedWhereInput
 }
 
@@ -4558,18 +5472,22 @@ input ImageBlockParentUpdateOneInlineInput {
 }
 
 input ImageBlockParentUpdateWithNestedWhereUniqueInput {
+    AboutPage: AboutPageUpdateWithNestedWhereUniqueInput
     Project: ProjectUpdateWithNestedWhereUniqueInput
 }
 
 input ImageBlockParentUpsertWithNestedWhereUniqueInput {
+    AboutPage: AboutPageUpsertWithNestedWhereUniqueInput
     Project: ProjectUpsertWithNestedWhereUniqueInput
 }
 
 input ImageBlockParentWhereInput {
+    AboutPage: AboutPageWhereInput
     Project: ProjectWhereInput
 }
 
 input ImageBlockParentWhereUniqueInput {
+    AboutPage: AboutPageWhereUniqueInput
     Project: ProjectWhereUniqueInput
 }
 
@@ -4799,7 +5717,6 @@ input MarketCreateInput {
     createdAt: DateTime
     image: AssetCreateOneInlineInput
     projects: ProjectCreateManyInlineInput
-    subtitle: String
     title: String
     updatedAt: DateTime
 }
@@ -4889,25 +5806,6 @@ input MarketManyWhereInput {
     scheduledIn_every: ScheduledOperationWhereInput
     scheduledIn_none: ScheduledOperationWhereInput
     scheduledIn_some: ScheduledOperationWhereInput
-    subtitle: String
-    "All values containing the given string."
-    subtitle_contains: String
-    "All values ending with the given string."
-    subtitle_ends_with: String
-    "All values that are contained in given list."
-    subtitle_in: [String]
-    "Any other value that exists and is not equal to the given value."
-    subtitle_not: String
-    "All values not containing the given string."
-    subtitle_not_contains: String
-    "All values not ending with the given string"
-    subtitle_not_ends_with: String
-    "All values that are not contained in given list."
-    subtitle_not_in: [String]
-    "All values not starting with the given string."
-    subtitle_not_starts_with: String
-    "All values starting with the given string."
-    subtitle_starts_with: String
     title: String
     "All values containing the given string."
     title_contains: String
@@ -4949,7 +5847,6 @@ input MarketUpdateInput {
     color: ColorInput
     image: AssetUpdateOneInlineInput
     projects: ProjectUpdateManyInlineInput
-    subtitle: String
     title: String
 }
 
@@ -4972,7 +5869,6 @@ input MarketUpdateManyInlineInput {
 
 input MarketUpdateManyInput {
     color: ColorInput
-    subtitle: String
     title: String
 }
 
@@ -5096,25 +5992,6 @@ input MarketWhereInput {
     scheduledIn_every: ScheduledOperationWhereInput
     scheduledIn_none: ScheduledOperationWhereInput
     scheduledIn_some: ScheduledOperationWhereInput
-    subtitle: String
-    "All values containing the given string."
-    subtitle_contains: String
-    "All values ending with the given string."
-    subtitle_ends_with: String
-    "All values that are contained in given list."
-    subtitle_in: [String]
-    "Any other value that exists and is not equal to the given value."
-    subtitle_not: String
-    "All values not containing the given string."
-    subtitle_not_contains: String
-    "All values not ending with the given string"
-    subtitle_not_ends_with: String
-    "All values that are not contained in given list."
-    subtitle_not_in: [String]
-    "All values not starting with the given string."
-    subtitle_not_starts_with: String
-    "All values starting with the given string."
-    subtitle_starts_with: String
     title: String
     "All values containing the given string."
     title_contains: String
@@ -5186,7 +6063,6 @@ input ProjectCreateInput {
     createdAt: DateTime
     description: String
     imageUrl: AssetCreateOneInlineInput
-    longDescription: String
     markets: MarketCreateManyInlineInput
     regions: RegionCreateManyInlineInput
     services: [String!]
@@ -5303,25 +6179,6 @@ input ProjectManyWhereInput {
     "All values starting with the given string."
     id_starts_with: ID
     imageUrl: AssetWhereInput
-    longDescription: String
-    "All values containing the given string."
-    longDescription_contains: String
-    "All values ending with the given string."
-    longDescription_ends_with: String
-    "All values that are contained in given list."
-    longDescription_in: [String]
-    "Any other value that exists and is not equal to the given value."
-    longDescription_not: String
-    "All values not containing the given string."
-    longDescription_not_contains: String
-    "All values not ending with the given string"
-    longDescription_not_ends_with: String
-    "All values that are not contained in given list."
-    longDescription_not_in: [String]
-    "All values not starting with the given string."
-    longDescription_not_starts_with: String
-    "All values starting with the given string."
-    longDescription_starts_with: String
     markets_every: MarketWhereInput
     markets_none: MarketWhereInput
     markets_some: MarketWhereInput
@@ -5420,7 +6277,6 @@ input ProjectUpdateInput {
     contentBlocks: ProjectcontentBlocksUnionUpdateManyInlineInput
     description: String
     imageUrl: AssetUpdateOneInlineInput
-    longDescription: String
     markets: MarketUpdateManyInlineInput
     regions: RegionUpdateManyInlineInput
     services: [String!]
@@ -5449,7 +6305,6 @@ input ProjectUpdateManyInput {
     accentColor: ColorInput
     client: String
     description: String
-    longDescription: String
     services: [String!]
     title: String
     year: String
@@ -5598,25 +6453,6 @@ input ProjectWhereInput {
     "All values starting with the given string."
     id_starts_with: ID
     imageUrl: AssetWhereInput
-    longDescription: String
-    "All values containing the given string."
-    longDescription_contains: String
-    "All values ending with the given string."
-    longDescription_ends_with: String
-    "All values that are contained in given list."
-    longDescription_in: [String]
-    "Any other value that exists and is not equal to the given value."
-    longDescription_not: String
-    "All values not containing the given string."
-    longDescription_not_contains: String
-    "All values not ending with the given string"
-    longDescription_not_ends_with: String
-    "All values that are not contained in given list."
-    longDescription_not_in: [String]
-    "All values not starting with the given string."
-    longDescription_not_starts_with: String
-    "All values starting with the given string."
-    longDescription_starts_with: String
     markets_every: MarketWhereInput
     markets_none: MarketWhereInput
     markets_some: MarketWhereInput
@@ -5852,7 +6688,6 @@ input RegionCreateInput {
     createdAt: DateTime
     image: AssetCreateOneInlineInput
     projects: ProjectCreateManyInlineInput
-    subtitle: String
     title: String
     updatedAt: DateTime
 }
@@ -5942,25 +6777,6 @@ input RegionManyWhereInput {
     scheduledIn_every: ScheduledOperationWhereInput
     scheduledIn_none: ScheduledOperationWhereInput
     scheduledIn_some: ScheduledOperationWhereInput
-    subtitle: String
-    "All values containing the given string."
-    subtitle_contains: String
-    "All values ending with the given string."
-    subtitle_ends_with: String
-    "All values that are contained in given list."
-    subtitle_in: [String]
-    "Any other value that exists and is not equal to the given value."
-    subtitle_not: String
-    "All values not containing the given string."
-    subtitle_not_contains: String
-    "All values not ending with the given string"
-    subtitle_not_ends_with: String
-    "All values that are not contained in given list."
-    subtitle_not_in: [String]
-    "All values not starting with the given string."
-    subtitle_not_starts_with: String
-    "All values starting with the given string."
-    subtitle_starts_with: String
     title: String
     "All values containing the given string."
     title_contains: String
@@ -6002,7 +6818,6 @@ input RegionUpdateInput {
     color: ColorInput
     image: AssetUpdateOneInlineInput
     projects: ProjectUpdateManyInlineInput
-    subtitle: String
     title: String
 }
 
@@ -6025,7 +6840,6 @@ input RegionUpdateManyInlineInput {
 
 input RegionUpdateManyInput {
     color: ColorInput
-    subtitle: String
     title: String
 }
 
@@ -6149,25 +6963,6 @@ input RegionWhereInput {
     scheduledIn_every: ScheduledOperationWhereInput
     scheduledIn_none: ScheduledOperationWhereInput
     scheduledIn_some: ScheduledOperationWhereInput
-    subtitle: String
-    "All values containing the given string."
-    subtitle_contains: String
-    "All values ending with the given string."
-    subtitle_ends_with: String
-    "All values that are contained in given list."
-    subtitle_in: [String]
-    "Any other value that exists and is not equal to the given value."
-    subtitle_not: String
-    "All values not containing the given string."
-    subtitle_not_contains: String
-    "All values not ending with the given string"
-    subtitle_not_ends_with: String
-    "All values that are not contained in given list."
-    subtitle_not_in: [String]
-    "All values not starting with the given string."
-    subtitle_not_starts_with: String
-    "All values starting with the given string."
-    subtitle_starts_with: String
     title: String
     "All values containing the given string."
     title_contains: String
@@ -7075,10 +7870,12 @@ input TextBlockManyWhereInput {
 }
 
 input TextBlockParentConnectInput {
+    AboutPage: AboutPageConnectInput
     Project: ProjectConnectInput
 }
 
 input TextBlockParentCreateInput {
+    AboutPage: AboutPageCreateInput
     Project: ProjectCreateInput
 }
 
@@ -7097,6 +7894,7 @@ input TextBlockParentCreateOneInlineInput {
 }
 
 input TextBlockParentUpdateInput {
+    AboutPage: AboutPageUpdateInput
     Project: ProjectUpdateInput
 }
 
@@ -7118,6 +7916,7 @@ input TextBlockParentUpdateManyInlineInput {
 }
 
 input TextBlockParentUpdateManyWithNestedWhereInput {
+    AboutPage: AboutPageUpdateManyWithNestedWhereInput
     Project: ProjectUpdateManyWithNestedWhereInput
 }
 
@@ -7137,18 +7936,22 @@ input TextBlockParentUpdateOneInlineInput {
 }
 
 input TextBlockParentUpdateWithNestedWhereUniqueInput {
+    AboutPage: AboutPageUpdateWithNestedWhereUniqueInput
     Project: ProjectUpdateWithNestedWhereUniqueInput
 }
 
 input TextBlockParentUpsertWithNestedWhereUniqueInput {
+    AboutPage: AboutPageUpsertWithNestedWhereUniqueInput
     Project: ProjectUpsertWithNestedWhereUniqueInput
 }
 
 input TextBlockParentWhereInput {
+    AboutPage: AboutPageWhereInput
     Project: ProjectWhereInput
 }
 
 input TextBlockParentWhereUniqueInput {
+    AboutPage: AboutPageWhereUniqueInput
     Project: ProjectWhereUniqueInput
 }
 
@@ -7724,10 +8527,12 @@ input VideoBlockManyWhereInput {
 }
 
 input VideoBlockParentConnectInput {
+    AboutPage: AboutPageConnectInput
     Project: ProjectConnectInput
 }
 
 input VideoBlockParentCreateInput {
+    AboutPage: AboutPageCreateInput
     Project: ProjectCreateInput
 }
 
@@ -7746,6 +8551,7 @@ input VideoBlockParentCreateOneInlineInput {
 }
 
 input VideoBlockParentUpdateInput {
+    AboutPage: AboutPageUpdateInput
     Project: ProjectUpdateInput
 }
 
@@ -7767,6 +8573,7 @@ input VideoBlockParentUpdateManyInlineInput {
 }
 
 input VideoBlockParentUpdateManyWithNestedWhereInput {
+    AboutPage: AboutPageUpdateManyWithNestedWhereInput
     Project: ProjectUpdateManyWithNestedWhereInput
 }
 
@@ -7786,18 +8593,22 @@ input VideoBlockParentUpdateOneInlineInput {
 }
 
 input VideoBlockParentUpdateWithNestedWhereUniqueInput {
+    AboutPage: AboutPageUpdateWithNestedWhereUniqueInput
     Project: ProjectUpdateWithNestedWhereUniqueInput
 }
 
 input VideoBlockParentUpsertWithNestedWhereUniqueInput {
+    AboutPage: AboutPageUpsertWithNestedWhereUniqueInput
     Project: ProjectUpsertWithNestedWhereUniqueInput
 }
 
 input VideoBlockParentWhereInput {
+    AboutPage: AboutPageWhereInput
     Project: ProjectWhereInput
 }
 
 input VideoBlockParentWhereUniqueInput {
+    AboutPage: AboutPageWhereUniqueInput
     Project: ProjectWhereUniqueInput
 }
 
