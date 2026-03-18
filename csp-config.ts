@@ -14,7 +14,7 @@ const cspPolicy = {
   'img-src': ["'self'", 'data:', 'blob:', 'https://*.graphassets.com', 'https://*.hygraph.com', 'https://grainy-gradients.vercel.app', 'https://*.vimeocdn.com'],
   'connect-src': ["'self'", 'https://*.hygraph.com', 'https://*.graphassets.com', 'https://vimeo.com'],
   'font-src': ["'self'", 'data:', 'https://fonts.gstatic.com'],
-  'media-src': ["'self'", 'https://*.graphassets.com', 'https://vimeo.com', 'https://*.vimeocdn.com'],
+  'media-src': ["'self'", 'https://*.graphassets.com', 'https://vimeo.com', 'https://*.vimeocdn.com','https://files.vidstack.io'],
   'frame-src': ["'self'", 'https://player.vimeo.com', 'https://www.youtube.com', 'https://www.youtube-nocookie.com'],
   'worker-src': ["'self'", 'blob:'],
   'object-src': ["'none'"],

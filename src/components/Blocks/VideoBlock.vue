@@ -3,42 +3,18 @@
         v-reveal
         class="relative w-full h-[50vh] md:h-[70vh] overflow-hidden transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-10 reveal:opacity-100 reveal:translate-y-0"
     >
-    <!-- 1. Skeleton State (Highest Z) -->
+    <!-- 1. Skeleton State (Z-50) -->
     <div v-if="isActuallyLoading" class="absolute inset-0 z-50 skeleton-shimmer flex items-center justify-center h-full">
       <div class="w-12 h-12 rounded-full border-2 border-white/10 border-t-white/40 animate-spin"></div>
     </div>
 
-    <!-- 2. Poster Image (Standard img for maximum reliability) -->
-    <img
-        v-if="(displayPoster || poster) && !isStarted"
-        :src="displayPoster || poster"
-        alt="Video Poster"
-        @load="onPosterLoad"
-        class="absolute inset-0 w-full h-full object-cover z-20 transition-opacity duration-700"
-        :class="isActuallyLoading ? 'opacity-0' : 'opacity-100'"
-    />
-
-    <!-- 3. Custom Play Overlay (Always above poster, hidden when started) -->
-    <div
-        v-if="!isStarted"
-        class="custom-overlay absolute inset-0 z-30 flex items-center justify-center bg-black/20 transition-all duration-700 pointer-events-none"
-        :class="isActuallyLoading ? 'opacity-0' : 'opacity-100'"
-    >
-      <button
-          v-if="!isLoading"
-          @click="handlePlayClick"
-          class="play-button group/btn relative w-24 h-24 flex items-center justify-center bg-white/10 backdrop-blur-xl border border-white/20 rounded-full pointer-events-auto cursor-pointer transition-all duration-500 hover:scale-110 hover:bg-white/20"
-      >
-        <div class="absolute inset-0 rounded-full bg-white/10 animate-ping opacity-20 group-hover/btn:hidden"></div>
-        <Play class="w-8 h-8 text-white fill-white ml-1 transition-transform group-hover/btn:scale-110" />
-      </button>
-    </div>
-
-    <!-- 4. Vidstack Player (Base Layer) -->
+    <!-- 2. Vidstack Player -->
     <media-player
         ref="player"
         class="absolute inset-0 w-full h-full group/player border-none outline-none ring-0 transition-opacity duration-700"
+        :class="isActuallyLoading ? 'opacity-0' : 'opacity-100'"
         :src="url"
+        view-type="video"
         cross-origin
         plays-inline
         :autoplay="autoplay"
@@ -48,10 +24,37 @@
         @vds-play="onPlay"
         @vds-playing="onPlaying"
         @vds-waiting="onWaiting"
-        @vds-started="onStarted"
     >
-      <media-provider class="w-full h-full" />
-      <media-video-layout />
+      <media-provider class="w-full h-full">
+        <!-- Poster Image inside Provider (Z-20) -->
+        <img
+            v-if="displayPoster || poster"
+            :src="displayPoster || poster"
+            alt="Video Poster"
+            @load="onPosterLoad"
+            class="vds-custom-poster absolute inset-0 w-full h-full object-cover z-20 transition-opacity duration-700 pointer-events-none"
+        />
+      </media-provider>
+
+      <!-- Default Video Controls Layout -->
+      <media-video-layout/>
+
+      <!-- Custom Play Overlay inside Player (Z-30) -->
+      <div
+          class="custom-overlay absolute inset-0 z-30 flex items-center justify-center bg-black/20 transition-all duration-700 pointer-events-none"
+      >
+        <button
+            v-if="!isLoading"
+            @click="handlePlayClick"
+            class="play-button group/btn relative w-24 h-24 flex items-center justify-center bg-white/10 backdrop-blur-xl border border-white/20 rounded-full pointer-events-auto cursor-pointer transition-all duration-500 hover:scale-110 hover:bg-white/20"
+        >
+          <div class="absolute inset-0 rounded-full bg-white/10 animate-ping opacity-20 group-hover/btn:hidden"></div>
+          <Play class="w-8 h-8 text-white fill-white ml-1 transition-transform group-hover/btn:scale-110" />
+        </button>
+      </div>
+
+      <!-- Default Vidstack Video Layout (Z-40 via class) -->
+      <media-video-layout class="z-40" />
     </media-player>
   </div>
 </template>
@@ -80,7 +83,6 @@ const props = withDefaults(defineProps<{
 
 const posterLoaded = ref(false);
 const displayPoster = ref('');
-const isStarted = ref(false);
 
 const isActuallyLoading = computed(() => 
   props.loading || 
@@ -99,10 +101,8 @@ watch(() => props.poster, async (newPoster) => {
     try {
       const cachedUrl = await ImageCacheService.getImageUrl(newPoster);
       displayPoster.value = cachedUrl;
-      // The @load on <img> will handle posterLoaded = true
     } catch (e) {
       displayPoster.value = newPoster;
-      // Fallback: if cache fails, we still wait for @load on the raw URL
     }
   } else {
     displayPoster.value = '';
@@ -114,9 +114,7 @@ const player = ref<any>(null);
 const isLoading = ref(false);
 
 const onPlay = () => {
-  console.log("play")
   isLoading.value = true;
-  isStarted.value = true; // Hide poster immediately when play is triggered
 };
 
 const onPlaying = () => {
@@ -127,15 +125,16 @@ const onWaiting = () => {
   isLoading.value = true;
 };
 
-const onStarted = () => {
-  isStarted.value = true;
-};
-
-const handlePlayClick = (e: Event) => {
+const handlePlayClick = async (e: Event) => {
   e.stopPropagation();
   if (player.value) {
-    player.value.play();
-    isLoading.value = true;
+    try {
+      await player.value.play();
+      isLoading.value = true;
+    } catch (error) {
+      console.warn('Media is not ready to play yet:', error);
+      // You could also show a loading state here if you wanted
+    }
   }
 };
 </script>
@@ -161,11 +160,20 @@ media-player :deep(.vds-video) {
   height: 100%;
 }
 
-/* Hide default controls until started */
-media-player:not([data-started]) :deep(.vds-controls) {
-  opacity: 0;
+/* 
+  CRITICAL: Hide custom poster and overlay when video starts.
+*/
+media-player[data-started] .vds-custom-poster,
+media-player[data-started] .custom-overlay {
+  opacity: 0 !important;
+  pointer-events: none !important;
   visibility: hidden;
 }
+
+/* 
+  Removed the CSS that was hiding .vds-controls 
+  as the missing CSS imports in main.ts were likely the root cause.
+*/
 
 media-player :deep(.vds-buffering-indicator) {
   --vds-buffering-indicator-color: #ffffff;

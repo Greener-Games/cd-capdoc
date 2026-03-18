@@ -35,6 +35,10 @@
 
     <!-- Global Footer -->
     <PageFooter v-if="showFooter" />
+
+    <media-player title="Sprite Fight" src="https://files.vidstack.io/sprite-fight/720p.mp4">
+      <media-provider></media-provider>
+    </media-player>
   </div>
 </template>
 
