@@ -1,6 +1,5 @@
 import { GraphQLClient, gql } from 'graphql-request';
 import { Project, CategoryItem, AboutPage } from '../types';
-import { ImageOptimizer } from './imageOptimizer';
 
 const endpoint = import.meta.env.VITE_HYGRAPH_ENDPOINT;
 
@@ -10,143 +9,178 @@ if (endpoint) {
   client = new GraphQLClient(endpoint);
 }
 
+// 1. Fragment for reusable project fields to keep queries clean
+const PROJECT_FIELDS = gql`
+  fragment ProjectFields on Project {
+    id
+    title
+    description
+    imageUrl {
+      url
+      overrideUrl
+    }
+    accentColor {
+      hex
+    }
+    client
+    year
+    services
+    contentBlocks {
+      __typename
+      ... on ImageBlock {
+        id
+        asset {
+          url
+          overrideUrl
+        }
+      }
+      ... on TextBlock {
+        id
+        title
+        leftContent {
+          html
+        }
+        rightContent {
+          html
+        }
+      }
+      ... on VideoBlock {
+        id
+        videoUrl
+        poster {
+          url
+          overrideUrl
+        }
+      }
+    }
+  }
+`;
+
+// 2. Fragments for Categories
+const MARKET_FIELDS = gql`
+  fragment MarketFields on Market {
+    id
+    title
+    image { url overrideUrl }
+    color { hex }
+    projects { id }
+  }
+`;
+
+const REGION_FIELDS = gql`
+  fragment RegionFields on Region {
+    id
+    title
+    image { url overrideUrl }
+    color { hex }
+    projects { id }
+  }
+`;
+
+const CAPABILITY_FIELDS = gql`
+  fragment CapabilityFields on Capability {
+    id
+    title
+    image { url overrideUrl }
+    color { hex }
+    projects { id }
+  }
+`;
+
+// 3. Query for the initial bulk data (About, Categories, and first page of Projects)
+const GET_ALL_DATA = gql`
+  ${PROJECT_FIELDS}
+  ${MARKET_FIELDS}
+  ${REGION_FIELDS}
+  ${CAPABILITY_FIELDS}
+  query GetAllData($first: Int!, $after: String) {
+    aboutPages(first: 1) {
+      title
+      description
+      services
+      client
+      year
+      contentBlocks {
+        __typename
+        ... on ImageBlock { id, asset { url overrideUrl } }
+        ... on TextBlock { id, title, leftContent { html } rightContent { html } }
+        ... on VideoBlock { id, videoUrl, poster { url overrideUrl } }
+      }
+    }
+    projectsConnection(first: $first, after: $after) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      edges {
+        node {
+          ...ProjectFields
+        }
+      }
+    }
+    markets(first: 100) {
+      ...MarketFields
+    }
+    regions(first: 100) {
+      ...RegionFields
+    }
+    capabilities(first: 100) {
+      ...CapabilityFields
+    }
+  }
+`;
+
+// 4. Query for subsequent project pages
+const GET_MORE_PROJECTS = gql`
+  ${PROJECT_FIELDS}
+  query GetMoreProjects($first: Int!, $after: String!) {
+    projectsConnection(first: $first, after: $after) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      edges {
+        node {
+          ...ProjectFields
+        }
+      }
+    }
+  }
+`;
+
 export const fetchHygraphData = async () => {
   if (!client) {
     console.warn('VITE_HYGRAPH_ENDPOINT is not set. Cannot fetch data from Hygraph.');
     return null;
   }
 
-  const query = gql`
-    query GetAllData {
-      aboutPages(first: 1) {
-        title
-        description
-        services
-        client
-        year
-        contentBlocks {
-          __typename
-          ... on ImageBlock {
-            id
-            asset {
-              url
-              overrideUrl
-            }
-          }
-          ... on TextBlock {
-            id
-            title
-            leftContent {
-              html
-            }
-            rightContent {
-              html
-            }
-          }
-          ... on VideoBlock {
-            id
-            videoUrl
-            poster {
-              url
-              overrideUrl
-            }
-          }
-        }
-      }
-      projects {
-        id
-        title
-        description
-        imageUrl {
-          url
-          overrideUrl
-        }
-        accentColor {
-          hex
-        }
-        client
-        year
-        services
-        contentBlocks {
-          __typename
-          ... on ImageBlock {
-            id
-            asset {
-              url
-              overrideUrl
-            }
-          }
-          ... on TextBlock {
-            id
-            title
-            leftContent {
-              html
-            }
-            rightContent {
-              html
-            }
-          }
-          ... on VideoBlock {
-            id
-            videoUrl
-            poster {
-              url
-              overrideUrl
-            }
-          }
-        }
-      }
-      markets {
-        id
-        title
-        image {
-          url
-          overrideUrl
-        }
-        color {
-          hex
-        }
-        projects {
-          id
-        }
-      }
-      regions {
-        id
-        title
-        image {
-          url
-          overrideUrl
-        }
-        color {
-          hex
-        }
-        projects {
-          id
-        }
-      }
-      capabilities {
-        id
-        title
-        image {
-          url
-          overrideUrl
-        }
-        color {
-          hex
-        }
-        projects {
-          id
-        }
-      }
-    }
-  `;
-
   try {
-    const data = await client.request<any>(query);
+    const PAGE_SIZE = 100;
+    let allProjects: any[] = [];
+    
+    // Fetch initial page
+    const initialData = await client.request<any>(GET_ALL_DATA, { 
+      first: PAGE_SIZE 
+    });
 
-    // Helper to resolve asset URL. We keep the raw URL here
-    // because the UI components (Cards/Blocks) now handle optimization
-    // via ImageOptimizer and ImageCacheService.
+    // Add first batch
+    allProjects = initialData.projectsConnection.edges.map((e: any) => e.node);
+    let { hasNextPage, endCursor } = initialData.projectsConnection.pageInfo;
+
+    // 4. Iteratively fetch remaining pages if they exist
+    while (hasNextPage) {
+      const nextPageData = await client.request<any>(GET_MORE_PROJECTS, {
+        first: PAGE_SIZE,
+        after: endCursor
+      });
+
+      allProjects = [...allProjects, ...nextPageData.projectsConnection.edges.map((e: any) => e.node)];
+      hasNextPage = nextPageData.projectsConnection.pageInfo.hasNextPage;
+      endCursor = nextPageData.projectsConnection.pageInfo.endCursor;
+    }
+
+    // --- Mapping Logic (Unchanged but adapted to the new loop output) ---
+
     const resolveAssetUrl = (asset: any) => {
       if (!asset) return '';
       if (asset.overrideUrl) return asset.overrideUrl;
@@ -156,44 +190,23 @@ export const fetchHygraphData = async () => {
     const mapContentBlocks = (blocks: any[]) => {
       return blocks?.map((block: any) => {
         const type = block.__typename?.replace('Block', '').toLowerCase();
-
-        if (block.asset) {
-          return {
-            ...block,
-            type,
-            url: resolveAssetUrl(block.asset)
-          };
-        }
-        if (type === 'text') {
-          return {
-            ...block,
-            type,
-            leftContent: block.leftContent || null,
-            rightContent: block.rightContent || null
-          };
-        }
-        if (block.videoUrl || block.poster) {
-          return {
-            ...block,
-            url: block.videoUrl,
-            type,
-            poster: resolveAssetUrl(block.poster)
-          };
-        }
+        if (block.asset) return { ...block, type, url: resolveAssetUrl(block.asset) };
+        if (type === 'text') return { ...block, type, leftContent: block.leftContent || null, rightContent: block.rightContent || null };
+        if (block.videoUrl || block.poster) return { ...block, url: block.videoUrl, type, poster: resolveAssetUrl(block.poster) };
         return block;
       });
     };
 
-    const projects = data.projects.map((p: any) => ({
+    const projects = allProjects.map((p: any) => ({
       ...p,
       image: resolveAssetUrl(p.imageUrl),
       accentColor: p.accentColor?.hex || null,
       contentBlocks: mapContentBlocks(p.contentBlocks)
     }));
 
-    const aboutPage = data.aboutPages?.[0] ? {
-      ...data.aboutPages[0],
-      contentBlocks: mapContentBlocks(data.aboutPages[0].contentBlocks)
+    const aboutPage = initialData.aboutPages?.[0] ? {
+      ...initialData.aboutPages[0],
+      contentBlocks: mapContentBlocks(initialData.aboutPages[0].contentBlocks)
     } : null;
 
     const mapCategoryItems = (items: any[]) => {
@@ -210,9 +223,9 @@ export const fetchHygraphData = async () => {
     return {
       aboutPage: aboutPage as AboutPage | null,
       projects: projects as Project[],
-      markets: mapCategoryItems(data.markets),
-      regions: mapCategoryItems(data.regions),
-      capabilities: mapCategoryItems(data.capabilities),
+      markets: mapCategoryItems(initialData.markets),
+      regions: mapCategoryItems(initialData.regions),
+      capabilities: mapCategoryItems(initialData.capabilities),
     };
   } catch (error) {
     console.error('Error fetching data from Hygraph:', error);
