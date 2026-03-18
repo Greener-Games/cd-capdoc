@@ -148,7 +148,7 @@ watch(filteredProjects, async (newData) => {
   displayedProjects.value = [];
 
   const images = newData.map(p => p.image);
-  prefetchImages(images);
+  prefetchImages(images, 'small');
 
   const exitDelay = (currentCount * 20) + 700;
   

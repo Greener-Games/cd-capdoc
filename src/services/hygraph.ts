@@ -1,5 +1,6 @@
 import { GraphQLClient, gql } from 'graphql-request';
 import { Project, CategoryItem, AboutPage } from '../types';
+import { ImageOptimizer } from './imageOptimizer';
 
 const endpoint = import.meta.env.VITE_HYGRAPH_ENDPOINT;
 
@@ -143,31 +144,26 @@ export const fetchHygraphData = async () => {
   try {
     const data = await client.request<any>(query);
 
-    // Helper to resolve the correct URL from an Asset object with optional optimization
-    const resolveAssetUrl = (asset: any, width?: number) => {
+    // Helper to resolve asset URL. We keep the raw URL here
+    // because the UI components (Cards/Blocks) now handle optimization
+    // via ImageOptimizer and ImageCacheService.
+    const resolveAssetUrl = (asset: any) => {
       if (!asset) return '';
       if (asset.overrideUrl) return asset.overrideUrl;
-      if (!asset.url) return '';
-      
-      if (width) {
-        return `${asset.url}?width=${width}&quality=80&format=webp`;
-      }
-      return asset.url;
+      return asset.url || '';
     };
 
     const mapContentBlocks = (blocks: any[]) => {
       return blocks?.map((block: any) => {
         const type = block.__typename?.replace('Block', '').toLowerCase();
 
-        // Handle ImageBlock (now uses 'asset' field)
         if (block.asset) {
           return {
             ...block,
             type,
-            url: resolveAssetUrl(block.asset, 1600)
+            url: resolveAssetUrl(block.asset)
           };
         }
-        // Handle TextBlock
         if (type === 'text') {
           return {
             ...block,
@@ -176,24 +172,22 @@ export const fetchHygraphData = async () => {
             rightContent: block.rightContent || null
           };
         }
-        // Handle VideoBlock (now uses 'videoUrl')
         if (block.videoUrl || block.poster) {
           return {
             ...block,
-            url: block.videoUrl, // Map videoUrl back to 'url' for UI consistency if needed
+            url: block.videoUrl,
             type,
-            poster: resolveAssetUrl(block.poster, 1600)
+            poster: resolveAssetUrl(block.poster)
           };
         }
         return block;
       });
     };
 
-    // Map projects back to the categories based on IDs and resolve asset URLs/nested objects
     const projects = data.projects.map((p: any) => ({
       ...p,
-      image: resolveAssetUrl(p.imageUrl, 1200),
-      accentColor: p.accentColor?.hex || null, // Extract hex from color object
+      image: resolveAssetUrl(p.imageUrl),
+      accentColor: p.accentColor?.hex || null,
       contentBlocks: mapContentBlocks(p.contentBlocks)
     }));
 
@@ -206,8 +200,8 @@ export const fetchHygraphData = async () => {
       return items.map(item => ({
         id: item.id,
         title: item.title,
-        image: resolveAssetUrl(item.image, 800),
-        color: item.color?.hex || null, // Extract hex from color object
+        image: resolveAssetUrl(item.image),
+        color: item.color?.hex || null,
         accentColor: item.color?.hex || null,
         projectIds: item.projects.map((p: any) => p.id)
       })) as CategoryItem[];

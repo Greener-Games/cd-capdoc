@@ -6,6 +6,7 @@
       :color="project.accentColor"
       :index="index"
       :is-dragging="isDragging"
+      image-size="medium"
       aspect-ratio-class="aspect-[16/9]"
       @select="handleClick"
   >

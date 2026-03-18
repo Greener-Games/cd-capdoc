@@ -58,6 +58,7 @@ import { computed, ref, watch } from 'vue';
 import { useOrbState } from '@/composables/useOrbState.ts';
 import { ImageCacheService } from '@/services/imageCache';
 import { useDataStore } from '@/store/data';
+import { ImageOptimizer, ImageSize } from '@/services/imageOptimizer';
 
 const dataStore = useDataStore();
 
@@ -75,6 +76,7 @@ const props = withDefaults(defineProps<{
   imageClass?: string;
   showHoverOverlay?: boolean;
   showBottomLine?: boolean;
+  imageSize?: ImageSize;
 }>(), {
   image: '',
   color: '',
@@ -86,6 +88,7 @@ const props = withDefaults(defineProps<{
   imageClass: 'group-hover:scale-110',
   showHoverOverlay: true,
   showBottomLine: true,
+  imageSize: 'medium'
 });
 
 const emit = defineEmits<{
@@ -113,7 +116,8 @@ const displayImage = ref('');
 watch(() => props.image, async (newImage) => {
   imageLoaded.value = false; // Reset loading state for new image
   if (newImage) {
-    displayImage.value = await ImageCacheService.getImageUrl(newImage);
+    const optimizedUrl = ImageOptimizer.getOptimizedUrl(newImage, props.imageSize);
+    displayImage.value = await ImageCacheService.getImageUrl(optimizedUrl);
   } else {
     displayImage.value = '';
   }

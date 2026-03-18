@@ -11,6 +11,59 @@ export class ImageCacheService {
   private static blobGuiRegistry = new Map<string, string>();
 
   /**
+   * Helper to format bytes to a readable size
+   */
+  private static formatSize(bytes: number): string {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const dm = 2;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+  /**
+   * Helper to extract dimensions and info from any Hygraph transformation URL style
+   */
+  private static getRequestInfo(url: string): string {
+    try {
+      let width = '';
+      let height = '';
+      let format = '';
+
+      if (url.includes('?')) {
+        // Modern Query-based
+        const params = new URL(url).searchParams;
+        width = params.get('width') || '';
+        height = params.get('height') || '';
+        format = params.get('format') || '';
+      } else {
+        // Legacy Path-based
+        const resizeMatch = url.match(/resize=([^/]+)/);
+        if (resizeMatch) {
+          width = resizeMatch[1].match(/width:(\d+)/)?.[1] || '';
+          height = resizeMatch[1].match(/height:(\d+)/)?.[1] || '';
+        }
+        format = url.match(/output=format:([^/]+)/)?.[1] || '';
+      }
+      
+      let info = '';
+      if (width && height) info += `${width}x${height}`;
+      else if (width) info += `w:${width}`;
+      else if (height) info += `h:${height}`;
+      else info += 'original';
+
+      if (format) {
+        info += ` [${format}]`;
+      }
+
+      return info;
+    } catch {
+      return 'original';
+    }
+  }
+
+  /**
    * Returns a local Blob URL for a cached image, or fetches/caches it if missing.
    */
   static async getImageUrl(url: string): Promise<string> {
@@ -20,6 +73,8 @@ export class ImageCacheService {
     if (this.blobGuiRegistry.has(url)) {
       return this.blobGuiRegistry.get(url)!;
     }
+
+    const requestInfo = this.getRequestInfo(url);
 
     try {
       const cache = await caches.open(CACHE_NAME);
@@ -31,14 +86,18 @@ export class ImageCacheService {
           const blob = await cachedResponse.blob();
           const blobUrl = URL.createObjectURL(blob);
           this.blobGuiRegistry.set(url, blobUrl);
-          console.log(`%c[Cache] Hit (Blob): ${url.split('/').pop()}`, 'color: #ccff00');
+          
+          console.log(
+            `%c[Cache] Hit: ${url.split('/').pop()?.split('?')[0]} | ${requestInfo} | ${this.formatSize(blob.size)}`, 
+            'color: #ccff00'
+          );
+          
           return blobUrl;
         }
-        console.log(`%c[Cache] Stale: ${url.split('/').pop()}`, 'color: #ffa500');
+        console.log(`%c[Cache] Stale: ${url.split('/').pop()?.split('?')[0]}`, 'color: #ffa500');
       }
 
       // Fetch and cache
-      console.log(`%c[Network] Fetching: ${url.split('/').pop()}`, 'color: #0044ff');
       const response = await fetch(url);
       if (response.ok) {
         const responseClone = response.clone();
@@ -48,6 +107,12 @@ export class ImageCacheService {
         const blob = await responseClone.blob();
         const blobUrl = URL.createObjectURL(blob);
         this.blobGuiRegistry.set(url, blobUrl);
+
+        console.log(
+          `%c[Network] Fetch: ${url.split('/').pop()?.split('?')[0]} | ${requestInfo} | ${this.formatSize(blob.size)}`, 
+          'color: #0044ff'
+        );
+
         return blobUrl;
       }
       

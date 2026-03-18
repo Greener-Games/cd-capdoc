@@ -25,6 +25,7 @@
 import { ref, watch, computed } from 'vue';
 import { ImageCacheService } from '@/services/imageCache';
 import { useDataStore } from '@/store/data';
+import { ImageOptimizer } from '@/services/imageOptimizer';
 
 const dataStore = useDataStore();
 
@@ -50,7 +51,9 @@ const onImageLoad = () => {
 watch(() => props.url, async (newUrl) => {
   imageLoaded.value = false;
   if (newUrl) {
-    displayUrl.value = await ImageCacheService.getImageUrl(newUrl);
+    const size = ImageOptimizer.getResponsiveSize();
+    const optimizedUrl = ImageOptimizer.getOptimizedUrl(newUrl, size);
+    displayUrl.value = await ImageCacheService.getImageUrl(optimizedUrl);
   } else {
     displayUrl.value = '';
   }

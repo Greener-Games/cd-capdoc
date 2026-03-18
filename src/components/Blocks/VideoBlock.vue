@@ -99,7 +99,8 @@ watch(() => props.poster, async (newPoster) => {
   if (newPoster) {
     posterLoaded.value = false;
     try {
-      const cachedUrl = await ImageCacheService.getImageUrl(newPoster);
+      const optimizedUrl = ImageOptimizer.getOptimizedUrl(newPoster, 'large');
+      const cachedUrl = await ImageCacheService.getImageUrl(optimizedUrl);
       displayPoster.value = cachedUrl;
     } catch (e) {
       displayPoster.value = newPoster;

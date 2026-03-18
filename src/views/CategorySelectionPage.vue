@@ -108,7 +108,7 @@ watch(currentData, async (newData) => {
   
   // Preload new images in background (don't await yet)
   const images = newData.map(item => item.image);
-  prefetchImages(images);
+  prefetchImages(images, 'small');
 
   // Wait for exit animation (20ms stagger + 600ms base + 100ms safety)
   const exitDelay = (currentCount * 20) + 700;
