@@ -1,5 +1,5 @@
 <template>
-  <div class="px-safe-side py-16">
+  <div class="px-safe-side py-12">
     <!-- Optional Header Title for the block -->
     <div v-if="title || isActuallyLoading" class="mb-4">
       <div v-if="isActuallyLoading" class="w-32 h-4 skeleton-shimmer rounded"></div>
@@ -9,7 +9,7 @@
     </div>
 
     <!-- Always Two Column Grid Mode (50/50) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-24">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-24">
       <div v-reveal class="transition-all duration-1000 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-8 reveal:opacity-100 reveal:translate-y-0">
         <div v-if="isActuallyLoading" class="space-y-3">
           <div class="w-full h-4 skeleton-shimmer rounded"></div>

@@ -1,7 +1,7 @@
 <template>
   <button
       @click="$emit('click', $event)"
-      class=" flex items-center justify-center space-x-2 rounded-full transition-all duration-500 cursor-pointer pointer-events-auto border h-7 lg:h-10"
+      class=" flex items-center justify-center space-x-2 rounded-full transition-all duration-500 cursor-pointer pointer-events-auto border h-7 xl:h-10"
       :class="[
           computedClasses,
           iconOnly ? 'w-9 lg:w-13 p-0' : 'px-3 lg:px-6',

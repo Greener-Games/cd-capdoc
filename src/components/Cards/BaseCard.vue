@@ -38,7 +38,7 @@
     </div>
 
     <!-- Info Section Area -->
-    <div v-if="$slots.default" class="mt-4 px-2 min-h-16 flex flex-col justify-start">
+    <div v-if="$slots.default" class="mt-2 xl:mt-4 min-h-8 xl:min-h-16 flex flex-col justify-start">
       <!-- Text Skeleton State -->
       <div v-if="isActuallyLoading" class="space-y-2 py-2">
         <div class="w-3/4 h-4 skeleton-shimmer rounded"></div>

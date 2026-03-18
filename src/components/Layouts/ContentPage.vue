@@ -7,7 +7,7 @@
         ref="scrollContainer"
     >
       <!-- Replicated Header Logic inside scrollable area -->
-      <div class="flex flex-col space-y-8 mb-16 px-safe-side">
+      <div class="flex flex-col gap-4 xl:gap-8 mb-6 md:mb-8 xl:mb-16 px-safe-side">
         <!-- Back Button -->
         <div class="flex items-center">
           <RoundedButton @click="goBack" icon-only>
@@ -26,16 +26,16 @@
 
         <!-- Info / Highlights -->
         <div v-reveal class="transition-all duration-1000 delay-200 cubic-bezier(0.16, 1, 0.3, 1) opacity-0 translate-y-4 reveal:opacity-100 reveal:translate-y-0">
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-12 items-start">
             <div class="md:col-span-6">
-              <p class="text-body text-base text-white">
+              <p class="text-body ">
                 {{ description }}
               </p>
             </div>
-            <div class="md:col-span-6 flex justify-end">
+            <div class="md:col-span-6 flex justify-start md:justify-end">
               <!-- Reusable Metadata component -->
-              <div v-if="metadata" class="grid grid-cols-2 gap-x-16 gap-y-4 text-label">
-                <div v-if="metadata.left && metadata.left.length" class="flex flex-col space-y-0.5">
+              <div v-if="metadata" class="grid grid-cols-2 gap-x-8 gap-y-4 text-label">
+                <div v-if="metadata.left && metadata.left.length" class="flex flex-col space-y-0.5 text-left md:text-right">
                   <span v-for="item in metadata.left" :key="item">{{ item }}</span>
                 </div>
                 <div v-if="metadata.right && metadata.right.length" class="flex flex-col space-y-0.5">

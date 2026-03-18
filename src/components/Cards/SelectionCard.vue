@@ -11,8 +11,8 @@
       @select="$emit('select', $event)"
   >
     <template #default="{ formattedTitle }">
-      <div class="flex flex-col justify-start text-left pointer-events-none px-2 h-16 md:h-24 shrink-0 min-w-0 mt-4" style="width: 0; min-width: 100%;">
-        <h2 class="text-heading transition-opacity duration-700 opacity-50 group-hover:opacity-100 w-full line-clamp-2 md:line-clamp-3 whitespace-normal">
+      <div class="flex flex-col justify-start text-left pointer-events-none h-8 md:h-16 xl:h-24 shrink-0 min-w-0 mt-2 lg:mt-3" style="width: 0; min-width: 100%;">
+        <h2 class="text-heading transition-opacity duration-700 opacity-50 group-hover:opacity-100 w-full line-clamp-2 md:line-clamp-3">
           {{ formattedTitle }}
         </h2>
       </div>

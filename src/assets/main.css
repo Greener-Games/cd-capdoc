@@ -151,22 +151,22 @@
 
   /* Large display titles (Home, Page Headers) */
   .text-display {
-    @apply font-gamechanger uppercase leading-none text-white text-xl lg:text-6xl;
+    @apply font-gamechanger uppercase leading-none text-white text-xl lg:text-3xl xl:text-6xl;
   }
 
   /* Standard uppercase headings (Section Headers, Card Titles) */
   .text-heading {
-    @apply font-bienvenue uppercase leading-none text-white text-xl lg:text-3xl;
+    @apply font-bienvenue uppercase leading-none text-white text-base xl:text-3xl;
   }
 
   /* Small metadata and labels */
   .text-label {
-    @apply font-bienvenue text-[9px] md:text-[10px] uppercase font-medium text-white/70 tracking-wider;
+    @apply font-bienvenue text-[6px] md:text-[10px] uppercase font-medium text-white/70 leading-none;
   }
 
   /* Standard body content */
   .text-body {
-    @apply font-bienvenue font-normal text-white/70 text-sm md:text-base;
+    @apply font-bienvenue font-normal text-white text-xs lg:text-base;
   }
 
   /* Button and small action text */

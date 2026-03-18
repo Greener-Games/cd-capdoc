@@ -22,7 +22,8 @@
       </router-view>
     </main>
 
-<!--    <DevToggle />-->
+    <!-- Dev Tools -->
+    <DevBreakpointHelper />
 
     <!-- Landing Page White Border Effect - ONLY visible on Landing -->
     <div
@@ -35,10 +36,6 @@
 
     <!-- Global Footer -->
     <PageFooter v-if="showFooter" />
-
-    <media-player title="Sprite Fight" src="https://files.vidstack.io/sprite-fight/720p.mp4">
-      <media-provider></media-provider>
-    </media-player>
   </div>
 </template>
 
@@ -48,9 +45,9 @@ import { useDataStore } from './store';
 import { ViewState } from './types';
 import { useAppView } from './composables/useAppView';
 import Canvas3D from './components/Three/Canvas3D.vue';
-import DevToggle from './components/Common/DevToggle.vue';
 import GlobalNav from './components/Navigation/GlobalNav.vue';
 import PageFooter from './components/Navigation/PageFooter.vue';
+import DevBreakpointHelper from './components/Common/DevBreakpointHelper.vue';
 
 const dataStore = useDataStore();
 const { view } = useAppView();

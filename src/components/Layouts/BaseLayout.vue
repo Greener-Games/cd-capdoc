@@ -1,22 +1,22 @@
 <template>
   <div
-      class="relative flex flex-col items-start w-full h-full pt-safe-top z-10"
+      class="relative flex flex-col items-start w-full h-full pt-safe-top z-10 gap-4 xl:gap-8"
       :class="[
           disablePaddingBottom ? 'pb-0' : 'pb-safe-bottom-footer',
           disablePaddingSide ? 'px-0' : 'px-safe-side'
       ]"
   >
     <!-- Top area for buttons or pills -->
-    <div v-if="$slots['header-controls']" class="flex items-center mb-4 lg:mb-8" :class="[disablePaddingSide ? 'px-safe-side' : '']">
+    <div v-if="$slots['header-controls']" class="flex items-center" :class="[disablePaddingSide ? 'px-safe-side' : '']">
       <slot name="header-controls"></slot>
     </div>
 
     <!-- Title area -->
-    <div class="w-full h-12 lg:h-16 mb-4 lg:mb-8 relative shrink-0" v-if="$slots['title'] || $slots['title-right']">
+    <div class="w-full relative shrink-0" v-if="$slots['title'] || $slots['title-right']">
       <Transition name="fade-delayed" mode="out-in">
-        <div 
-            :key="titleKey" 
-            class="w-full flex items-center justify-between gap-8 absolute inset-0"
+        <div
+            :key="titleKey"
+            class="w-full flex items-center justify-between gap-8"
             :class="[disablePaddingSide ? 'px-safe-side' : '']"
         >
           <h2 v-if="$slots['title']" class="text-display shrink-0">
@@ -30,7 +30,7 @@
       </Transition>
     </div>
 
-    <div v-if="$slots['header-bottom']" class="w-full mb-8" :class="[disablePaddingSide ? 'px-safe-side' : '']">
+    <div v-if="$slots['header-bottom']" class="w-full" :class="[disablePaddingSide ? 'px-safe-side' : '']">
       <slot name="header-bottom"></slot>
     </div>
 
