@@ -30,9 +30,9 @@
     </PageHeader>
 
     <!-- Main content area -->
-    <div class="relative flex-1 w-full min-h-0">
+    <main class="relative flex-1 w-full min-h-0">
       <slot></slot>
-    </div>
+    </main>
   </div>
 </template>
 

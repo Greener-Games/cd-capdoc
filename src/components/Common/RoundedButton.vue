@@ -1,12 +1,13 @@
 <template>
   <button
       @click="$emit('click', $event)"
-      class=" flex items-center justify-center space-x-2 rounded-full transition-all duration-500 cursor-pointer pointer-events-auto border h-7 xl:h-10"
+      class=" flex items-center justify-center space-x-2 rounded-full transition-all duration-500 cursor-pointer pointer-events-auto border h-7 xl:h-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent focus-visible:transition-none"
       :class="[
           computedClasses,
           iconOnly ? 'w-9 lg:w-13 p-0' : 'px-3 lg:px-6',
           textClass
         ]"
+      :aria-label="ariaLabel || label"
   >
     <slot name="icon"></slot>
     <slot>
@@ -21,6 +22,7 @@ import { computed } from 'vue';
 const props = withDefaults(defineProps<{
   active?: boolean;
   label?: string;
+  ariaLabel?: string;
   iconOnly?: boolean;
   variant?: 'glass' | 'solid-white' | 'solid-black';
 }>(), {

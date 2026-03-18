@@ -2,10 +2,13 @@
   <div
       :style="{ '--index': index }"
       @click="handleClick"
+      @keydown.enter="handleClick"
       @mouseenter="setHoveredColor(color)"
       @mouseleave="setHoveredColor(null)"
+      tabindex="0"
+      :role="clickable ? 'button' : undefined"
       :class="[
-          'group relative shrink-0 transition-all duration-700 grid grid-rows-[minmax(0,1fr)_auto] cursor-pointer',
+          'group relative shrink-0 transition-all duration-700 grid grid-rows-[minmax(0,1fr)_auto] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent focus-visible:transition-none',
         cardClass
       ]"
   >
@@ -126,6 +129,8 @@ watch(() => props.image, async (newImage) => {
 const formattedTitle = computed(() => 
   props.title.toUpperCase().replace('&', 'AND')
 );
+
+const clickable = computed(() => !props.loading && !dataStore.isPageLoading);
 
 const handleClick = () => {
   if (!props.isDragging) {
