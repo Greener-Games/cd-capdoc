@@ -76,6 +76,10 @@ import { ref, computed } from 'vue';
 import { Play } from 'lucide-vue-next';
 import SkeletonLoader from '@/components/Common/SkeletonLoader.vue';
 import {MediaVideoLayoutElement} from 'vidstack/elements'
+import 'vidstack/bundle';
+import 'vidstack/player/styles/base.css';
+import 'vidstack/player/styles/default/theme.css';
+import 'vidstack/player/styles/default/layouts/video.css';
 
 const props = defineProps<{
   url: string;
