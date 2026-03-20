@@ -23,81 +23,77 @@ export class ImageCacheService {
   }
 
   /**
-   * Helper to extract dimensions and info from any Hygraph transformation URL style
+   * Identifies the core asset ID/handle from a Hygraph URL to group different sizes together.
    */
-  private static getRequestInfo(url: string): string {
+  private static getBaseAssetInfo(url: string): { base: string, width: number, name: string } {
     try {
-      let width = '';
-      let height = '';
-      let format = '';
+      let width = 0;
+      let base = url;
+      let name = url.split('/').pop()?.split('?')[0] || 'unknown';
 
-      if (url.includes('?')) {
-        // Modern Query-based
-        const params = new URL(url).searchParams;
-        width = params.get('width') || '';
-        height = params.get('height') || '';
-        format = params.get('format') || '';
-      } else {
-        // Legacy Path-based
-        const resizeMatch = url.match(/resize=([^/]+)/);
-        if (resizeMatch) {
-          width = resizeMatch[1].match(/width:(\d+)/)?.[1] || '';
-          height = resizeMatch[1].match(/height:(\d+)/)?.[1] || '';
-        }
-        format = url.match(/output=format:([^/]+)/)?.[1] || '';
+      if (url.includes('cdn.hygraph.com')) {
+        const urlObj = new URL(url);
+        width = parseInt(urlObj.searchParams.get('width') || '0');
+        base = urlObj.origin + urlObj.pathname;
+      } else if (url.includes('graphassets.com')) {
+        const urlObj = new URL(url);
+        const segments = urlObj.pathname.split('/').filter(Boolean);
+        const handle = segments.pop() || '';
+        const resizeMatch = url.match(/resize=width:(\d+)/);
+        width = resizeMatch ? parseInt(resizeMatch[1]) : 0;
+        base = `${urlObj.origin}/${segments[0]}/${handle}`;
       }
       
-      let info = '';
-      if (width && height) info += `${width}x${height}`;
-      else if (width) info += `w:${width}`;
-      else if (height) info += `h:${height}`;
-      else info += 'original';
-
-      if (format) {
-        info += ` [${format}]`;
-      }
-
-      return info;
+      return { base, width, name };
     } catch {
-      return 'original';
+      return { base: url, width: 0, name: 'unknown' };
     }
   }
 
   /**
    * Returns a local Blob URL for a cached image, or fetches/caches it if missing.
+   * SMART: If a larger version of this same image exists in cache, it uses that instead.
    */
   static async getImageUrl(url: string): Promise<string> {
     if (!url) return '';
 
-    // If we already have a session-active Blob URL for this, return it instantly
     if (this.blobGuiRegistry.has(url)) {
       return this.blobGuiRegistry.get(url)!;
     }
 
-    const requestInfo = this.getRequestInfo(url);
+    const { base, width: requestedWidth, name } = this.getBaseAssetInfo(url);
 
     try {
       const cache = await caches.open(CACHE_NAME);
-      const cachedResponse = await cache.match(url);
-
-      if (cachedResponse) {
-        const isStale = await this.isStale(url);
-        if (!isStale) {
-          const blob = await cachedResponse.blob();
-          const blobUrl = URL.createObjectURL(blob);
-          this.blobGuiRegistry.set(url, blobUrl);
-          
-          console.log(
-            `%c[Cache] Hit: ${url.split('/').pop()?.split('?')[0]} | ${requestInfo} | ${this.formatSize(blob.size)}`, 
-            'color: #ccff00'
-          );
-          
-          return blobUrl;
-        }
-        console.log(`%c[Cache] Stale: ${url.split('/').pop()?.split('?')[0]}`, 'color: #ffa500');
+      
+      // 1. Check for exact match first
+      const exactMatch = await cache.match(url);
+      if (exactMatch && !(await this.isStale(url))) {
+        const blob = await exactMatch.blob();
+        console.log(`%c[Cache] Hit: ${name} | ${requestedWidth}px | ${this.formatSize(blob.size)}`, 'color: #ccff00');
+        return this.createBlobUrl(url, blob);
       }
 
-      // Fetch and cache
+      // 2. SMART CACHE CHECK: Look for siblings (same asset, different size)
+      const keys = await cache.keys();
+      for (const request of keys) {
+        const cachedUrl = request.url;
+        const { base: cachedBase, width: cachedWidth } = this.getBaseAssetInfo(cachedUrl);
+        
+        if (base === cachedBase && cachedWidth >= requestedWidth && requestedWidth > 0) {
+          const cachedResponse = await cache.match(request);
+          if (cachedResponse && !(await this.isStale(cachedUrl))) {
+            const blob = await cachedResponse.blob();
+            console.log(
+              `%c[Cache] Smart Reuse: ${name} | Using ${cachedWidth}px for ${requestedWidth}px request | ${this.formatSize(blob.size)}`, 
+              'color: #00ffcc'
+            );
+            return this.createBlobUrl(url, blob);
+          }
+        }
+      }
+
+      // 3. Fetch and cache if no suitable version found
       const response = await fetch(url);
       if (response.ok) {
         const responseClone = response.clone();
@@ -105,22 +101,25 @@ export class ImageCacheService {
         await this.updateMetadata(url);
         
         const blob = await responseClone.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        this.blobGuiRegistry.set(url, blobUrl);
-
         console.log(
-          `%c[Network] Fetch: ${url.split('/').pop()?.split('?')[0]} | ${requestInfo} | ${this.formatSize(blob.size)}`, 
+          `%c[Network] Fetch: ${name} | ${requestedWidth}px | ${this.formatSize(blob.size)}`, 
           'color: #0044ff'
         );
 
-        return blobUrl;
+        return this.createBlobUrl(url, blob);
       }
       
       return url;
     } catch (e) {
       console.error('Cache API error:', e);
-      return url; // Fallback
+      return url;
     }
+  }
+
+  private static createBlobUrl(originalUrl: string, blob: Blob): string {
+    const blobUrl = URL.createObjectURL(blob);
+    this.blobGuiRegistry.set(originalUrl, blobUrl);
+    return blobUrl;
   }
 
   /**

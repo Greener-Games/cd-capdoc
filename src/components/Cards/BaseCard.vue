@@ -96,7 +96,7 @@ const props = withDefaults(defineProps<{
   imageClass: 'group-hover:scale-110',
   showHoverOverlay: true,
   showBottomLine: true,
-  imageSize: 'medium',
+  imageSize: 'm',
 });
 
 const emit = defineEmits<{

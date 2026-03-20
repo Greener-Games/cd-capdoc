@@ -20,7 +20,7 @@ export function useImagePreloader() {
    * Blocks the page loading state until all images are ready.
    * Useful for detail pages where you want a clean transition.
    */
-  const preloadImages = async (requests: PreloadRequest[], defaultSize: ImageSize = 'large') => {
+  const preloadImages = async (requests: PreloadRequest[], defaultSize: ImageSize = 'lg') => {
     dataStore.isPageLoading = true;
     try {
       const optimizedUrls = getOptimizedUrls(requests, defaultSize);
@@ -36,7 +36,7 @@ export function useImagePreloader() {
    * Fetches images into the cache without blocking the UI state.
    * Ideal for lists like the Curator Page.
    */
-  const prefetchImages = (requests: PreloadRequest[], defaultSize: ImageSize = 'medium') => {
+  const prefetchImages = (requests: PreloadRequest[], defaultSize: ImageSize = 'm') => {
     const optimizedUrls = getOptimizedUrls(requests, defaultSize);
     // We don't await this, just trigger the background fetch/cache
     ImageCacheService.preloadImages(optimizedUrls).catch(err => {

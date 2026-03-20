@@ -37,8 +37,8 @@
       >
         <!-- Poster Image -->
         <img
-          v-if="poster"
-          :src="poster"
+          v-if="displayPoster || poster"
+          :src="displayPoster || poster"
           alt="Video Poster"
           class="absolute inset-0 w-full h-full object-cover"
         />
@@ -72,10 +72,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { Play } from 'lucide-vue-next';
 import SkeletonLoader from '@/components/Common/SkeletonLoader.vue';
-import {MediaVideoLayoutElement} from 'vidstack/elements'
+import { ImageCacheService } from '@/services/imageCache';
+import { ImageOptimizer } from '@/services/imageOptimizer';
 import 'vidstack/bundle';
 import 'vidstack/player/styles/base.css';
 import 'vidstack/player/styles/default/theme.css';
@@ -92,6 +93,17 @@ const props = defineProps<{
 const player = ref<any>(null);
 const videoStarted = ref(false);
 const isWaiting = ref(false);
+const displayPoster = ref('');
+
+// Preload and cache the poster with '2xl' size
+watch(() => props.poster, async (newPoster) => {
+  if (newPoster) {
+    const optimizedUrl = ImageOptimizer.getOptimizedUrl(newPoster, '2xl');
+    displayPoster.value = await ImageCacheService.getImageUrl(optimizedUrl);
+  } else {
+    displayPoster.value = '';
+  }
+}, { immediate: true });
 
 /**
  * Vidstack requires a specific format for unlisted Vimeo videos with hashes.

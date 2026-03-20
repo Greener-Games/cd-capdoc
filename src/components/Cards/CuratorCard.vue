@@ -7,7 +7,7 @@
       :index="index"
       :is-dragging="isDragging"
       card-class="w-full"
-      image-size="small"
+      image-size="s"
       aspect-ratio-class="aspect-[31/34]"
       image-container-class="w-full h-full"
       image-class="group-hover:scale-110 will-change-transform"

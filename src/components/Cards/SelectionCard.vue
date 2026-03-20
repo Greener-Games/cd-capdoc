@@ -6,7 +6,7 @@
       :color="item.accentColor"
       :index="index"
       :is-dragging="isDragging"
-      image-size="small"
+      image-size="m"
       aspect-ratio-class="aspect-[20/13]"
       @select="$emit('select', $event)"
   >

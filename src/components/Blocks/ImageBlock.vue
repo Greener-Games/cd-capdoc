@@ -56,8 +56,7 @@ const onImageLoad = () => {
 watch(() => props.url, async (newUrl) => {
   imageLoaded.value = false;
   if (newUrl) {
-    const size = ImageOptimizer.getResponsiveSize();
-    const optimizedUrl = ImageOptimizer.getOptimizedUrl(newUrl, size);
+    const optimizedUrl = ImageOptimizer.getOptimizedUrl(newUrl, '2xl');
     displayUrl.value = await ImageCacheService.getImageUrl(optimizedUrl);
   } else {
     displayUrl.value = '';
