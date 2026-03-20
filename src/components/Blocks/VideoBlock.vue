@@ -75,6 +75,7 @@
 import { ref, computed } from 'vue';
 import { Play } from 'lucide-vue-next';
 import SkeletonLoader from '@/components/Common/SkeletonLoader.vue';
+import {MediaVideoLayoutElement} from 'vidstack/elements'
 
 const props = defineProps<{
   url: string;

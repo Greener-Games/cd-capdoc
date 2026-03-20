@@ -60,8 +60,8 @@ export default defineConfig(({ mode }) => {
             ]
           }
         }),
-        vidstack(),
         cspPlugin(),
+        vidstack(),
       ],
       resolve: {
         alias: {
