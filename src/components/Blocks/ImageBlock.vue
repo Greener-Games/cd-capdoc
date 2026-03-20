@@ -1,7 +1,7 @@
 <template>
   <div
     v-reveal
-    class="reveal-fx relative w-full h-[70vh] overflow-hidden"
+    class="reveal-fx relative w-full aspect-12/5 overflow-hidden"
   >
     <!-- Skeleton State -->
     <SkeletonLoader

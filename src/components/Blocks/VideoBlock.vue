@@ -1,7 +1,7 @@
 <template>
   <div
     v-reveal
-    class="reveal-fx relative w-full h-[50vh] md:h-[70vh] overflow-hidden bg-black"
+    class="reveal-fx relative w-full aspect-[12/5] overflow-hidden bg-black"
   >
     <!-- 1. The Video Player -->
     <media-player

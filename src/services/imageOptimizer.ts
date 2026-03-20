@@ -18,7 +18,6 @@ const SIZE_MAP: Record<ImageSize, TransformOptions> = {
   small: { width: 900, fit: 'max', quality: 95 },
   medium: { width: 1200, fit: 'max', quality: 95 },
   large: { width: 1920, fit: 'max', quality: 100 },
-  full: { quality: 100 }
 };
 
 export class ImageOptimizer {
