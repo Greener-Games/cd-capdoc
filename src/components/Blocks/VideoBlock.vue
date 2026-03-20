@@ -24,6 +24,7 @@
       @error="onVideoError"
     >
       <media-provider class="w-full h-full"></media-provider>
+      <!-- Use the default layout with explicitly enabled features -->
       <media-video-layout></media-video-layout>
     </media-player>
 
@@ -88,8 +89,6 @@ const isWaiting = ref(false);
 
 /**
  * Vidstack requires a specific format for unlisted Vimeo videos with hashes.
- * It expects: vimeo/{id}?hash={hash} or https://vimeo.com/{id}?hash={hash}
- * Your URL: https://vimeo.com/1125813420/751883143c?fl=pl&fe=sh
  */
 const formattedSrc = computed(() => {
   if (!props.url) return '';
@@ -122,7 +121,6 @@ const onVideoStarted = () => {
 const onVideoError = (event: any) => {
   console.error('Vidstack Player Error:', event);
   isWaiting.value = false;
-  // If it's a critical error and we haven't started, reset the UI
   if (!videoStarted.value) {
     videoStarted.value = false;
   }
@@ -146,12 +144,25 @@ const handlePlayClick = async (e: Event) => {
 media-player {
   --video-brand: #ffffff;
   --media-primary-color: #ffffff;
+  /* Ensure the background of the controls is visible */
+  --video-controls-bg: rgba(0, 0, 0, 0.6);
 }
 
 media-player :deep(.vds-video) {
   object-fit: cover;
   width: 100%;
   height: 100%;
+}
+
+/* 
+  Force layout visibility in production. 
+  Sometimes minification or CSP can hide these.
+*/
+media-player :deep(media-video-layout),
+media-player :deep(.vds-layout) {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .fade-overlay-enter-active,
