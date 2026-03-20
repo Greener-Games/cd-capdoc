@@ -83,12 +83,16 @@
         <!-- Input Container with explicit isolation -->
         <div class="grow flex items-center space-x-2 relative isolate">
           <input
+              ref="titleInput"
               v-model="curatedTitle"
               type="text"
               class="font-bienvenue relative z-20 w-full bg-transparent text-black text-sm font-bold uppercase focus:outline-none placeholder-black/40 selection:bg-zinc-900 selection:text-white"
               placeholder="MY PRESENTATION"
           />
-          <Edit3 class="w-4 h-4 text-black shrink-0 relative z-20" />
+          <Edit3
+              class="w-4 h-4 text-black shrink-0 relative z-20 cursor-pointer hover:opacity-70 transition-opacity"
+              @click="focusAndSelectTitle"
+          />
         </div>
 
         <button
@@ -125,6 +129,7 @@ const route = useRoute();
 const { goToProject, launchCuratedPresentation } = useAppNavigation();
 const { prefetchImages } = useImagePreloader();
 
+const titleInput = ref<HTMLInputElement | null>(null);
 const activeMode = ref<'explore' | 'build'>((route.query.mode as 'explore' | 'build') || 'explore');
 
 const { searchQuery, filteredProjects, clearSearch } = useProjectData();
@@ -172,6 +177,13 @@ watch(activeMode, (newMode, oldMode) => {
     localSearchQuery.value = '';
   }
 });
+
+const focusAndSelectTitle = () => {
+  if (titleInput.value) {
+    titleInput.value.focus();
+    titleInput.value.select();
+  }
+};
 
 const handleClearSearch = () => {
   localSearchQuery.value = '';
