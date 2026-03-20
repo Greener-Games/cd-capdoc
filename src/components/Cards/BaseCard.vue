@@ -45,7 +45,7 @@
     </div>
 
     <!-- Info Section Area -->
-    <div v-if="$slots.default" class="mt-2 xl:mt-4 min-h-8 xl:min-h-16 flex flex-col justify-start">
+    <div v-if="$slots.default" class="mt-2 xl:mt-4 min-h-8 xl:min-h-16 flex flex-col justify-start w-0 min-w-full">
       <!-- Text Skeleton State -->
       <div v-if="isActuallyLoading" class="space-y-2 py-2">
         <SkeletonLoader class="w-3/4 h-4" />
@@ -96,7 +96,7 @@ const props = withDefaults(defineProps<{
   imageClass: 'group-hover:scale-110',
   showHoverOverlay: true,
   showBottomLine: true,
-  imageSize: 'medium'
+  imageSize: 'medium',
 });
 
 const emit = defineEmits<{
