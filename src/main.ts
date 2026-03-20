@@ -7,6 +7,9 @@ import revealDirective from './directives/reveal';
 
 // Vidstack Imports
 import 'vidstack/bundle';
+import 'vidstack/player/styles/base.css';
+import 'vidstack/player/styles/default/theme.css';
+import 'vidstack/player/styles/default/layouts/video.css';
 
 import './assets/main.css';
 

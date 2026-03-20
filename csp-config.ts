@@ -12,7 +12,7 @@ const cspPolicy = {
   'script-src': ["'self'", "'unsafe-inline'", "'unsafe-eval'"], // 'unsafe-eval' often needed for Vue in dev, 'unsafe-inline' for Vite
   'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
   'img-src': ["'self'", 'data:', 'blob:', 'https://*.graphassets.com', 'https://*.hygraph.com', 'https://grainy-gradients.vercel.app', 'https://*.vimeocdn.com'],
-  'connect-src': ["'self'", 'https://*.hygraph.com', 'https://*.graphassets.com', 'https://vimeo.com'],
+  'connect-src': ["'self'", 'https://*.hygraph.com', 'https://*.graphassets.com', 'https://vimeo.com','https://files.vidstack.io/sprite-fight/thumbnails.vtt'],
   'font-src': ["'self'", 'data:', 'https://fonts.gstatic.com'],
   'media-src': ["'self'", 'https://*.graphassets.com', 'https://vimeo.com', 'https://*.vimeocdn.com','https://files.vidstack.io'],
   'frame-src': ["'self'", 'https://player.vimeo.com', 'https://www.youtube.com', 'https://www.youtube-nocookie.com'],

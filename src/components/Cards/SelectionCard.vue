@@ -7,7 +7,7 @@
       :index="index"
       :is-dragging="isDragging"
       image-size="small"
-      aspect-ratio-class="aspect-[31/41]"
+      aspect-ratio-class="aspect-[20/13]"
       @select="$emit('select', $event)"
   >
     <template #default="{ formattedTitle }">

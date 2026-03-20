@@ -7,7 +7,7 @@
       :index="index"
       :is-dragging="isDragging"
       image-size="medium"
-      aspect-ratio-class="aspect-[97/51]"
+      aspect-ratio-class="aspect-[20/13]"
       @select="handleClick"
   >
     <template #default="{ formattedTitle }">
