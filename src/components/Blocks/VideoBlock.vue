@@ -67,7 +67,7 @@ import { useDataStore } from '../../store/data';
 import { ImageCacheService } from '@/services/imageCache';
 import {ImageOptimizer} from "@/services/imageOptimizer.ts";
 import SkeletonLoader from '@/components/Common/SkeletonLoader.vue';
-
+import 'vidstack/bundle';
 const dataStore = useDataStore();
 
 const props = withDefaults(defineProps<{

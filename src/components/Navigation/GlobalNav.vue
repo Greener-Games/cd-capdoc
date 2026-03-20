@@ -6,7 +6,7 @@
           class="transition-all duration-500 cursor-pointer hover:opacity-70 active:scale-95 text-left"
 
       >
-        <span class="text-display text-lg md:text-xl lg:text-2xl" :class="view === ViewState.LANDING ? 'text-black' : 'text-white'">Creative Design</span>
+        <span class="text-display font-bienvenue text-lg md:text-xl lg:text-2xl" :class="view === ViewState.LANDING ? 'text-black' : 'text-white'">Creative Design</span>
       </button>
     </div>
 
