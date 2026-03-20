@@ -6,7 +6,8 @@
     <!-- 1. The Video Player -->
     <media-player
       ref="player"
-      class="absolute inset-0 w-full h-full border-none! outline-none! ring-0"
+      class="absolute inset-0 w-full h-full ring-0"
+      style="border: 0px"
       :src="formattedSrc"
       view-type="video"
       stream-type="on-demand"
