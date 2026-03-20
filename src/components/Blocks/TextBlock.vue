@@ -2,7 +2,7 @@
   <div class="px-safe-side py-12">
     <!-- Optional Header Title for the block -->
     <div v-if="title || isActuallyLoading" class="mb-4">
-      <div v-if="isActuallyLoading" class="w-32 h-4 skeleton-shimmer rounded"></div>
+      <SkeletonLoader v-if="isActuallyLoading" class="w-32 h-4" />
       <h3 v-else class="text-label">
         {{ title }}
       </h3>
@@ -12,9 +12,9 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-24">
       <div v-reveal class="reveal-fx">
         <div v-if="isActuallyLoading" class="space-y-3">
-          <div class="w-full h-4 skeleton-shimmer rounded"></div>
-          <div class="w-full h-4 skeleton-shimmer rounded"></div>
-          <div class="w-3/4 h-4 skeleton-shimmer rounded"></div>
+          <SkeletonLoader class="w-full h-4" />
+          <SkeletonLoader class="w-full h-4" />
+          <SkeletonLoader class="w-3/4 h-4" />
         </div>
         <div
             v-else-if="leftContent"
@@ -24,9 +24,9 @@
       </div>
       <div v-reveal class="reveal-fx delay-100">
         <div v-if="isActuallyLoading" class="space-y-3">
-          <div class="w-full h-4 skeleton-shimmer rounded"></div>
-          <div class="w-full h-4 skeleton-shimmer rounded"></div>
-          <div class="w-1/2 h-4 skeleton-shimmer rounded"></div>
+          <SkeletonLoader class="w-full h-4" />
+          <SkeletonLoader class="w-full h-4" />
+          <SkeletonLoader class="w-1/2 h-4" />
         </div>
         <div
             v-else-if="rightContent"
@@ -42,6 +42,7 @@
 import { computed } from 'vue';
 import { RichTextContent } from '../../types';
 import { useDataStore } from '../../store/data';
+import SkeletonLoader from '@/components/Common/SkeletonLoader.vue';
 
 const dataStore = useDataStore();
 

@@ -4,9 +4,13 @@
         class="reveal-fx relative w-full h-[50vh] md:h-[70vh] overflow-hidden"
     >
     <!-- 1. Skeleton State (Z-50) -->
-    <div v-if="isActuallyLoading" class="absolute inset-0 z-50 skeleton-shimmer flex items-center justify-center h-full">
-      <div class="w-12 h-12 rounded-full border-2 border-white/10 border-t-white/40 animate-spin"></div>
-    </div>
+    <SkeletonLoader
+        v-if="isActuallyLoading"
+        class="absolute inset-0 z-50"
+        show-spinner
+        spinner-class="w-12 h-12"
+        :rounded="false"
+    />
 
     <!-- 2. Vidstack Player -->
     <media-player
@@ -62,6 +66,7 @@ import { Play } from 'lucide-vue-next';
 import { useDataStore } from '../../store/data';
 import { ImageCacheService } from '@/services/imageCache';
 import {ImageOptimizer} from "@/services/imageOptimizer.ts";
+import SkeletonLoader from '@/components/Common/SkeletonLoader.vue';
 
 const dataStore = useDataStore();
 

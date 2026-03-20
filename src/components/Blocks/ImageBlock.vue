@@ -4,9 +4,13 @@
     class="reveal-fx relative w-full h-[70vh] overflow-hidden"
   >
     <!-- Skeleton State -->
-    <div v-if="isActuallyLoading" class="absolute inset-0 z-30 skeleton-shimmer flex items-center justify-center h-full">
-      <div class="w-12 h-12 rounded-full border-2 border-white/10 border-t-white/40 animate-spin"></div>
-    </div>
+    <SkeletonLoader
+        v-if="isActuallyLoading"
+        class="absolute inset-0 z-30 h-full"
+        show-spinner
+        spinner-class="w-12 h-12"
+        :rounded="false"
+    />
 
     <img
         v-if="displayUrl || url"
@@ -26,6 +30,7 @@ import { ref, watch, computed } from 'vue';
 import { ImageCacheService } from '@/services/imageCache';
 import { useDataStore } from '@/store/data';
 import { ImageOptimizer } from '@/services/imageOptimizer';
+import SkeletonLoader from '@/components/Common/SkeletonLoader.vue';
 
 const dataStore = useDataStore();
 

@@ -15,9 +15,13 @@
     <!-- Image/Media Container -->
     <div :class="['relative overflow-hidden border-none bg-zinc-950/40 isolate backface-hidden transform-gpu shrink-0', aspectRatioClass, imageContainerClass]">
       <!-- Image Skeleton State -->
-      <div v-if="isActuallyLoading" class="absolute inset-0 z-30 skeleton-shimmer flex items-center justify-center h-full">
-        <div class="w-10 h-10 rounded-full border-2 border-white/10 border-t-white/40 animate-spin"></div>
-      </div>
+      <SkeletonLoader
+          v-if="isActuallyLoading"
+          class="absolute inset-0 z-30 h-full"
+          show-spinner
+          spinner-class="w-10 h-10"
+          :rounded="false"
+      />
 
       <img
           v-if="displayImage || image"
@@ -44,8 +48,8 @@
     <div v-if="$slots.default" class="mt-2 xl:mt-4 min-h-8 xl:min-h-16 flex flex-col justify-start">
       <!-- Text Skeleton State -->
       <div v-if="isActuallyLoading" class="space-y-2 py-2">
-        <div class="w-3/4 h-4 skeleton-shimmer rounded"></div>
-        <div class="w-1/2 h-3 skeleton-shimmer rounded opacity-50"></div>
+        <SkeletonLoader class="w-3/4 h-4" />
+        <SkeletonLoader class="w-1/2 h-3 opacity-50" />
       </div>
 
       <!-- Actual Content -->
@@ -62,6 +66,7 @@ import { useOrbState } from '@/composables/useOrbState.ts';
 import { ImageCacheService } from '@/services/imageCache';
 import { useDataStore } from '@/store/data';
 import { ImageOptimizer, ImageSize } from '@/services/imageOptimizer';
+import SkeletonLoader from '@/components/Common/SkeletonLoader.vue';
 
 const dataStore = useDataStore();
 
@@ -102,8 +107,8 @@ const { setHoveredColor } = useOrbState();
 
 // Determine if we should show skeleton
 const imageLoaded = ref(false);
-const isActuallyLoading = computed(() => 
-  props.loading || 
+const isActuallyLoading = computed(() =>
+  props.loading ||
   dataStore.isPageLoading || 
   (props.image && !imageLoaded.value)
 );
