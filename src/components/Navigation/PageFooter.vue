@@ -1,37 +1,42 @@
 <template>
-  <div class="absolute layout-footer px-safe-side h-(--footer-height) items-center flex justify-between z-10 pointer-events-none text-footer">
-    <!-- Dynamic part -->
+  <div 
+    :class="[
+      'z-10 pointer-events-none text-footer flex justify-between items-center px-safe-side',
+      inline ? 'w-full py-8 mt-12' : 'absolute layout-footer h-(--footer-height)'
+    ]"
+  >
+    <!-- Dynamic part (Left) -->
     <div class="flex-1 text-left">
       <Transition name="fade-delayed" mode="out-in">
         <div
-            v-if="hasFooterAnimated"
+            v-if="view !== ViewState.LANDING && !inline"
             class="fill-mode-both"
             :key="`${footerProps.count}-${footerProps.label}`"
-        >
-          {{ footerProps.count }} {{ footerProps.label }}
-        </div>
-        <div
-            v-else
-            class="animate-in fade-in slide-in-from-bottom-5 duration-1000 delay-800 fill-mode-both"
         >
           {{ footerProps.count }} {{ footerProps.label }}
         </div>
       </Transition>
     </div>
 
-    <!-- Static parts -->
-    <div
-        class="shrink-0 text-center"
-        :class="[!hasFooterAnimated ? 'animate-in fade-in slide-in-from-bottom-5 duration-1000 delay-800 fill-mode-both' : '']"
-    >
-      COMPLEX → CLARITY
+    <!-- Center Tagline -->
+    <div class="shrink-0 text-center">
+      <Transition name="fade-delayed">
+        <div v-if="view !== ViewState.LANDING && !inline">
+          COMPLEX → CLARITY
+        </div>
+      </Transition>
     </div>
 
-    <div
-        class="flex-1 text-right normal-case"
-        :class="[!hasFooterAnimated ? 'animate-in fade-in slide-in-from-bottom-5 duration-1000 delay-800 fill-mode-both' : '']"
-    >
-      © 2026 Creative Design. Proud to be part of AtkinsRéalis Group Inc
+    <!-- Right Copyright -->
+    <div class="flex-1 text-right">
+      <Transition name="fade-delayed" appear>
+        <div
+            class="normal-case fill-mode-both"
+            :class="[inline ? 'opacity-60' : '']"
+        >
+          © 2026 Creative Design. Proud to be part of AtkinsRéalis Group Inc
+        </div>
+      </Transition>
     </div>
   </div>
 </template>
@@ -44,6 +49,12 @@ import { useAppView } from '../../composables/useAppView';
 import { useProjectData } from '../../composables/useProjectData';
 import { useCategoryFilter } from '../../composables/useCategoryFilter';
 import { ViewState, CategoryType } from '../../types';
+
+const props = withDefaults(defineProps<{
+  inline?: boolean;
+}>(), {
+  inline: false
+});
 
 const dataStore = useDataStore();
 const { view } = useAppView();
@@ -71,8 +82,8 @@ const footerProps = computed(() => {
 });
 
 onMounted(() => {
-  if (!hasFooterAnimated.value) {
-    // 800ms delay + 1000ms duration
+  if (!hasFooterAnimated.value && !props.inline) {
+    // Initial load animation trigger
     setTimeout(() => {
       setHasFooterAnimated(true);
     }, 1800);

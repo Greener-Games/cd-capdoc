@@ -67,6 +67,9 @@
           </p>
         </div>
       </TransitionGroup>
+
+      <!-- Standard Page Footer (Copyright only in this mode) -->
+      <PageFooter inline />
     </div>
 
     <!-- FIXED SECTION START -->
@@ -118,6 +121,7 @@ import BaseLayout from "@/components/Layouts/BaseLayout.vue";
 import {Project} from '../types';
 import Magnifying from "@/assets/icons/Magnifying.svg";
 import Icon from "@/components/Common/Icon.vue";
+import PageFooter from "@/components/Navigation/PageFooter.vue";
 import { useAppNavigation } from '../composables/useAppNavigation';
 import { useProjectData } from '../composables/useProjectData';
 import { useImagePreloader } from '../composables/useImagePreloader';

@@ -2,7 +2,7 @@
   <BaseLayout :disable-padding-bottom="true" :disable-padding-side="true">
     <!-- Main Scrollable Content Area -->
     <div
-        class="flex flex-col gap-6 md:gap-8 xl:gap-16 w-full h-full overflow-y-auto overflow-x-hidden scrollbar-none pointer-events-auto pb-safe-bottom-footer"
+        class="flex flex-col gap-6 md:gap-8 xl:gap-16 w-full h-full overflow-y-auto overflow-x-hidden scrollbar-none pointer-events-auto"
         @scroll="handleScroll"
         ref="scrollContainer"
     >
@@ -73,6 +73,9 @@
         <div class="px-safe-side">
           <slot name="footer"></slot>
         </div>
+
+        <!-- Standard Page Footer (Copyright only in this mode) -->
+        <PageFooter inline />
       </div>
     </div>
   </BaseLayout>
@@ -89,6 +92,7 @@ import Icon from "@/components/Common/Icon.vue";
 import BlockRenderer from "@/components/Blocks/BlockRenderer.vue";
 import { ContentBlock, PageMetadata } from '../../types';
 import PageHeader from "@/components/Common/PageHeader.vue";
+import PageFooter from "@/components/Navigation/PageFooter.vue";
 
 withDefaults(defineProps<{
   title: string;

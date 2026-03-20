@@ -36,7 +36,9 @@
     <GlobalNav />
 
     <!-- Global Footer -->
-    <PageFooter v-if="showFooter" />
+    <Transition name="fade">
+      <PageFooter v-if="showFooter" />
+    </Transition>
   </div>
 </template>
 
