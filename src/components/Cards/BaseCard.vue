@@ -8,12 +8,12 @@
       tabindex="0"
       :role="clickable ? 'button' : undefined"
       :class="[
-          'group relative shrink-0 transition-all duration-700 grid grid-rows-[minmax(0,1fr)_auto] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent focus-visible:transition-none',
+          'group relative shrink-0 transition-all duration-700 grid grid-rows-[minmax(0,1fr)_auto] cursor-pointer focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-accent focus-visible:transition-none',
         cardClass
       ]"
   >
     <!-- Image/Media Container -->
-    <div :class="['relative overflow-hidden border-none bg-zinc-950/40 isolate backface-hidden transform-gpu [clip-path:inset(0_round_1.5rem)] shrink-0', aspectRatioClass, imageContainerClass]">
+    <div :class="['relative overflow-hidden border-none bg-zinc-950/40 isolate backface-hidden transform-gpu shrink-0', aspectRatioClass, imageContainerClass]">
       <!-- Image Skeleton State -->
       <div v-if="isActuallyLoading" class="absolute inset-0 z-30 skeleton-shimmer flex items-center justify-center h-full">
         <div class="w-10 h-10 rounded-full border-2 border-white/10 border-t-white/40 animate-spin"></div>
@@ -87,7 +87,7 @@ const props = withDefaults(defineProps<{
   loading: false,
   cardClass: 'w-max h-full',
   aspectRatioClass: 'aspect-[4/5]',
-  imageContainerClass: 'rounded-3xl h-full',
+  imageContainerClass: 'h-full',
   imageClass: 'group-hover:scale-110',
   showHoverOverlay: true,
   showBottomLine: true,

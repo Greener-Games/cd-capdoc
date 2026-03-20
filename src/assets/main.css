@@ -151,17 +151,17 @@
 
   /* Large display titles (Home, Page Headers) */
   .text-display {
-    @apply font-gamechanger uppercase leading-none text-white text-xl lg:text-3xl xl:text-6xl;
+    @apply font-gamechanger leading-none font-normal text-white text-xl lg:text-3xl xl:text-4xl 2xl:text-6xl;
   }
 
   /* Standard uppercase headings (Section Headers, Card Titles) */
   .text-heading {
-    @apply font-bienvenue uppercase leading-none text-white text-base xl:text-xl 2xl:text-3xl;
+    @apply font-bienvenue uppercase leading-none text-white text-base xl:text-2xl 2xl:text-3xl;
   }
 
   /* Small metadata and labels */
   .text-label {
-    @apply font-bienvenue text-[6px] md:text-[10px] uppercase font-medium text-white/70 leading-none;
+    @apply font-bienvenue text-xs lg:text-sm uppercase font-normal text-white/70 leading-none;
   }
 
   /* Standard body content */
@@ -193,6 +193,10 @@
     }
   }
 
+  .structure-gap
+  {
+    @apply flex flex-col gap-4 xl:gap-6;
+  }
   .reveal-fx-slow {
     @apply transition-all duration-1000 ease-out-expo opacity-0 translate-y-4;
 

@@ -7,11 +7,11 @@
       :index="index"
       :is-dragging="isDragging"
       image-size="small"
-      aspect-ratio-class="aspect-[4/5]"
+      aspect-ratio-class="aspect-[31/41]"
       @select="$emit('select', $event)"
   >
     <template #default="{ formattedTitle }">
-      <div class="flex flex-col justify-start text-left pointer-events-none h-8 md:h-16 xl:h-20 shrink-0 min-w-0 mt-2 lg:mt-3" style="width: 0; min-width: 100%;">
+      <div class="flex flex-col justify-start text-left pointer-events-none h-8 md:h-16 xl:h-22 2xl:h-28 shrink-0 min-w-0 mt-1 lg:mt-2" style="width: 0; min-width: 100%;">
         <h2 class="text-heading hover-reveal w-full line-clamp-2 md:line-clamp-3">
           {{ formattedTitle }}
         </h2>

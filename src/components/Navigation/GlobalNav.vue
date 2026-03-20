@@ -25,7 +25,7 @@
 
       <!-- Fixed-width Search Button - Fades only, width never changes -->
       <div
-          class="w-7.5 lg:w-13 transition-opacity duration-500 ease-in-out"
+          class="transition-opacity duration-500 ease-in-out"
           :class="[
             showSearch ? 'opacity-100' : 'opacity-0 pointer-events-none'
           ]"

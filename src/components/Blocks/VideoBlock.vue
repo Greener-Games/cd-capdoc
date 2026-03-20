@@ -36,9 +36,6 @@
         />
       </media-provider>
 
-      <!-- Default Video Controls Layout -->
-      <media-video-layout/>
-
       <!-- Custom Play Overlay inside Player (Z-30) -->
       <div
           class="custom-overlay absolute inset-0 z-30 flex items-center justify-center bg-black/20 transition-all duration-700 pointer-events-none"
@@ -54,7 +51,7 @@
       </div>
 
       <!-- Default Vidstack Video Layout (Z-40 via class) -->
-      <media-video-layout class="z-40" />
+      <media-video-layout thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt"></media-video-layout>
     </media-player>
   </div>
 </template>
@@ -64,6 +61,7 @@ import { ref, computed, watch } from 'vue';
 import { Play } from 'lucide-vue-next';
 import { useDataStore } from '../../store/data';
 import { ImageCacheService } from '@/services/imageCache';
+import {ImageOptimizer} from "@/services/imageOptimizer.ts";
 
 const dataStore = useDataStore();
 
@@ -99,7 +97,7 @@ watch(() => props.poster, async (newPoster) => {
   if (newPoster) {
     posterLoaded.value = false;
     try {
-      const optimizedUrl = ImageOptimizer.getOptimizedUrl(newPoster, 'large');
+      const optimizedUrl = ImageOptimizer.getOptimizedUrl(newPoster, 'full');
       const cachedUrl = await ImageCacheService.getImageUrl(optimizedUrl);
       displayPoster.value = cachedUrl;
     } catch (e) {
@@ -161,7 +159,7 @@ media-player :deep(.vds-video) {
   height: 100%;
 }
 
-/* 
+/*
   CRITICAL: Hide custom poster and overlay when video starts.
 */
 media-player[data-started] .vds-custom-poster,
@@ -171,8 +169,8 @@ media-player[data-started] .custom-overlay {
   visibility: hidden;
 }
 
-/* 
-  Removed the CSS that was hiding .vds-controls 
+/*
+  Removed the CSS that was hiding .vds-controls
   as the missing CSS imports in main.ts were likely the root cause.
 */
 

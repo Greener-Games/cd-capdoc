@@ -1,6 +1,6 @@
 <template>
   <div
-      class="relative flex flex-col items-start w-full h-full pt-safe-top z-10 gap-4 xl:gap-8"
+      class="relative structure-gap items-start w-full h-full pt-safe-top z-10"
       :class="[
           disablePaddingBottom ? 'pb-0' : 'pb-safe-bottom-footer',
           disablePaddingSide ? 'px-0' : 'px-safe-side'

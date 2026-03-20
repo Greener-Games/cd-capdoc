@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-col gap-4 xl:gap-8" :class="[forcePadding ? 'px-safe-side' : '']">
+  <div class="w-full structure-gap" :class="[forcePadding ? 'px-safe-side' : '']">
     <!-- Top area for buttons or pills (e.g., Back button) -->
     <div v-if="$slots['controls']" class="flex items-center">
       <slot name="controls"></slot>
