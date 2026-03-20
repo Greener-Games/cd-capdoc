@@ -1,12 +1,13 @@
 <template>
   <div class="relative w-screen h-screen overflow-hidden bg-black selection:bg-white selection:text-black">
 
-    <!-- Full Bleed 3D Background with Tailwind Transitions -->
+    <!-- Full Bleed Background with Tailwind Transitions -->
     <div
         class="fixed inset-0 z-0 pointer-events-none transition-opacity duration-1000 ease-in-out"
-        :class="show3D ? 'opacity-100' : 'opacity-0'"
+        :class="showBackground ? 'opacity-100' : 'opacity-0'"
     >
-      <Canvas3D />
+      <BackgroundVideo />
+      
       <!-- Frosted Glass Overlay -->
       <div class="absolute inset-0 z-1 backdrop-blur-[100px] bg-black/40 opacity-50">
         <div class="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay" style="background-image: url('https://grainy-gradients.vercel.app/noise.svg')"></div>
@@ -44,7 +45,7 @@ import { computed, onMounted } from 'vue';
 import { useDataStore } from './store';
 import { ViewState } from './types';
 import { useAppView } from './composables/useAppView';
-import Canvas3D from './components/Three/Canvas3D.vue';
+import BackgroundVideo from './components/Common/BackgroundVideo.vue';
 import GlobalNav from './components/Navigation/GlobalNav.vue';
 import PageFooter from './components/Navigation/PageFooter.vue';
 import DevBreakpointHelper from './components/Common/DevBreakpointHelper.vue';
@@ -56,8 +57,9 @@ onMounted(() => {
   dataStore.init();
 });
 
-const show3D = computed(() => {
-  return ![ViewState.DETAIL, ViewState.CURATOR, ViewState.CURATED, ViewState.ABOUT].includes(view.value);
+const showBackground = computed(() => {
+  // Only show on Home (Landing) page
+  return view.value === ViewState.LANDING;
 });
 
 const showFooter = computed(() => {
