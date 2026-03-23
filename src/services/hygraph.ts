@@ -25,7 +25,7 @@ const PROJECT_FIELDS = gql`
     client
     year
     services
-    contentBlocks {
+    contentBlocks (first: 50) {
       __typename
       ... on ImageBlock {
         id
@@ -63,7 +63,7 @@ const MARKET_FIELDS = gql`
     title
     image { url overrideUrl }
     color { hex }
-    projects { id }
+    projects(first: 100) { id }
   }
 `;
 
@@ -73,7 +73,7 @@ const REGION_FIELDS = gql`
     title
     image { url overrideUrl }
     color { hex }
-    projects { id }
+    projects(first: 100) { id }
   }
 `;
 
@@ -83,7 +83,7 @@ const CAPABILITY_FIELDS = gql`
     title
     image { url overrideUrl }
     color { hex }
-    projects { id }
+    projects(first: 100) { id }
   }
 `;
 

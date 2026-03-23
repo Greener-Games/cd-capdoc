@@ -15,7 +15,7 @@
       <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
         <button
             @click.stop="handleEnter"
-            class="text-heading w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full border border-white flex items-center justify-center font-bold cursor-pointer pointer-events-auto
+            class="text-heading font-bienvenue w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 rounded-full border border-white flex items-center justify-center font-bold cursor-pointer pointer-events-auto
             transition-all duration-500 animate-in fade-in zoom-in-50 duration-1000 delay-400 fill-mode-both hover:bg-white hover:text-black"
         >
           Enter
