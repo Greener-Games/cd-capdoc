@@ -6,7 +6,7 @@ export function useAppView() {
   const route = useRoute();
   
   const view = computed(() => {
-    if (!route) return ViewState.LANDING;
+    if (!route || !route.name) return null;
     
     switch (route.name) {
       case 'Home': return ViewState.LANDING;
@@ -19,7 +19,7 @@ export function useAppView() {
       case 'ProjectDirect': return ViewState.DETAIL;
       case 'About': return ViewState.ABOUT;
       case 'Curator': return ViewState.CURATOR;
-      default: return ViewState.LANDING;
+      default: return null;
     }
   });
 

@@ -26,8 +26,9 @@
     <!-- Dev Tools -->
     <DevBreakpointHelper />
 
-    <!-- Landing Page White Border Effect - ONLY visible on Landing -->
+    <!-- Landing Page White Border Effect - ONLY visible on Landing or when transitioning from it -->
     <div
+        v-if="hasVisitedLanding || view === ViewState.LANDING"
         class="landing-hole pointer-events-none"
         :class="view === ViewState.LANDING ? 'landing-hole-active' : 'landing-hole-inactive'"
     ></div>
@@ -43,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useDataStore } from './store';
 import { ViewState } from './types';
 import { useAppView } from './composables/useAppView';
@@ -55,6 +56,14 @@ import DevBreakpointHelper from './components/Common/DevBreakpointHelper.vue';
 const dataStore = useDataStore();
 const { view } = useAppView();
 
+const hasVisitedLanding = ref(false);
+
+watch(view, (newView) => {
+  if (newView === ViewState.LANDING) {
+    hasVisitedLanding.value = true;
+  }
+}, { immediate: true });
+
 onMounted(() => {
   dataStore.init();
 });
@@ -65,6 +74,7 @@ const showBackground = computed(() => {
 });
 
 const showFooter = computed(() => {
+  if (!view.value) return false;
   return [ViewState.LANDING, ViewState.SELECTOR, ViewState.PROJECT_LIST].includes(view.value);
 });
 </script>
