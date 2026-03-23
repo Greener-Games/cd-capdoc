@@ -39,37 +39,49 @@
     </template>
 
     <!-- Scrollable Content Area -->
-    <div class="absolute inset-0 overflow-y-auto overflow-x-hidden scrollbar-none pb-8 scroll-smooth">
-      <TransitionGroup 
-        name="card-list" 
-        tag="div" 
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-grid w-full isolate px-safe-side"
-        appear
-      >
-        <CuratorCard
-            v-for="(project, index) in displayedProjects"
-            :key="project.id"
-            :project="project"
-            :index="index"
-            :mode="activeMode"
-            :is-selected="isCurated(project.id)"
-            card-class="w-full"
-            @select="handleSelectProject"
-        />
+    <div class="absolute inset-0 overflow-y-auto overflow-x-hidden scrollbar-none scroll-smooth">
+      <div class="min-h-full flex flex-col">
+        <TransitionGroup
+            name="card-list"
+            tag="div"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-grid w-full isolate flex-1 pb-8"
+            appear
+        >
+          <CuratorCard
+              v-for="(project, index) in displayedProjects"
+              :key="project.id"
+              :project="project"
+              :index="index"
+              :mode="activeMode"
+              :is-selected="isCurated(project.id)"
+              card-class="w-full"
+              @select="handleSelectProject"
+          />
 
-        <div v-if="filteredProjects.length === 0" key="no-results" class="col-span-full text-center py-32 w-full">
-          <div class="w-24 h-24 rounded-full border border-white/10 flex items-center justify-center mx-auto mb-6 text-white/20">
-            <Search class="w-8 h-8" />
+          <!-- Skeletons during initial load or transitions -->
+          <div
+              v-if="showSkeletons"
+              v-for="i in 8"
+              :key="`skeleton-${i}`"
+              class="w-full aspect-[31/34] rounded-3xl overflow-hidden"
+          >
+            <SkeletonLoader class="w-full h-full" />
           </div>
-          <h3 class="text-xl font-light text-white mb-2">No projects found</h3>
-          <p class="text-white/40 font-light">
-            Try adjusting your search terms or browse the library
-          </p>
-        </div>
-      </TransitionGroup>
 
-      <!-- Standard Page Footer (Copyright only in this mode) -->
-      <PageFooter inline />
+          <div v-if="!showSkeletons && filteredProjects.length === 0" key="no-results" class="col-span-full text-center py-32 w-full">
+            <div class="w-24 h-24 rounded-full border border-white/10 flex items-center justify-center mx-auto mb-6 text-white/20">
+              <Search class="w-8 h-8" />
+            </div>
+            <h3 class="text-xl font-light text-white mb-2">No projects found</h3>
+            <p class="text-white/40 font-light">
+              Try adjusting your search terms or browse the library
+            </p>
+          </div>
+        </TransitionGroup>
+
+        <!-- Standard Page Footer (Copyright only in this mode) -->
+        <PageFooter inline class="mt-auto" />
+      </div>
     </div>
 
     <!-- FIXED SECTION START -->
@@ -122,6 +134,7 @@ import {Project} from '../types';
 import Magnifying from "@/assets/icons/Magnifying.svg";
 import Icon from "@/components/Common/Icon.vue";
 import PageFooter from "@/components/Navigation/PageFooter.vue";
+import SkeletonLoader from "@/components/Common/SkeletonLoader.vue";
 import { useAppNavigation } from '../composables/useAppNavigation';
 import { useProjectData } from '../composables/useProjectData';
 import { useImagePreloader } from '../composables/useImagePreloader';
@@ -151,10 +164,12 @@ watch(localSearchQuery, (newVal) => {
 
 // Staged data for smooth out-in staggering
 const displayedProjects = ref([...filteredProjects.value]);
+const isTransitioning = ref(false);
 
 watch(filteredProjects, async (newData) => {
   const currentCount = displayedProjects.value.length;
   displayedProjects.value = [];
+  isTransitioning.value = true;
 
   const images = newData.map(p => p.image);
   prefetchImages(images, 's');
@@ -163,8 +178,14 @@ watch(filteredProjects, async (newData) => {
   
   setTimeout(() => {
     displayedProjects.value = newData;
+    isTransitioning.value = false;
   }, exitDelay);
 }, { deep: true, immediate: true });
+
+const showSkeletons = computed(() => 
+  displayedProjects.value.length === 0 && 
+  (dataStore.isFetchingData || isTransitioning.value)
+);
 
 onMounted(() => {
   if (!route.query.ids) {

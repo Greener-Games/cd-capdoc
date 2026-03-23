@@ -3,13 +3,23 @@
  * Supports Modern (cdn.hygraph.com) and Legacy (*.graphassets.com) systems.
  */
 
+/** Available logical image size presets. */
 export type ImageSize = 'xs' | 's' | 'm' | 'lg' | 'xl' | '2xl' | 'full';
 
+/**
+ * Configuration options for image transformation.
+ * Maps to Hygraph's asset transformation API properties.
+ */
 interface TransformOptions {
+  /** Target width in pixels */
   width?: number;
+  /** Target height in pixels */
   height?: number;
+  /** Resize behavior (e.g., 'crop' to fill, 'max' to fit within bounds) */
   fit?: 'clip' | 'crop' | 'scale' | 'max';
+  /** Targeted output format */
   format?: 'jpg' | 'png';
+  /** Image compression quality (0-100) */
   quality?: number;
 }
 
@@ -36,16 +46,22 @@ export const SIZE_MAP: Record<ImageSize, TransformOptions> = {
 export class ImageOptimizer {
   /**
    * Transforms a Hygraph asset URL using the appropriate syntax for the domain.
+   * Automatically caps the requested size based on the user's viewport limit.
+   * 
+   * @param url - The original Hygraph image URL.
+   * @param size - The requested logical size preset (defaults to 'm').
+   * @returns The optimized URL with transformation parameters applied.
    */
   static getOptimizedUrl(url: string, size: ImageSize = 'm'): string {
     if (!url) return '';
     
-    // 1. Be Smart: Don't request a size bigger than the actual screen
+    // 1. Optimization: Don't request a size larger than the actual screen can display
     const constrainedSize = this.getConstrainedSize(size);
     const options = SIZE_MAP[constrainedSize];
     
     // 2. Handle Modern CDN System (*.cdn.hygraph.com)
     if (url.includes('cdn.hygraph.com')) {
+      // Return original if transformations are already present via query parameters
       if (url.includes('?')) return url;
 
       const params = new URLSearchParams();
@@ -59,17 +75,21 @@ export class ImageOptimizer {
 
     // 3. Handle Legacy System (*.graphassets.com)
     if (url.includes('graphassets.com')) {
+      // Skip if legacy transformations are already applied in the path
       if (url.includes('resize=') || url.includes('output=')) return url;
 
       const urlObj = new URL(url);
       const baseUrl = `${urlObj.protocol}//${urlObj.host}`;
-      const segments = urlObj.pathname.split('/').filter(Boolean);
       
+      // Split the path to isolate the environment prefix and the asset handle
+      const segments = urlObj.pathname.split('/').filter(Boolean);
       if (segments.length === 0) return url;
 
+      // The last segment in graphassets is always the unique handle
       const handle = segments.pop();
       const envPrefix = segments.length > 0 ? `/${segments.join('/')}` : '';
 
+      // Build the legacy transformation strings (path-based instead of query-based)
       const transforms: string[] = [];
       if (options.width || options.height) {
         const resizeParts: string[] = [];
@@ -91,9 +111,18 @@ export class ImageOptimizer {
   }
 
   /**
-   * Returns the maximum useful size based on current viewport width
+   * Returns the maximum useful image size based on current viewport width and device pixel ratio.
+   * Includes a fallback for Server-Side Rendering (SSR) environments.
+   * 
+   * @returns The calculated maximum logical size (`ImageSize`) needed for the current screen.
    */
   static getViewportLimit(): ImageSize {
+    // Fallback for Server-Side Rendering (SSR) environments where `window` is undefined
+    if (typeof window === 'undefined') {
+      return 'lg'; // Provide a sensible default to avoid Layout Shift
+    }
+
+    // Calculate effective screen width considering high-DPI (Retina) displays
     const width = window.innerWidth * window.devicePixelRatio;
     if (width <= 200) return 'xs';
     if (width <= 600) return 's';
@@ -104,9 +133,14 @@ export class ImageOptimizer {
   }
 
   /**
-   * Ensures the requested size doesn't exceed what the current screen can actually display.
+   * Ensures the requested size doesn't exceed what the current screen can actually display,
+   * saving bandwidth on smaller screens.
+   * 
+   * @param requestedSize - The size originally requested by the component.
+   * @returns The constrained size, capped at the maximum useful viewport size.
    */
   static getConstrainedSize(requestedSize: ImageSize): ImageSize {
+    // Pass through un-constrainable sizes
     if (requestedSize === 'full' || requestedSize === 'xs') return requestedSize;
 
     const limit = this.getViewportLimit();
