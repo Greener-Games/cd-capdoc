@@ -95,7 +95,7 @@ const props = withDefaults(defineProps<{
   imageContainerClass: 'h-full',
   imageClass: 'group-hover:scale-110',
   showHoverOverlay: true,
-  showBottomLine: true,
+  showBottomLine: false,
   imageSize: 'm',
 });
 
